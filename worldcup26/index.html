@@ -837,7 +837,10 @@ function ingestEvent(e){
  const detail=e.status&&e.status.type?(e.status.type.shortDetail||e.status.type.detail||""):"";
  const status=stt==="post"?"final":stt==="in"?"live":"up";
  const kk=key(hit),prev=LIVE[kk];EVID[kk]=e.id;
- const kdate=e.date||(comp&&comp.date),kickoff=kdate?new Date(kdate).getTime():(prev&&prev.kickoff)||null;
+ const kdate=e.date||(comp&&comp.date);
+ const sa=hit.d.split("-").map(Number),sched=Date.UTC(sa[0],sa[1]-1,sa[2],hit.t+4,(hit.t%1)*60);
+ let kickoff=(prev&&prev.kickoff)||null;
+ if(kdate){const kt=new Date(kdate).getTime();kickoff=Math.abs(kt-sched)<=90*60000?kt:null;}
  LIVE[kk]={status:status,hs:status==="up"?null:(byTeam[hit.h]?byTeam[hit.h].score:null),as:status==="up"?null:(byTeam[hit.a]?byTeam[hit.a].score:null),detail:status==="live"?detail:"",kickoff:kickoff};
  if(!prev||prev.hs!==LIVE[kk].hs||prev.as!==LIVE[kk].as||prev.status!==LIVE[kk].status)return hit.h+" "+(LIVE[kk].hs==null?0:LIVE[kk].hs)+"\u2013"+(LIVE[kk].as==null?0:LIVE[kk].as)+" "+hit.a;
  return null;
