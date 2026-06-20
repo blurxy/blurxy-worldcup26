@@ -529,7 +529,7 @@ const ALIAS={"unitedstates":"USA","congodr":"DR Congo"};
 
 function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
 function key(m){return m.h+"|"+m.a;}
-function startDate(m){const a=m.d.split("-").map(Number);return new Date(Date.UTC(a[0],a[1]-1,a[2],m.t+4,(m.t%1)*60));}
+function startDate(m){const ov=LIVE[key(m)];if(ov&&ov.kickoff)return new Date(ov.kickoff);const a=m.d.split("-").map(Number);return new Date(Date.UTC(a[0],a[1]-1,a[2],m.t+4,(m.t%1)*60));}
 function fmtTime(dt){const l=new Date(dt.getTime()+tzMinFor(dt)*60000);let h=l.getUTCHours(),mm=l.getUTCMinutes();const ap=h<12?"AM":"PM";let h12=h%12;if(h12===0)h12=12;return h12+":"+String(mm).padStart(2,"0")+" "+ap;}
 function localParts(dt){const l=new Date(dt.getTime()+tzMinFor(dt)*60000);return {dkey:l.getUTCFullYear()+"-"+String(l.getUTCMonth()+1).padStart(2,"0")+"-"+String(l.getUTCDate()).padStart(2,"0"),dow:l.getUTCDay(),dd:l.getUTCDate(),mo:l.getUTCMonth()};}
 function flagCode(n){const c=ISO[n];if(!c)return null;if(c==="_ENG")return "gb-eng";if(c==="_SCO")return "gb-sct";return c.toLowerCase();}
@@ -837,7 +837,8 @@ function ingestEvent(e){
  const detail=e.status&&e.status.type?(e.status.type.shortDetail||e.status.type.detail||""):"";
  const status=stt==="post"?"final":stt==="in"?"live":"up";
  const kk=key(hit),prev=LIVE[kk];EVID[kk]=e.id;
- LIVE[kk]={status:status,hs:status==="up"?null:(byTeam[hit.h]?byTeam[hit.h].score:null),as:status==="up"?null:(byTeam[hit.a]?byTeam[hit.a].score:null),detail:status==="live"?detail:""};
+ const kdate=e.date||(comp&&comp.date),kickoff=kdate?new Date(kdate).getTime():(prev&&prev.kickoff)||null;
+ LIVE[kk]={status:status,hs:status==="up"?null:(byTeam[hit.h]?byTeam[hit.h].score:null),as:status==="up"?null:(byTeam[hit.a]?byTeam[hit.a].score:null),detail:status==="live"?detail:"",kickoff:kickoff};
  if(!prev||prev.hs!==LIVE[kk].hs||prev.as!==LIVE[kk].as||prev.status!==LIVE[kk].status)return hit.h+" "+(LIVE[kk].hs==null?0:LIVE[kk].hs)+"\u2013"+(LIVE[kk].as==null?0:LIVE[kk].as)+" "+hit.a;
  return null;
 }
