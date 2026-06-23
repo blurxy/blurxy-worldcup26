@@ -78,6 +78,12 @@
   .mteams .row{display:flex;align-items:center;gap:9px;padding:1.5px 0}
   .flag{width:26px;height:18px;flex:0 0 auto;object-fit:cover;border-radius:3px;border:1px solid rgba(10,31,20,.12);background:#eef1ee}
   .flag.ph{border-style:dashed;border-color:#c9b87e;background:#f1ede2}
+  .koR .konm{display:flex;flex-direction:column;min-width:0;line-height:1.12}
+  .koR .konm .nmline{display:flex;align-items:baseline;min-width:0}
+  .koR .konm .nm{font-weight:700;font-size:15px;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .slotcode{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--gold-deep);margin-top:1px}
+  .projflag{box-shadow:0 0 0 1.5px var(--gold-deep)}
+  .projpill{display:inline-block;font-family:'Archivo',sans-serif;font-weight:800;font-size:8px;letter-spacing:.06em;text-transform:uppercase;color:#7a5800;background:#fbe6a8;border-radius:4px;padding:1.5px 5px;vertical-align:middle;margin-left:5px}
   .nm{font-weight:700;font-size:15px;letter-spacing:-.01em}
   .row.win .nm{color:var(--field)}
   .row.lose .nm{color:var(--muted2);text-decoration:line-through;text-decoration-color:var(--faint);text-decoration-thickness:1.5px}
@@ -490,23 +496,23 @@ const M=[
  {d:"2026-06-30",t:13,g:"R32",h:"2E",a:"2I",ko:1,slot:"Match 78",v:"AT&T Stadium",c:"Dallas"},
  {d:"2026-06-30",t:17,g:"R32",h:"1I",a:"3rd C/D/F/G/H",ko:1,slot:"Match 77",v:"MetLife Stadium",c:"New York/NJ"},
  {d:"2026-07-01",t:15,g:"R32",h:"1A",a:"3rd C/E/F/H/I",ko:1,slot:"Match 79",v:"Estadio Azteca",c:"Mexico City"},
- {d:"2026-07-01",t:19,g:"R32",h:"2D",a:"2G",ko:1,slot:"Match 80",v:"Arrowhead",c:"Kansas City"},
- {d:"2026-07-02",t:15,g:"R32",h:"1L",a:"3rd E/H/I/J/K",ko:1,slot:"Match 81",v:"BC Place",c:"Vancouver"},
- {d:"2026-07-02",t:17,g:"R32",h:"1D",a:"3rd B/E/F/I/J",ko:1,slot:"Match 84",v:"Mercedes-Benz",c:"Atlanta"},
- {d:"2026-07-02",t:19,g:"R32",h:"2J",a:"2K",ko:1,slot:"Match 82",v:"Lumen Field",c:"Seattle"},
- {d:"2026-07-02",t:21,g:"R32",h:"1H",a:"2L",ko:1,slot:"Match 83",v:"Hard Rock",c:"Miami"},
- {d:"2026-07-03",t:13,g:"R32",h:"1G",a:"3rd A/B/C/G/H",ko:1,slot:"Match 85",v:"BMO Field",c:"Toronto"},
- {d:"2026-07-03",t:16,g:"R32",h:"1B",a:"3rd A/D/E/G/I",ko:1,slot:"Match 86",v:"Lincoln Financial",c:"Philadelphia"},
- {d:"2026-07-03",t:19,g:"R32",h:"1K",a:"2H",ko:1,slot:"Match 87",v:"Levi's Stadium",c:"SF Bay Area"},
- {d:"2026-07-03",t:22,g:"R32",h:"1J",a:"2A",ko:1,slot:"Match 88",v:"SoFi Stadium",c:"Los Angeles"},
+ {d:"2026-07-01",t:19,g:"R32",h:"1L",a:"3rd E/H/I/J/K",ko:1,slot:"Match 80",v:"Arrowhead",c:"Kansas City"},
+ {d:"2026-07-02",t:15,g:"R32",h:"1D",a:"3rd B/E/F/I/J",ko:1,slot:"Match 81",v:"BC Place",c:"Vancouver"},
+ {d:"2026-07-02",t:17,g:"R32",h:"1H",a:"2J",ko:1,slot:"Match 84",v:"Mercedes-Benz",c:"Atlanta"},
+ {d:"2026-07-02",t:19,g:"R32",h:"1G",a:"3rd A/E/H/I/J",ko:1,slot:"Match 82",v:"Lumen Field",c:"Seattle"},
+ {d:"2026-07-02",t:21,g:"R32",h:"2K",a:"2L",ko:1,slot:"Match 83",v:"Hard Rock",c:"Miami"},
+ {d:"2026-07-03",t:13,g:"R32",h:"1B",a:"3rd E/F/G/I/J",ko:1,slot:"Match 85",v:"BMO Field",c:"Toronto"},
+ {d:"2026-07-03",t:16,g:"R32",h:"1J",a:"2H",ko:1,slot:"Match 86",v:"Lincoln Financial",c:"Philadelphia"},
+ {d:"2026-07-03",t:19,g:"R32",h:"1K",a:"3rd D/E/I/J/L",ko:1,slot:"Match 87",v:"Levi's Stadium",c:"SF Bay Area"},
+ {d:"2026-07-03",t:22,g:"R32",h:"2D",a:"2G",ko:1,slot:"Match 88",v:"SoFi Stadium",c:"Los Angeles"},
  {d:"2026-07-04",t:16,g:"R16",h:"W74",a:"W77",ko:1,slot:"Match 89",v:"Lincoln Financial",c:"Philadelphia"},
  {d:"2026-07-04",t:20,g:"R16",h:"W73",a:"W75",ko:1,slot:"Match 90",v:"NRG Stadium",c:"Houston"},
  {d:"2026-07-05",t:16,g:"R16",h:"W76",a:"W78",ko:1,slot:"Match 91",v:"MetLife Stadium",c:"New York/NJ"},
  {d:"2026-07-05",t:20,g:"R16",h:"W79",a:"W80",ko:1,slot:"Match 92",v:"Estadio Azteca",c:"Mexico City"},
  {d:"2026-07-06",t:16,g:"R16",h:"W83",a:"W84",ko:1,slot:"Match 93",v:"AT&T Stadium",c:"Dallas"},
  {d:"2026-07-06",t:20,g:"R16",h:"W81",a:"W82",ko:1,slot:"Match 94",v:"SoFi Stadium",c:"Los Angeles"},
- {d:"2026-07-07",t:12,g:"R16",h:"W85",a:"W86",ko:1,slot:"Match 95",v:"Mercedes-Benz",c:"Atlanta"},
- {d:"2026-07-07",t:16,g:"R16",h:"W87",a:"W88",ko:1,slot:"Match 96",v:"BC Place",c:"Vancouver"},
+ {d:"2026-07-07",t:12,g:"R16",h:"W86",a:"W88",ko:1,slot:"Match 95",v:"Mercedes-Benz",c:"Atlanta"},
+ {d:"2026-07-07",t:16,g:"R16",h:"W85",a:"W87",ko:1,slot:"Match 96",v:"BC Place",c:"Vancouver"},
  {d:"2026-07-09",t:16,g:"QF",h:"W89",a:"W90",ko:1,slot:"Quarterfinal 1",v:"Gillette Stadium",c:"Boston"},
  {d:"2026-07-10",t:15,g:"QF",h:"W93",a:"W94",ko:1,slot:"Quarterfinal 2",v:"SoFi Stadium",c:"Los Angeles"},
  {d:"2026-07-11",t:17,g:"QF",h:"W91",a:"W92",ko:1,slot:"Quarterfinal 3",v:"Hard Rock",c:"Miami"},
@@ -572,14 +578,16 @@ function slotInfoHTML(code){
   return h;
  }
  mm=code.match(/^3rd (.+)$/);
- if(mm){ const gs=mm[1].split("/"); let h='<div class="slottitle">Best 3rd from '+esc(gs.join(", "))+'</div>';
-  gs.forEach(g=>{ const t=computeGroup(g)[2]; if(!t)return; h+='<div class="srow"><span class="spos p2">'+g+'</span>'+flagTag(t.n,"flag-sm")+'<span class="snm">'+esc(t.n)+'</span><span class="cell">'+t.pld+'</span><span class="cell pts">'+t.pts+'</span></div>'; });
-  return h+'<div class="slotnote">8 of 12 third-placed teams reach the Round of 32.</div>';
+ if(mm){ const gs=mm[1].split("/"); const proj=computeThirdProj()[code]; const qSet=new Set(bestThirds().slice(0,8).map(x=>x.g));
+  let h='<div class="slottitle">Best 3rd from '+esc(gs.join(", "))+(proj?' \u2014 likely <b>'+esc(proj.n)+'</b>':'')+'</div>';
+  gs.forEach(g=>{ const t=computeGroup(g)[2]; if(!t)return; const isP=proj&&proj.g===g, q=qSet.has(g);
+   h+='<div class="srow'+(isP?' tgt':'')+'"><span class="spos '+(q?'p1':'p2')+'">'+g+'</span>'+flagTag(t.n,"flag-sm")+'<span class="snm">'+esc(t.n)+(isP?' <span class="projpill">most likely</span>':'')+'</span><span class="cell">'+t.pld+'</span><span class="cell pts">'+t.pts+'</span></div>'; });
+  return h+'<div class="slotnote">8 of 12 third-placed teams reach the Round of 32 \u00b7 projection from current standings.</div>';
  }
  mm=code.match(/^W(\d+)$/);
- if(mm){ const fm=M.find(x=>x.slot==="Match "+mm[1]); if(fm)return '<div class="slottitle">Winner of</div><button type="button" class="slotlink" data-jump="'+esc(key(fm))+'"><b>'+esc(decodeSlot(fm.h))+'</b> vs <b>'+esc(decodeSlot(fm.a))+'</b><span class="jh">drill in \u203a</span></button>'; }
+ if(mm){ const fm=M.find(x=>x.slot==="Match "+mm[1]); if(fm)return '<div class="slottitle">Winner of'+(slotTeam(code)?' \u2014 likely <b>'+esc(slotTeam(code).name)+'</b>':'')+'</div><button type="button" class="slotlink" data-jump="'+esc(key(fm))+'"><b>'+esc(slotLabel(fm.h))+'</b> vs <b>'+esc(slotLabel(fm.a))+'</b><span class="jh">drill in \u203a</span></button>'; }
  mm=code.match(/^([WL]) (QF|SF)(\d)$/);
- if(mm){ const mp={QF:"Quarterfinal ",SF:"Semifinal "}; const fm=M.find(x=>x.slot===mp[mm[2]]+mm[3]); if(fm)return '<div class="slottitle">'+(mm[1]==="W"?"Winner":"Loser")+' of</div><button type="button" class="slotlink" data-jump="'+esc(key(fm))+'"><b>'+esc(decodeSlot(fm.h))+'</b> vs <b>'+esc(decodeSlot(fm.a))+'</b><span class="jh">drill in \u203a</span></button>'; }
+ if(mm){ const mp={QF:"Quarterfinal ",SF:"Semifinal "}; const fm=M.find(x=>x.slot===mp[mm[2]]+mm[3]); if(fm)return '<div class="slottitle">'+(mm[1]==="W"?"Winner":"Loser")+' of'+(slotTeam(code)?' \u2014 likely <b>'+esc(slotTeam(code).name)+'</b>':'')+'</div><button type="button" class="slotlink" data-jump="'+esc(key(fm))+'"><b>'+esc(slotLabel(fm.h))+'</b> vs <b>'+esc(slotLabel(fm.a))+'</b><span class="jh">drill in \u203a</span></button>'; }
  return null;
 }
 function roundLabel(m){
@@ -601,13 +609,69 @@ function bestThirds(){
  return "ABCDEFGHIJKL".split("").map(g=>{const t=computeGroup(g)[2];return t?{...t,g}:null;}).filter(Boolean)
   .sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf||a.n.localeCompare(b.n));
 }
+/* Project which 3rd-placed team most likely fills each open knockout slot.
+   Top 8 thirds qualify (by current standings); assign them to the slots'
+   candidate-group sets via bipartite matching so no team appears twice. */
+function _thirdSlotCodes(){return M.filter(m=>m.ko&&/^3rd /.test(m.a)).map(m=>m.a);}
+let _projCache=null;
+function computeThirdProj(){
+ if(_projCache)return _projCache;
+ const thirds=bestThirds();
+ const rankByG={}; thirds.slice(0,8).forEach((t,i)=>{rankByG[t.g]={n:t.n,g:t.g,rank:i+1};});
+ const slots=_thirdSlotCodes();
+ const cand=slots.map(code=>code.slice(4).split("/").filter(g=>rankByG[g]));
+ const groupToSlot={};
+ function aug(si,seen){
+  for(const g of cand[si]){ if(seen[g])continue; seen[g]=true;
+   if(groupToSlot[g]===undefined||aug(groupToSlot[g],seen)){groupToSlot[g]=si;return true;} }
+  return false;
+ }
+ for(let si=0;si<slots.length;si++)aug(si,{});
+ const out={}; for(const g in groupToSlot)out[slots[groupToSlot[g]]]=rankByG[g];
+ _projCache=out; return out;
+}
+let _slotCache=null;
+function slotTeam(code){
+ if(_slotCache&&(code in _slotCache))return _slotCache[code];
+ const r=_slotTeamRaw(code);
+ if(_slotCache)_slotCache[code]=r;
+ return r;
+}
+function _slotTeamRaw(code){
+ let mm=code.match(/^([12])([A-L])$/);
+ if(mm){ const rows=computeGroup(mm[2]); if(!rows.length||!rows.some(t=>t.pld>0))return null;
+  const t=rows[mm[1]==="1"?0:1]; if(!t)return null;
+  return {name:t.n,group:mm[2],proj:!rows.every(x=>x.pld===3)}; }
+ if(/^3rd /.test(code)){ const p=computeThirdProj()[code]; return p?{name:p.n,group:p.g,proj:true,rank:p.rank,sub:code.slice(4)}:null; }
+ mm=code.match(/^W(\d+)$/);
+ if(mm)return matchSideTeam("Match "+mm[1],"W");
+ mm=code.match(/^([WL]) (QF|SF)(\d)$/);
+ if(mm){ const mp={QF:"Quarterfinal ",SF:"Semifinal "}; return matchSideTeam(mp[mm[2]]+mm[3],mm[1]); }
+ return null;
+}
+function matchSideTeam(slotName,side){
+ const fm=M.find(x=>x.slot===slotName); if(!fm)return null;
+ const H=slotTeam(fm.h),A=slotTeam(fm.a); if(!H||!A)return null;
+ const strong=strengthOf(H.name)>=strengthOf(A.name)?H:A, weak=strong===H?A:H;
+ const pick=side==="W"?strong:weak;
+ return {name:pick.name,group:pick.group,proj:true};
+}
+function slotLabel(code){ const r=slotTeam(code); return r?(r.name+(r.proj?" \u00b7 proj":"")):decodeSlot(code); }
 
 /* ============ LIST + TABLES RENDER ============ */
 function buildChips(){
  document.getElementById("chips").innerHTML=FILTERS.map(([k,l])=>'<button class="chip'+(k===FILTER?' active':'')+'" data-k="'+k+'">'+l+'</button>').join("");
 }
-function teamRowHTML(name,score,win,ko,lose){
- if(ko)return '<div class="row"><span class="flag ph"></span><span class="nm" style="color:#8a7a2e">'+esc(name)+'</span></div>';
+function teamRowHTML(name,score,win,ko,lose,resolved){
+ if(ko){
+  if(resolved){
+   const ring=resolved.proj?"flag projflag":"flag";
+   const pill=resolved.proj?'<span class="projpill">proj</span>':'';
+   const sub=resolved.sub?'<span class="slotcode">'+esc(resolved.sub)+'</span>':'';
+   return '<div class="row koR">'+flagTag(resolved.name,ring)+'<span class="konm"><span class="nmline"><span class="nm">'+esc(resolved.name)+'</span>'+pill+'</span>'+sub+'</span></div>';
+  }
+  return '<div class="row"><span class="flag ph"></span><span class="nm" style="color:#8a7a2e">'+esc(name)+'</span></div>';
+ }
  const sc=(score!==undefined&&score!==null)?'<span class="sc">'+score+'</span>':'';
  return '<div class="row'+(win?' win':'')+(lose?' lose':'')+'">'+flagTag(name,"flag")+'<span class="nm">'+esc(name)+(FOLLOW.has(name)?' <span class="fstar">\u2605</span>':'')+'</span>'+sc+'</div>';
 }
@@ -624,7 +688,7 @@ function matchCardHTML(m){
  const gtag=ko?'<span class="mgroup ko">'+esc(m.slot)+'</span>':'<span class="mgroup">Group '+m.g+'</span>';
  return '<div class="match'+(ko?' knockout':'')+(done?' done':'')+(live?' live':'')+'" role="button" tabindex="0" aria-label="'+esc((ko?decodeSlot(m.h):m.h)+" versus "+(ko?decodeSlot(m.a):m.a))+'" data-key="'+esc(key(m))+'">'
   +'<div class="mtime"><div class="t">'+parts[0]+'</div><div class="tz">'+parts[1]+' '+tzAbbr()+'</div>'+badge+'</div>'
-  +'<div class="mteams">'+teamRowHTML(m.h,ko?undefined:hsv,winH,ko,loseH)+(ko?'<div class="vs">vs</div>':'')+teamRowHTML(m.a,ko?undefined:asv,winA,ko,loseA)+'</div>'
+  +'<div class="mteams">'+teamRowHTML(m.h,ko?undefined:hsv,winH,ko,loseH,ko?slotTeam(m.h):null)+(ko?'<div class="vs">vs</div>':'')+teamRowHTML(m.a,ko?undefined:asv,winA,ko,loseA,ko?slotTeam(m.a):null)+'</div>'
   +'<div class="mmeta">'+gtag+'<div class="mvenue"><span class="mcity">'+esc(m.c)+'</span><br>'+esc(m.v)+'</div></div></div>';
 }
 function tablesHTML(){
@@ -661,6 +725,8 @@ function tablesHTML(){
  return h;
 }
 function render(){
+ _projCache=null;
+ _slotCache={};
  buildChips();
  const list=document.getElementById("list");
  const todayP=localParts(new Date());
@@ -981,7 +1047,7 @@ function h2hPair(group,a,b){ const mm=M.find(x=>x.g===group&&!x.ko&&((x.h===a&&x
 /* ===== calendar (.ics) ===== */
 function icsFor(m){ const dt=startDate(m), end=new Date(dt.getTime()+115*60000); const pad=n=>String(n).padStart(2,"0"); const f=d=>d.getUTCFullYear()+pad(d.getUTCMonth()+1)+pad(d.getUTCDate())+"T"+pad(d.getUTCHours())+pad(d.getUTCMinutes())+"00Z"; const tt=(m.ko?decodeSlot(m.h)+" vs "+decodeSlot(m.a):m.h+" vs "+m.a)+" — World Cup 26"; const ics=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//WC26//EN","CALSCALE:GREGORIAN","BEGIN:VEVENT","UID:wc26-"+hashStr(key(m))+"@local","DTSTAMP:"+f(new Date()),"DTSTART:"+f(dt),"DTEND:"+f(end),"SUMMARY:"+tt,"LOCATION:"+(m.v+", "+m.c),"DESCRIPTION:"+roundLabel(m),"END:VEVENT","END:VCALENDAR"].join("\r\n"); const blob=new Blob([ics],{type:"text/calendar"}); const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download="wc26-"+(canon(m.ko?m.slot:m.h)||"match")+".ics"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),2000); }
 /* ===== knockout bracket ===== */
-function bracketHTML(){ const rounds=[["R32","Round of 32"],["R16","Round of 16"],["QF","Quarter-finals"],["SF","Semi-finals"],["FINAL","Final"]]; let h='<div class="sec-head"><div class="sec-title">Knockout bracket</div><div class="sec-note">Tap a tie for its match center \u00b7 teams fill in as groups finish</div></div><div class="bracket">'; rounds.forEach(([g,lab])=>{ const ms=M.filter(x=>x.g===g); h+='<div class="bcol"><h4>'+lab+'</h4><div class="bties">'+ms.map(m=>{ const p=localParts(startDate(m)); return '<div class="btie" role="button" tabindex="0" data-key="'+esc(key(m))+'"><div class="bmeta">'+esc(m.slot)+' \u00b7 '+MON[p.mo]+' '+p.dd+'</div><div class="bt"><span>'+esc(decodeSlot(m.h))+'</span></div><div class="bt"><span>'+esc(decodeSlot(m.a))+'</span></div></div>'; }).join("")+'</div></div>'; }); h+='</div>'; const tp=M.find(x=>x.g==="3rd"); if(tp){const p=localParts(startDate(tp)); h+='<div style="margin-top:8px"><div class="btie" role="button" tabindex="0" data-key="'+esc(key(tp))+'" style="max-width:240px"><div class="bmeta">Third place \u00b7 '+MON[p.mo]+' '+p.dd+'</div><div class="bt"><span>'+esc(decodeSlot(tp.h))+'</span></div><div class="bt"><span>'+esc(decodeSlot(tp.a))+'</span></div></div></div>';} return h; }
+function bracketHTML(){ const rounds=[["R32","Round of 32"],["R16","Round of 16"],["QF","Quarter-finals"],["SF","Semi-finals"],["FINAL","Final"]]; let h='<div class="sec-head"><div class="sec-title">Knockout bracket</div><div class="sec-note">Tap a tie for its match center \u00b7 teams fill in as groups finish</div></div><div class="bracket">'; rounds.forEach(([g,lab])=>{ const ms=M.filter(x=>x.g===g); h+='<div class="bcol"><h4>'+lab+'</h4><div class="bties">'+ms.map(m=>{ const p=localParts(startDate(m)); return '<div class="btie" role="button" tabindex="0" data-key="'+esc(key(m))+'"><div class="bmeta">'+esc(m.slot)+' \u00b7 '+MON[p.mo]+' '+p.dd+'</div><div class="bt"><span>'+esc(slotLabel(m.h))+'</span></div><div class="bt"><span>'+esc(slotLabel(m.a))+'</span></div></div>'; }).join("")+'</div></div>'; }); h+='</div>'; const tp=M.find(x=>x.g==="3rd"); if(tp){const p=localParts(startDate(tp)); h+='<div style="margin-top:8px"><div class="btie" role="button" tabindex="0" data-key="'+esc(key(tp))+'" style="max-width:240px"><div class="bmeta">Third place \u00b7 '+MON[p.mo]+' '+p.dd+'</div><div class="bt"><span>'+esc(slotLabel(tp.h))+'</span></div><div class="bt"><span>'+esc(slotLabel(tp.a))+'</span></div></div></div>';} return h; }
 function trapTab(e){ if(e.key!=="Tab")return; const bd=document.getElementById("backdrop"); if(!bd)return; const f=[...bd.querySelectorAll('button,select,a[href],[tabindex]:not([tabindex="-1"])')].filter(x=>x.offsetParent!==null); if(!f.length)return; const first=f[0],last=f[f.length-1]; if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();} else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();} }
 
 /* ============ EVENTS + INIT ============ */
