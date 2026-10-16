@@ -574,7 +574,7 @@ const LIVE={};
 const CANON2TEAM={}; Object.keys(ISO).forEach(t=>CANON2TEAM[canon(t)]=t);
 const ALIAS={"unitedstates":"USA","congodr":"DR Congo"};
 
-function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
 function key(m){return m.h+"|"+m.a;}
 function startDate(m){const ov=LIVE[key(m)];if(ov&&ov.kickoff)return new Date(ov.kickoff);const a=m.d.split("-").map(Number);return new Date(Date.UTC(a[0],a[1]-1,a[2],m.t+4,(m.t%1)*60));}
 function fmtTime(dt){const l=new Date(dt.getTime()+tzMinFor(dt)*60000);let h=l.getUTCHours(),mm=l.getUTCMinutes();const ap=h<12?"AM":"PM";let h12=h%12;if(h12===0)h12=12;return h12+":"+String(mm).padStart(2,"0")+" "+ap;}
@@ -1220,9 +1220,9 @@ function parseEvents(sum,m){
   if(/own goal/.test(tt))kind="og"; else if(/goal/.test(tt))kind="goal"; else if(/yellow/.test(tt))kind="yc"; else if(/red/.test(tt))kind="rc"; else if(/substitution/.test(tt))kind="sub"; else if(/penalty/.test(tt))kind="pen"; else return;
   const tn=k.team&&(k.team.displayName||k.team.name)?toTeam(k.team.displayName||k.team.name):null;
   let side=tn?(tn===m.h?"h":"a"):"h"; if(home&&tn){ side=(tn===home?(home===m.h?"h":"a"):(home===m.h?"a":"h")); }
-  const pr=(k.participants||[]).map(p=>p.athlete&&p.athlete.displayName).filter(Boolean);
+  const pr=(k.participants||[]).map(p=>p.athlete&&p.athlete.displayName).filter(Boolean).map(esc); // ESPN feed text: escape before it reaches innerHTML
   let label="";
-  if(kind==="sub")label=(pr[0]||"")+(pr[1]?'<span class="evsub"> for '+esc(pr[1])+'</span>':"");
+  if(kind==="sub")label=(pr[0]||"")+(pr[1]?'<span class="evsub"> for '+pr[1]+'</span>':"");
   else if(kind==="goal"||kind==="og"){ label=pr[0]||""; if(/penalt/i.test(k.text||""))label+=' <span class="evsub">(pen)</span>'; if(kind==="og")label+=' <span class="evsub">(OG)</span>'; }
   else label=pr[0]||"";
   if(!label&&!k.text)return;
