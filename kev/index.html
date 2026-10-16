@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://raw.githubusercontent.com https://api.first.org; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<title>KEV Watch</title>
+<meta name="description" content="Vulnerabilities CISA has seen exploited in the wild, sorted by fix-by date, with vendor follows, calendar export and a wall-display mode. What it measures, and what it cannot establish.">
+<meta name="theme-color" content="#08090c">
+<meta property="og:title" content="KEV Watch · blurxy">
+<meta property="og:description" content="What attackers are exploiting right now, from CISA's Known Exploited Vulnerabilities catalog.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: an operations board for exploited vulnerabilities. A countdown column leads every row; the Due view is grouped by
+   day so "what is due this week" reads in one glance. Amber means urgency and nothing else. Single dark theme by choice. */
+:root {
+  --bg: #08090c; --panel: #0e1217; --raised: #141a21; --line: #26303b; --edge: #5b6775; --ink: #e9edf1; --body: #c9d0d7; --muted: #8893a1;
+  --amber: #f2b705; --fault: #ff5a47; --pass: #39d98a; --info: #7fb4ff;
+  --display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --col: 1180px;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { background: var(--bg); scroll-padding-top: 96px; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 var(--display); -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+button, input, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* ---- header: aligned to the content column; wraps on phones ---- */
+.bar { position: sticky; top: 0; z-index: 20; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; min-height: 52px;
+  padding-top: calc(8px + env(safe-area-inset-top, 0px)); padding-bottom: 8px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px), calc((100% - var(--col)) / 2 + 16px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px), calc((100% - var(--col)) / 2 + 16px));
+  background: color-mix(in srgb, var(--bg) 92%, transparent); border-bottom: 1px solid var(--line); backdrop-filter: blur(6px); }
+.mark { font: 800 17px/1 var(--display); font-stretch: 125%; letter-spacing: .02em; display: flex; align-items: center; gap: 10px; white-space: nowrap; text-decoration: none; min-width: 0; padding-block: 6px; }
+.mark i { width: 10px; height: 10px; background: var(--amber); display: inline-block; clip-path: polygon(0 0, 100% 0, 100% 100%); }
+.mark span { color: var(--muted); font-weight: 600; }
+.pill { font: 600 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; border: 1px solid var(--edge); color: var(--muted); white-space: nowrap; }
+.pill.live { color: var(--pass); border-color: var(--pass); }
+.pill.snap { color: var(--amber); border-color: var(--amber); }
+.spacer { flex: 1; }
+.tbtn { background: var(--raised); border: 1px solid var(--edge); border-radius: 3px; padding: 7px 12px; font: 500 12px var(--mono); cursor: pointer; white-space: nowrap; }
+.tbtn:hover { border-color: var(--muted); }
+.tbtn[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+main { grid-template-columns: minmax(0, 1fr); max-width: var(--col); margin: 0 auto; padding-block: 20px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 16px; }
+.head { display: grid; gap: 10px; }
+.kicker { font: 600 11px var(--mono); color: var(--muted); letter-spacing: .14em; text-transform: uppercase; }
+h1 { margin: 0; font: 800 clamp(28px, 4.6vw, 42px)/1.02 var(--display); font-stretch: 112%; letter-spacing: -.01em; text-wrap: balance; }
+
+/* ---- the honesty strip: small, always visible, details on demand ---- */
+.truth { border: 1px solid var(--line); background: var(--panel); font-size: 13.5px; }
+.truth .lines { display: grid; grid-template-columns: 1fr 1fr; }
+@media (max-width: 760px) { .truth .lines { grid-template-columns: 1fr; } }
+.truth .lines p { margin: 0; padding: 9px 14px; color: var(--body); }
+.truth .lines p + p { border-left: 1px solid var(--line); }
+@media (max-width: 760px) { .truth .lines p + p { border-left: 0; border-top: 1px solid var(--line); } }
+.truth b { font: 600 11px var(--mono); letter-spacing: .1em; text-transform: uppercase; margin-right: 6px; }
+.truth .m b { color: var(--pass); } .truth .c b { color: var(--muted); }
+.truth details { border-top: 1px solid var(--line); }
+.truth summary { cursor: pointer; padding: 8px 14px; font: 500 12px var(--mono); color: var(--muted); }
+.truth summary:hover { color: var(--ink); }
+.truth .more-c { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; padding: 2px 14px 12px; }
+@media (max-width: 760px) { .truth .more-c { grid-template-columns: 1fr; } }
+.truth ul { margin: 0; padding-left: 18px; display: grid; gap: 5px; color: var(--body); }
+
+/* ---- status line: freshness lives next to the list, not hidden in the header ---- */
+.status { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: center; font: 500 12.5px var(--mono); color: var(--muted); overflow-wrap: anywhere; min-height: 19px; }
+.status > span + span::before { content: "· "; color: var(--edge); }
+.status.warn { border-left: 3px solid var(--amber); background: var(--panel); padding: 8px 12px; color: var(--amber); }
+.status.err { border-left: 3px solid var(--fault); background: var(--panel); padding: 8px 12px; color: var(--ink); }
+
+.controls { display: grid; gap: 12px; }
+.search { display: flex; gap: 8px; flex-wrap: wrap; }
+.search input { flex: 1 1 180px; min-width: 0; padding: 10px 12px; background: var(--panel); border: 1px solid var(--edge); border-radius: 3px; }
+.search input::placeholder { color: var(--muted); }
+.search select { flex: 0 1 220px; width: 220px; padding: 9px 10px; background: var(--panel); border: 1px solid var(--edge); border-radius: 3px; min-width: 0; max-width: 100%; }
+.viewrow { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; min-height: 34px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.chip { border: 1px solid var(--edge); background: var(--panel); border-radius: 999px; padding: 5px 12px; cursor: pointer; font: 500 13px var(--display); display: inline-flex; gap: 6px; align-items: center; }
+.chip .ct { font: 500 11.5px var(--mono); color: var(--muted); }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.chip[aria-pressed="true"] .ct { color: inherit; opacity: .75; }
+.act { margin-left: auto; border: 1px dashed var(--edge); background: transparent; border-radius: 3px; padding: 5px 10px; cursor: pointer; font: 500 12px var(--mono); color: var(--body); }
+
+.listhead { display: flex; justify-content: space-between; gap: 6px 16px; flex-wrap: wrap; font: 500 12.5px var(--mono); color: var(--muted); }
+#count { overflow-wrap: anywhere; min-width: 0; }
+ul.list:empty { min-height: 50vh; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 12px; }
+.legend span { white-space: nowrap; display: inline-flex; gap: 6px; align-items: center; }
+
+/* ---- list ---- */
+ul.list { list-style: none; margin: 0; padding: 0; border: 1px solid var(--line); background: var(--panel); }
+.dayhead { position: sticky; top: 52px; z-index: 2; padding: 7px 14px; background: var(--raised); border-bottom: 1px solid var(--line); font: 600 12px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 14px; }
+.dayhead .n { margin-left: auto; color: var(--muted); }
+.dayhead.urgent { color: var(--amber); }
+.dayhead b { color: var(--ink); font-weight: 600; }
+.row { position: relative; display: grid; grid-template-columns: 92px minmax(0, 1fr) auto; border-bottom: 1px solid var(--line); }
+.row::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; }
+.row:last-child { border-bottom: 0; }
+.row:hover { background: color-mix(in srgb, var(--raised) 70%, transparent); }
+.row.u0::before, .row.u1::before { background: var(--amber); }                      /* due today, 1-3 days */
+.row.u2::before { background: color-mix(in srgb, var(--amber) 45%, transparent); }     /* 4-14 days */
+.row.over::before { background: repeating-linear-gradient(to bottom, var(--fault) 0 6px, transparent 6px 10px); }   /* past due */
+.cd { padding: 12px 0 12px 16px; display: grid; align-content: start; gap: 2px; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.cd b { font: 700 15px/1.2 var(--mono); color: var(--ink); white-space: nowrap; }
+.cd small { font-size: 11px; color: var(--muted); white-space: nowrap; }
+.row.u0 .cd b { background: var(--amber); color: #111; padding: 1px 6px; border-radius: 3px; justify-self: start; }
+.row.u1 .cd b { color: var(--amber); }
+.row.over .cd b { color: var(--fault); }
+.open { all: unset; cursor: pointer; display: grid; gap: 4px; padding: 11px 14px; min-width: 0; }
+.open::after { content: ""; position: absolute; inset: 0; }             /* the whole row opens the detail */
+.open:focus-visible { outline: none; }
+.row:has(.open:focus-visible) { outline: 2px solid var(--amber); outline-offset: -2px; }
+.row:hover .vname { text-decoration: underline; }
+.l1 { display: flex; flex-wrap: wrap; gap: 2px 10px; align-items: baseline; }
+.cve { font: 600 13px var(--mono); color: var(--ink); }
+.vp { font: 500 12.5px var(--mono); color: var(--muted); overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.vname { font-weight: 600; overflow-wrap: anywhere; color: var(--body); }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font: 500 11px var(--mono); border: 1px solid var(--line); border-radius: 3px; padding: 1px 6px; color: var(--muted); white-space: nowrap; display: inline-flex; gap: 5px; align-items: center; }
+.tag.rw { color: var(--ink); border-color: var(--fault); }
+.tag.rw::before { content: ""; width: 7px; height: 7px; background: var(--fault); }
+.tag.ft { color: var(--info); border-color: var(--info); }
+.side { display: grid; gap: 4px; align-content: start; justify-items: end; padding: 11px 14px; font: 500 12px var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; text-align: right; }
+.star { all: unset; position: relative; z-index: 1; cursor: pointer; padding: 2px 4px; color: var(--edge); font-size: 16px; line-height: 1; }
+.star[aria-pressed="true"] { color: var(--amber); }
+.star:focus-visible { outline: 2px solid var(--amber); }
+@media (max-width: 620px) {
+  .row { grid-template-columns: 76px minmax(0, 1fr); }
+  .side { grid-column: 2; grid-row: 2; display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 2px 14px; padding: 0 14px 11px; text-align: left; }
+  .side > * { white-space: nowrap; }
+  .side .star { margin-left: auto; }
+  .cd { grid-row: 1 / span 2; }
+}
+.more { display: block; width: 100%; padding: 12px; border: 1px solid var(--line); border-top: 0; background: var(--panel); cursor: pointer; color: var(--body); font: 600 13px var(--mono); }
+.empty { padding: 26px 14px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+/* ---- detail dialog: sticky header and actions, facts first ---- */
+dialog { width: min(640px, calc(100% - 24px)); max-height: calc(100% - 24px); padding: 0; background: var(--panel); color: var(--ink); border: 1px solid var(--line); border-top: 3px solid var(--amber); border-radius: 2px; }
+dialog::backdrop { background: rgb(0 0 0 / .62); }
+.dlg { display: grid; }
+.dlg-top { position: sticky; top: 0; z-index: 1; display: flex; justify-content: space-between; gap: 10px; align-items: center; padding: 10px 20px; background: var(--panel); border-bottom: 1px solid var(--line); }
+.dlg-top .cve { color: var(--muted); }
+.dlg-body { padding: 16px 20px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+.dlg h2 { margin: 0; font: 800 25px/1.1 var(--display); font-stretch: 108%; text-wrap: balance; overflow-wrap: anywhere; }
+.dlg h2:focus { outline: none; }
+.dlg p { margin: 0; color: var(--body); overflow-wrap: anywhere; }
+.facts { display: flex; flex-wrap: wrap; gap: 6px; }
+.facts span { font: 500 12px var(--mono); padding: 4px 8px; border: 1px solid var(--line); border-radius: 3px; background: var(--raised); }
+.facts .due { border-color: var(--amber); color: var(--amber); }
+.facts .over { border-color: var(--fault); color: var(--fault); }
+.facts .rw { border-color: var(--fault); }
+.spec { margin: 0; border: 1px solid var(--line); }
+.spec div { display: grid; grid-template-columns: 130px 1fr; gap: 10px; padding: 7px 12px; border-bottom: 1px solid var(--line); font-size: 14px; }
+.spec div:last-child { border-bottom: 0; }
+.spec dt { font: 500 11.5px/1.9 var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.spec dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.blockh { font: 600 11px var(--mono); color: var(--muted); letter-spacing: .14em; text-transform: uppercase; margin-bottom: 6px; }
+.links { margin: 0; padding-left: 18px; display: grid; gap: 4px; font-size: 13.5px; overflow-wrap: anywhere; }
+.acts { position: sticky; bottom: 0; display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 20px; background: var(--panel); border-top: 1px solid var(--line); }
+.acts a, .acts button { font: 600 12.5px var(--mono); text-decoration: none; padding: 8px 12px; border-radius: 3px; border: 1px solid var(--edge); background: var(--raised); cursor: pointer; }
+.acts .pri { background: var(--amber); color: #111; border-color: var(--amber); }
+@media (max-width: 520px) { .spec div { grid-template-columns: 1fr; gap: 2px; } .dlg h2 { font-size: 21px; } }
+
+footer { font-size: 13px; color: var(--muted); display: grid; gap: 6px; }
+
+/* ---- phones: get the list onto the first screen ---- */
+@media (max-width: 620px) {
+  #kiosk { display: none; }                         /* a wall display is for big screens */
+  .legend { display: none; }                        /* the countdown column carries urgency on its own */
+  .truth .lines p.m { display: none; }              /* keep the caveat that changes decisions; the rest is under details */
+  .status .rel, .status .src { display: none; }     /* the header pill already says live or snapshot */
+  .head { gap: 6px; }
+  main { gap: 12px; padding-block: 14px 48px; }
+  .chip { padding: 4px 10px; }
+}
+
+/* ---- wall display: type scales with the screen, the due list pages itself ---- */
+body.kiosk { font-size: clamp(16px, .9vw + 8px, 30px); --col: 100%; }
+body.kiosk .status, body.kiosk .listhead, body.kiosk .kicker { font-size: .7em; }
+body.kiosk .controls, body.kiosk .truth, body.kiosk footer, body.kiosk .more, body.kiosk .star, body.kiosk .legend { display: none !important; }
+body.kiosk h1 { font-size: 2em; }
+body.kiosk .row { grid-template-columns: 7.5em minmax(0, 1fr) auto; }
+body.kiosk .cd b { font-size: 1.35em; }
+body.kiosk .cd small, body.kiosk .side, body.kiosk .vp, body.kiosk .tag, body.kiosk .cve { font-size: .78em; }
+body.kiosk .vname { font-size: 1.15em; }
+body.kiosk .dayhead { font-size: .8em; }
+
+@media (pointer: coarse) {
+  .tbtn, .chip, .act, .truth summary { min-height: 44px; }
+  .truth summary { display: flex; align-items: center; }
+  .mark { padding-block: 12px; }
+  .star { min-width: 44px; min-height: 44px; display: grid; place-items: center; padding: 0; }
+  .search select, .search input { min-height: 44px; }
+  .acts a, .acts button { min-height: 44px; display: inline-flex; align-items: center; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+<header class="bar">
+  <a class="mark" href="../"><i aria-hidden="true"></i>blurxy <span>/ kev watch</span></a>
+  <span class="pill" id="srcpill">loading</span>
+  <span class="spacer"></span>
+  <button class="tbtn" id="kiosk" aria-pressed="false">Wall display</button>
+</header>
+<main id="main">
+  <div class="head">
+    <div class="kicker">CISA Known Exploited Vulnerabilities</div>
+    <h1>What attackers are exploiting right now</h1>
+  </div>
+  <div class="truth">
+    <div class="lines">
+      <p class="m"><b>Measured</b>CISA has evidence each entry was exploited in the wild, and sets a fix-by date.</p>
+      <p class="c"><b>Not established</b>Whether you run it. Fix-by dates bind US federal agencies only.</p>
+    </div>
+    <details><summary>What this can and cannot tell you</summary>
+      <div class="more-c">
+        <ul>
+          <li>CISA has evidence each entry was actively exploited, and lists the action to take.</li>
+          <li>Whether it is known to be used in ransomware campaigns, and whether BOD 26-04 requires forensic triage.</li>
+          <li>EPSS (FIRST): a model's probability that the CVE is exploited in the next 30 days.</li>
+        </ul>
+        <ul>
+          <li>Whether <b>you</b> run an affected version. The catalog names products, not your inventory.</li>
+          <li>Fix-by dates bind US federal civilian agencies (BOD 22-01). For everyone else they are a priority signal, not a deadline.</li>
+          <li>Ransomware "Unknown" means not known, which is not the same as never. EPSS is a forecast, not observed exploitation.</li>
+        </ul>
+      </div>
+    </details>
+  </div>
+  <div class="controls" id="controls">
+    <div class="search">
+      <label class="sr" for="q">Search</label>
+      <input id="q" type="search" placeholder="Search CVE, vendor, product or name" autocomplete="off">
+      <label class="sr" for="vendor">Vendor</label>
+      <select id="vendor"><option value="">All vendors</option></select>
+    </div>
+    <div class="viewrow"><div class="chips" id="views" role="group" aria-label="View"></div><div id="viewActs"></div></div>
+  </div>
+  <div class="status" id="status" role="status">Loading the catalog…</div>
+  <div class="listhead" id="listhead">
+    <span id="count" aria-live="polite"></span>
+    <span class="legend"><span><span class="tag rw">ransomware</span></span><span><span class="tag ft">forensic triage</span></span><span>amber edge: due within 14 days</span><span>dashed red edge: past due</span></span>
+  </div>
+  <div>
+    <ul class="list" id="list" aria-label="Exploited vulnerabilities"></ul>
+    <button class="more" id="more" hidden>Show more</button>
+  </div>
+  <footer>
+    <span>Data: <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" rel="noopener noreferrer" target="_blank">CISA KEV catalog</a> via CISA's <a href="https://github.com/cisagov/kev-data" rel="noopener noreferrer" target="_blank">cisagov/kev-data</a> mirror (refreshed on load), with a bundled snapshot if the mirror is unreachable. Exploit probabilities: <a href="https://www.first.org/epss/" rel="noopener noreferrer" target="_blank">EPSS by FIRST</a>.</span>
+    <span>Follows are stored in this browser only, and this page sets no cookies and runs no analytics. To load, it contacts GitHub (the catalog), Google Fonts (typefaces) and FIRST (EPSS scores for the CVEs on screen, so FIRST can see which CVEs you view). Part of <a href="../">blurxy</a>.</span>
+  </footer>
+</main>
+
+<dialog id="dlg" aria-labelledby="dTitle"><div class="dlg" id="dlgBody"></div></dialog>
+<div class="sr" id="live" aria-live="polite"></div>
+<noscript><p style="padding:80px 16px;color:#e9edf1">KEV Watch needs JavaScript. The catalog itself is at cisa.gov/known-exploited-vulnerabilities-catalog.</p></noscript>
+<script src="app.js"></script>
+</body>
+</html>
