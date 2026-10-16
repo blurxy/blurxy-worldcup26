@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>World Cup 2026 — Match Schedule</title>
+<title>World Cup 2026 — Results</title>
+<meta name="description" content="Final results of the 2026 FIFA World Cup: all 104 matches, group tables and the knockout bracket. Archived after the tournament ended on July 19, 2026." />
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Archivo+Narrow:wght@500;600;700&family=DM+Mono:wght@400;500&display=swap');
 
@@ -330,18 +331,16 @@
     <div class="hero-meta">
       <div><span class="num" id="statTotal">104</span><span class="lbl">Matches</span></div>
       <div><span class="num" id="statDone">0</span><span class="lbl">Played</span></div>
-      <div><span class="num" id="statLive">0</span><span class="lbl">Live now</span></div>
+      <div><span class="num" id="statGoals">0</span><span class="lbl">Goals</span></div>
     </div>
   </div>
 </header>
 
 <div class="livebar">
   <div class="inner livebar-inner">
-    <span class="dot" id="liveDot"></span>
-    <span class="txt" id="liveTxt">Connecting to live scores&hellip;</span>
+    <span class="txt" id="archiveTxt">Loading archived results&hellip;</span>
     <button class="refresh ghost" id="themeBtn" aria-label="Toggle dark mode">Dark</button>
     <button class="refresh ghost" id="fullBtn" aria-label="Toggle fullscreen">Full</button>
-    <button class="refresh" id="refreshBtn" aria-label="Refresh live scores">Refresh</button>
   </div>
 </div>
 
@@ -353,10 +352,9 @@
   </div>
 </div>
 
-<div id="liveRegion" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 <div class="inner wrap" id="list"></div>
 
-<footer>Tap any match for the full match center &middot; Live scores via ESPN<br/>Knockout pairings fill in as groups finish &middot; Schedule per FIFA</footer>
+<footer>Tap any match for the full match center &middot; Results, kickoff times and venues from ESPN&rsquo;s feed<br/>Tournament complete &middot; archived results as of Jul 19, 2026</footer>
 
 <div id="modalRoot"></div>
 
@@ -423,23 +421,24 @@ const TEAMS={
  "Panama":{rank:31,form:"WWDLW",mgr:"Thomas Christiansen",formation:"4-4-2",players:[{n:"Adalberto Carrasquilla",pos:"CM",club:"Pumas",tag:"Engine"},{n:"Jos\u00e9 Fajardo",pos:"ST",club:"\u2014",tag:"Goal threat"},{n:"An\u00edbal Godoy",pos:"DM",club:"San Jose",tag:"Captain"}]}
 };
 
+/* Keyed by the venue name ESPN reports. short = the name shown on match cards, metro = the host-city label. */
 const STADIUMS={
- "Estadio Azteca":{city:"Mexico City, MX",cap:"83,264",opened:1966,surface:"Grass",roof:"Open"},
- "NRG Stadium":{city:"Houston, TX",cap:"72,220",opened:2002,surface:"Grass (WC)",roof:"Retractable"},
- "Mercedes-Benz":{city:"Atlanta, GA",cap:"71,000",opened:2017,surface:"Grass (WC)",roof:"Retractable"},
- "Estadio Akron":{city:"Guadalajara, MX",cap:"49,850",opened:2010,surface:"Grass",roof:"Open"},
- "Estadio BBVA":{city:"Monterrey, MX",cap:"53,500",opened:2015,surface:"Grass",roof:"Open"},
- "BMO Field":{city:"Toronto, ON",cap:"45,000",opened:2007,surface:"Grass",roof:"Open"},
- "Lumen Field":{city:"Seattle, WA",cap:"68,740",opened:2002,surface:"Grass (WC)",roof:"Open"},
- "SoFi Stadium":{city:"Los Angeles, CA",cap:"70,240",opened:2020,surface:"Grass (WC)",roof:"Fixed canopy"},
- "BC Place":{city:"Vancouver, BC",cap:"54,500",opened:1983,surface:"Grass (WC)",roof:"Retractable"},
- "Lincoln Financial":{city:"Philadelphia, PA",cap:"69,176",opened:2003,surface:"Grass",roof:"Open"},
- "Gillette Stadium":{city:"Boston, MA",cap:"65,878",opened:2002,surface:"Grass (WC)",roof:"Open"},
- "Hard Rock":{city:"Miami, FL",cap:"65,326",opened:1987,surface:"Grass",roof:"Open canopy"},
- "AT&T Stadium":{city:"Dallas, TX",cap:"80,000",opened:2009,surface:"Grass (WC)",roof:"Retractable"},
- "Levi's Stadium":{city:"SF Bay Area, CA",cap:"68,500",opened:2014,surface:"Grass",roof:"Open"},
- "Arrowhead":{city:"Kansas City, MO",cap:"76,416",opened:1972,surface:"Grass",roof:"Open"},
- "MetLife Stadium":{city:"New York/NJ",cap:"82,500",opened:2010,surface:"Grass (WC)",roof:"Open"}
+ "Estadio Banorte":{short:"Estadio Azteca",metro:"Mexico City",city:"Mexico City, MX",cap:"83,264",opened:1966,surface:"Grass",roof:"Open"},
+ "NRG Stadium":{short:"NRG Stadium",metro:"Houston",city:"Houston, TX",cap:"72,220",opened:2002,surface:"Grass (WC)",roof:"Retractable"},
+ "Mercedes-Benz Stadium":{short:"Mercedes-Benz",metro:"Atlanta",city:"Atlanta, GA",cap:"71,000",opened:2017,surface:"Grass (WC)",roof:"Retractable"},
+ "Estadio Akron":{short:"Estadio Akron",metro:"Guadalajara",city:"Guadalajara, MX",cap:"49,850",opened:2010,surface:"Grass",roof:"Open"},
+ "Estadio BBVA":{short:"Estadio BBVA",metro:"Monterrey",city:"Monterrey, MX",cap:"53,500",opened:2015,surface:"Grass",roof:"Open"},
+ "BMO Field":{short:"BMO Field",metro:"Toronto",city:"Toronto, ON",cap:"45,000",opened:2007,surface:"Grass",roof:"Open"},
+ "Lumen Field":{short:"Lumen Field",metro:"Seattle",city:"Seattle, WA",cap:"68,740",opened:2002,surface:"Grass (WC)",roof:"Open"},
+ "SoFi Stadium":{short:"SoFi Stadium",metro:"Los Angeles",city:"Los Angeles, CA",cap:"70,240",opened:2020,surface:"Grass (WC)",roof:"Fixed canopy"},
+ "BC Place":{short:"BC Place",metro:"Vancouver",city:"Vancouver, BC",cap:"54,500",opened:1983,surface:"Grass (WC)",roof:"Retractable"},
+ "Lincoln Financial Field":{short:"Lincoln Financial",metro:"Philadelphia",city:"Philadelphia, PA",cap:"69,176",opened:2003,surface:"Grass",roof:"Open"},
+ "Gillette Stadium":{short:"Gillette Stadium",metro:"Boston",city:"Boston, MA",cap:"65,878",opened:2002,surface:"Grass (WC)",roof:"Open"},
+ "Hard Rock Stadium":{short:"Hard Rock",metro:"Miami",city:"Miami, FL",cap:"65,326",opened:1987,surface:"Grass",roof:"Open canopy"},
+ "AT&T Stadium":{short:"AT&T Stadium",metro:"Dallas",city:"Dallas, TX",cap:"80,000",opened:2009,surface:"Grass (WC)",roof:"Retractable"},
+ "Levi's Stadium":{short:"Levi's Stadium",metro:"SF Bay Area",city:"SF Bay Area, CA",cap:"68,500",opened:2014,surface:"Grass",roof:"Open"},
+ "GEHA Field at Arrowhead Stadium":{short:"Arrowhead",metro:"Kansas City",city:"Kansas City, MO",cap:"76,416",opened:1972,surface:"Grass",roof:"Open"},
+ "MetLife Stadium":{short:"MetLife Stadium",metro:"New York/NJ",city:"New York/NJ",cap:"82,500",opened:2010,surface:"Grass (WC)",roof:"Open"}
 };
 
 const H2H={
@@ -457,141 +456,160 @@ const H2H={
  "Canada|Switzerland":{a:"Canada",aw:0,d:0,bw:1,last:"Switzerland 1\u20130 Canada (2024)"}
 };
 
+/* Fixtures only: group, the two sides (or bracket slots) and the knockout slot name. Teams, kickoff times,
+   venues and scores for every match are read from data/results.json. */
 const M=[
- {d:"2026-06-11",t:14,g:"A",h:"Mexico",a:"South Africa",hs:2,as:0,v:"Estadio Azteca",c:"Mexico City"},
- {d:"2026-06-11",t:17,g:"A",h:"South Korea",a:"Czechia",hs:2,as:1,v:"NRG Stadium",c:"Houston"},
- {d:"2026-06-18",t:12,g:"A",h:"Czechia",a:"South Africa",v:"Mercedes-Benz",c:"Atlanta"},
- {d:"2026-06-18",t:21,g:"A",h:"Mexico",a:"South Korea",v:"Estadio Akron",c:"Guadalajara"},
- {d:"2026-06-24",t:21,g:"A",h:"Czechia",a:"Mexico",v:"Estadio Azteca",c:"Mexico City"},
- {d:"2026-06-24",t:21,g:"A",h:"South Africa",a:"South Korea",v:"Estadio BBVA",c:"Monterrey"},
- {d:"2026-06-12",t:16,g:"B",h:"Canada",a:"Bosnia & Herzegovina",hs:1,as:1,v:"BMO Field",c:"Toronto"},
- {d:"2026-06-13",t:14,g:"B",h:"Qatar",a:"Switzerland",hs:1,as:1,v:"Lumen Field",c:"Seattle"},
- {d:"2026-06-18",t:15,g:"B",h:"Switzerland",a:"Bosnia & Herzegovina",v:"SoFi Stadium",c:"Los Angeles"},
- {d:"2026-06-18",t:18,g:"B",h:"Canada",a:"Qatar",v:"BC Place",c:"Vancouver"},
- {d:"2026-06-24",t:15,g:"B",h:"Switzerland",a:"Canada",v:"BC Place",c:"Vancouver"},
- {d:"2026-06-24",t:15,g:"B",h:"Bosnia & Herzegovina",a:"Qatar",v:"Lumen Field",c:"Seattle"},
- {d:"2026-06-13",t:12,g:"C",h:"Brazil",a:"Morocco",hs:1,as:1,v:"Lincoln Financial",c:"Philadelphia"},
- {d:"2026-06-13",t:15,g:"C",h:"Haiti",a:"Scotland",hs:0,as:1,v:"Gillette Stadium",c:"Boston"},
- {d:"2026-06-19",t:18,g:"C",h:"Scotland",a:"Morocco",v:"Gillette Stadium",c:"Boston"},
- {d:"2026-06-19",t:21,g:"C",h:"Brazil",a:"Haiti",v:"Lincoln Financial",c:"Philadelphia"},
- {d:"2026-06-24",t:18,g:"C",h:"Scotland",a:"Brazil",v:"Hard Rock",c:"Miami"},
- {d:"2026-06-24",t:18,g:"C",h:"Morocco",a:"Haiti",v:"Mercedes-Benz",c:"Atlanta"},
- {d:"2026-06-12",t:20,g:"D",h:"USA",a:"Paraguay",hs:4,as:1,v:"SoFi Stadium",c:"Los Angeles"},
- {d:"2026-06-13",t:18,g:"D",h:"Australia",a:"T\u00FCrkiye",hs:2,as:0,v:"AT&T Stadium",c:"Dallas"},
- {d:"2026-06-19",t:15,g:"D",h:"USA",a:"Australia",v:"Lumen Field",c:"Seattle"},
- {d:"2026-06-20",t:0,g:"D",h:"T\u00FCrkiye",a:"Paraguay",v:"Levi's Stadium",c:"SF Bay Area"},
- {d:"2026-06-25",t:22,g:"D",h:"T\u00FCrkiye",a:"USA",v:"SoFi Stadium",c:"Los Angeles"},
- {d:"2026-06-25",t:22,g:"D",h:"Paraguay",a:"Australia",v:"Levi's Stadium",c:"SF Bay Area"},
- {d:"2026-06-14",t:12,g:"E",h:"Germany",a:"Cura\u00E7ao",hs:7,as:1,v:"BMO Field",c:"Toronto"},
- {d:"2026-06-14",t:15,g:"E",h:"Ivory Coast",a:"Ecuador",hs:1,as:0,v:"Arrowhead",c:"Kansas City"},
- {d:"2026-06-20",t:16,g:"E",h:"Germany",a:"Ivory Coast",v:"BMO Field",c:"Toronto"},
- {d:"2026-06-20",t:20,g:"E",h:"Ecuador",a:"Cura\u00E7ao",v:"Arrowhead",c:"Kansas City"},
- {d:"2026-06-25",t:16,g:"E",h:"Ecuador",a:"Germany",v:"MetLife Stadium",c:"New York/NJ"},
- {d:"2026-06-25",t:16,g:"E",h:"Cura\u00E7ao",a:"Ivory Coast",v:"Lincoln Financial",c:"Philadelphia"},
- {d:"2026-06-14",t:18,g:"F",h:"Netherlands",a:"Japan",hs:2,as:2,v:"Hard Rock",c:"Miami"},
- {d:"2026-06-14",t:22,g:"F",h:"Sweden",a:"Tunisia",hs:5,as:1,v:"Estadio BBVA",c:"Monterrey"},
- {d:"2026-06-20",t:13,g:"F",h:"Netherlands",a:"Sweden",v:"NRG Stadium",c:"Houston"},
- {d:"2026-06-21",t:0,g:"F",h:"Tunisia",a:"Japan",v:"Estadio BBVA",c:"Monterrey"},
- {d:"2026-06-25",t:19,g:"F",h:"Japan",a:"Sweden",v:"AT&T Stadium",c:"Dallas"},
- {d:"2026-06-25",t:19,g:"F",h:"Tunisia",a:"Netherlands",v:"Arrowhead",c:"Kansas City"},
- {d:"2026-06-15",t:15,g:"G",h:"Belgium",a:"Egypt",v:"Lumen Field",c:"Seattle"},
- {d:"2026-06-15",t:21,g:"G",h:"Iran",a:"New Zealand",v:"SoFi Stadium",c:"Los Angeles"},
- {d:"2026-06-21",t:15,g:"G",h:"Belgium",a:"Iran",v:"SoFi Stadium",c:"Los Angeles"},
- {d:"2026-06-21",t:21,g:"G",h:"New Zealand",a:"Egypt",v:"BC Place",c:"Vancouver"},
- {d:"2026-06-26",t:23,g:"G",h:"Egypt",a:"Iran",v:"Lumen Field",c:"Seattle"},
- {d:"2026-06-26",t:23,g:"G",h:"New Zealand",a:"Belgium",v:"BC Place",c:"Vancouver"},
- {d:"2026-06-15",t:12,g:"H",h:"Spain",a:"Cape Verde",hs:0,as:0,v:"Mercedes-Benz",c:"Atlanta"},
- {d:"2026-06-15",t:18,g:"H",h:"Saudi Arabia",a:"Uruguay",v:"Hard Rock",c:"Miami"},
- {d:"2026-06-21",t:12,g:"H",h:"Spain",a:"Saudi Arabia",v:"Mercedes-Benz",c:"Atlanta"},
- {d:"2026-06-21",t:18,g:"H",h:"Uruguay",a:"Cape Verde",v:"Hard Rock",c:"Miami"},
- {d:"2026-06-26",t:20,g:"H",h:"Cape Verde",a:"Saudi Arabia",v:"NRG Stadium",c:"Houston"},
- {d:"2026-06-26",t:20,g:"H",h:"Uruguay",a:"Spain",v:"Estadio Akron",c:"Guadalajara"},
- {d:"2026-06-16",t:15,g:"I",h:"France",a:"Senegal",v:"MetLife Stadium",c:"New York/NJ"},
- {d:"2026-06-16",t:18,g:"I",h:"Iraq",a:"Norway",v:"Gillette Stadium",c:"Boston"},
- {d:"2026-06-22",t:17,g:"I",h:"France",a:"Iraq",v:"Lincoln Financial",c:"Philadelphia"},
- {d:"2026-06-22",t:20,g:"I",h:"Norway",a:"Senegal",v:"MetLife Stadium",c:"New York/NJ"},
- {d:"2026-06-26",t:15,g:"I",h:"Norway",a:"France",v:"Gillette Stadium",c:"Boston"},
- {d:"2026-06-26",t:15,g:"I",h:"Senegal",a:"Iraq",v:"BMO Field",c:"Toronto"},
- {d:"2026-06-16",t:21,g:"J",h:"Argentina",a:"Algeria",v:"Arrowhead",c:"Kansas City"},
- {d:"2026-06-17",t:0,g:"J",h:"Austria",a:"Jordan",v:"Levi's Stadium",c:"SF Bay Area"},
- {d:"2026-06-22",t:13,g:"J",h:"Argentina",a:"Austria",v:"AT&T Stadium",c:"Dallas"},
- {d:"2026-06-22",t:23,g:"J",h:"Jordan",a:"Algeria",v:"Levi's Stadium",c:"SF Bay Area"},
- {d:"2026-06-27",t:22,g:"J",h:"Algeria",a:"Austria",v:"Arrowhead",c:"Kansas City"},
- {d:"2026-06-27",t:22,g:"J",h:"Jordan",a:"Argentina",v:"AT&T Stadium",c:"Dallas"},
- {d:"2026-06-17",t:13,g:"K",h:"Portugal",a:"DR Congo",v:"NRG Stadium",c:"Houston"},
- {d:"2026-06-17",t:22,g:"K",h:"Uzbekistan",a:"Colombia",v:"Estadio Azteca",c:"Mexico City"},
- {d:"2026-06-23",t:13,g:"K",h:"Portugal",a:"Uzbekistan",v:"NRG Stadium",c:"Houston"},
- {d:"2026-06-23",t:22,g:"K",h:"Colombia",a:"DR Congo",v:"Estadio Akron",c:"Guadalajara"},
- {d:"2026-06-27",t:19.5,g:"K",h:"Colombia",a:"Portugal",v:"Hard Rock",c:"Miami"},
- {d:"2026-06-27",t:19.5,g:"K",h:"DR Congo",a:"Uzbekistan",v:"Mercedes-Benz",c:"Atlanta"},
- {d:"2026-06-17",t:16,g:"L",h:"England",a:"Croatia",v:"AT&T Stadium",c:"Dallas"},
- {d:"2026-06-17",t:19,g:"L",h:"Ghana",a:"Panama",v:"BMO Field",c:"Toronto"},
- {d:"2026-06-23",t:16,g:"L",h:"England",a:"Ghana",v:"Gillette Stadium",c:"Boston"},
- {d:"2026-06-23",t:19,g:"L",h:"Panama",a:"Croatia",v:"BMO Field",c:"Toronto"},
- {d:"2026-06-27",t:17,g:"L",h:"Panama",a:"England",v:"MetLife Stadium",c:"New York/NJ"},
- {d:"2026-06-27",t:17,g:"L",h:"Croatia",a:"Ghana",v:"Lincoln Financial",c:"Philadelphia"},
- {d:"2026-06-28",t:15,g:"R32",h:"2A",a:"2B",ko:1,slot:"Match 73",v:"SoFi Stadium",c:"Los Angeles"},
- {d:"2026-06-28",t:18,g:"R32",h:"1E",a:"3rd A/B/C/D/F",ko:1,slot:"Match 74",v:"Gillette Stadium",c:"Boston"},
- {d:"2026-06-29",t:13,g:"R32",h:"1C",a:"2F",ko:1,slot:"Match 76",v:"NRG Stadium",c:"Houston"},
- {d:"2026-06-29",t:21,g:"R32",h:"1F",a:"2C",ko:1,slot:"Match 75",v:"Estadio BBVA",c:"Monterrey"},
- {d:"2026-06-30",t:13,g:"R32",h:"2E",a:"2I",ko:1,slot:"Match 78",v:"AT&T Stadium",c:"Dallas"},
- {d:"2026-06-30",t:17,g:"R32",h:"1I",a:"3rd C/D/F/G/H",ko:1,slot:"Match 77",v:"MetLife Stadium",c:"New York/NJ"},
- {d:"2026-07-01",t:15,g:"R32",h:"1A",a:"3rd C/E/F/H/I",ko:1,slot:"Match 79",v:"Estadio Azteca",c:"Mexico City"},
- {d:"2026-07-01",t:19,g:"R32",h:"1L",a:"3rd E/H/I/J/K",ko:1,slot:"Match 80",v:"Arrowhead",c:"Kansas City"},
- {d:"2026-07-02",t:15,g:"R32",h:"1D",a:"3rd B/E/F/I/J",ko:1,slot:"Match 81",v:"BC Place",c:"Vancouver"},
- {d:"2026-07-02",t:17,g:"R32",h:"1H",a:"2J",ko:1,slot:"Match 84",v:"Mercedes-Benz",c:"Atlanta"},
- {d:"2026-07-02",t:19,g:"R32",h:"1G",a:"3rd A/E/H/I/J",ko:1,slot:"Match 82",v:"Lumen Field",c:"Seattle"},
- {d:"2026-07-02",t:21,g:"R32",h:"2K",a:"2L",ko:1,slot:"Match 83",v:"Hard Rock",c:"Miami"},
- {d:"2026-07-03",t:13,g:"R32",h:"1B",a:"3rd E/F/G/I/J",ko:1,slot:"Match 85",v:"BMO Field",c:"Toronto"},
- {d:"2026-07-03",t:16,g:"R32",h:"1J",a:"2H",ko:1,slot:"Match 86",v:"Lincoln Financial",c:"Philadelphia"},
- {d:"2026-07-03",t:19,g:"R32",h:"1K",a:"3rd D/E/I/J/L",ko:1,slot:"Match 87",v:"Levi's Stadium",c:"SF Bay Area"},
- {d:"2026-07-03",t:22,g:"R32",h:"2D",a:"2G",ko:1,slot:"Match 88",v:"SoFi Stadium",c:"Los Angeles"},
- {d:"2026-07-04",t:16,g:"R16",h:"W74",a:"W77",ko:1,slot:"Match 89",v:"Lincoln Financial",c:"Philadelphia"},
- {d:"2026-07-04",t:20,g:"R16",h:"W73",a:"W75",ko:1,slot:"Match 90",v:"NRG Stadium",c:"Houston"},
- {d:"2026-07-05",t:16,g:"R16",h:"W76",a:"W78",ko:1,slot:"Match 91",v:"MetLife Stadium",c:"New York/NJ"},
- {d:"2026-07-05",t:20,g:"R16",h:"W79",a:"W80",ko:1,slot:"Match 92",v:"Estadio Azteca",c:"Mexico City"},
- {d:"2026-07-06",t:16,g:"R16",h:"W83",a:"W84",ko:1,slot:"Match 93",v:"AT&T Stadium",c:"Dallas"},
- {d:"2026-07-06",t:20,g:"R16",h:"W81",a:"W82",ko:1,slot:"Match 94",v:"SoFi Stadium",c:"Los Angeles"},
- {d:"2026-07-07",t:12,g:"R16",h:"W86",a:"W88",ko:1,slot:"Match 95",v:"Mercedes-Benz",c:"Atlanta"},
- {d:"2026-07-07",t:16,g:"R16",h:"W85",a:"W87",ko:1,slot:"Match 96",v:"BC Place",c:"Vancouver"},
- {d:"2026-07-09",t:16,g:"QF",h:"W89",a:"W90",ko:1,slot:"Quarterfinal 1",v:"Gillette Stadium",c:"Boston"},
- {d:"2026-07-10",t:15,g:"QF",h:"W93",a:"W94",ko:1,slot:"Quarterfinal 2",v:"SoFi Stadium",c:"Los Angeles"},
- {d:"2026-07-11",t:17,g:"QF",h:"W91",a:"W92",ko:1,slot:"Quarterfinal 3",v:"Hard Rock",c:"Miami"},
- {d:"2026-07-11",t:21,g:"QF",h:"W95",a:"W96",ko:1,slot:"Quarterfinal 4",v:"Arrowhead",c:"Kansas City"},
- {d:"2026-07-14",t:15,g:"SF",h:"W QF1",a:"W QF2",ko:1,slot:"Semifinal 1",v:"AT&T Stadium",c:"Dallas"},
- {d:"2026-07-15",t:15,g:"SF",h:"W QF3",a:"W QF4",ko:1,slot:"Semifinal 2",v:"Mercedes-Benz",c:"Atlanta"},
- {d:"2026-07-18",t:15,g:"3rd",h:"L SF1",a:"L SF2",ko:1,slot:"Third Place",v:"Hard Rock",c:"Miami"},
- {d:"2026-07-19",t:15,g:"FINAL",h:"W SF1",a:"W SF2",ko:1,slot:"The Final",v:"MetLife Stadium",c:"New York/NJ"}
+ {g:"A",h:"Mexico",a:"South Africa"},
+ {g:"A",h:"South Korea",a:"Czechia"},
+ {g:"A",h:"Czechia",a:"South Africa"},
+ {g:"A",h:"Mexico",a:"South Korea"},
+ {g:"A",h:"Czechia",a:"Mexico"},
+ {g:"A",h:"South Africa",a:"South Korea"},
+ {g:"B",h:"Canada",a:"Bosnia & Herzegovina"},
+ {g:"B",h:"Qatar",a:"Switzerland"},
+ {g:"B",h:"Switzerland",a:"Bosnia & Herzegovina"},
+ {g:"B",h:"Canada",a:"Qatar"},
+ {g:"B",h:"Switzerland",a:"Canada"},
+ {g:"B",h:"Bosnia & Herzegovina",a:"Qatar"},
+ {g:"C",h:"Brazil",a:"Morocco"},
+ {g:"C",h:"Haiti",a:"Scotland"},
+ {g:"C",h:"Scotland",a:"Morocco"},
+ {g:"C",h:"Brazil",a:"Haiti"},
+ {g:"C",h:"Scotland",a:"Brazil"},
+ {g:"C",h:"Morocco",a:"Haiti"},
+ {g:"D",h:"USA",a:"Paraguay"},
+ {g:"D",h:"Australia",a:"T\u00FCrkiye"},
+ {g:"D",h:"USA",a:"Australia"},
+ {g:"D",h:"T\u00FCrkiye",a:"Paraguay"},
+ {g:"D",h:"T\u00FCrkiye",a:"USA"},
+ {g:"D",h:"Paraguay",a:"Australia"},
+ {g:"E",h:"Germany",a:"Cura\u00E7ao"},
+ {g:"E",h:"Ivory Coast",a:"Ecuador"},
+ {g:"E",h:"Germany",a:"Ivory Coast"},
+ {g:"E",h:"Ecuador",a:"Cura\u00E7ao"},
+ {g:"E",h:"Ecuador",a:"Germany"},
+ {g:"E",h:"Cura\u00E7ao",a:"Ivory Coast"},
+ {g:"F",h:"Netherlands",a:"Japan"},
+ {g:"F",h:"Sweden",a:"Tunisia"},
+ {g:"F",h:"Netherlands",a:"Sweden"},
+ {g:"F",h:"Tunisia",a:"Japan"},
+ {g:"F",h:"Japan",a:"Sweden"},
+ {g:"F",h:"Tunisia",a:"Netherlands"},
+ {g:"G",h:"Belgium",a:"Egypt"},
+ {g:"G",h:"Iran",a:"New Zealand"},
+ {g:"G",h:"Belgium",a:"Iran"},
+ {g:"G",h:"New Zealand",a:"Egypt"},
+ {g:"G",h:"Egypt",a:"Iran"},
+ {g:"G",h:"New Zealand",a:"Belgium"},
+ {g:"H",h:"Spain",a:"Cape Verde"},
+ {g:"H",h:"Saudi Arabia",a:"Uruguay"},
+ {g:"H",h:"Spain",a:"Saudi Arabia"},
+ {g:"H",h:"Uruguay",a:"Cape Verde"},
+ {g:"H",h:"Cape Verde",a:"Saudi Arabia"},
+ {g:"H",h:"Uruguay",a:"Spain"},
+ {g:"I",h:"France",a:"Senegal"},
+ {g:"I",h:"Iraq",a:"Norway"},
+ {g:"I",h:"France",a:"Iraq"},
+ {g:"I",h:"Norway",a:"Senegal"},
+ {g:"I",h:"Norway",a:"France"},
+ {g:"I",h:"Senegal",a:"Iraq"},
+ {g:"J",h:"Argentina",a:"Algeria"},
+ {g:"J",h:"Austria",a:"Jordan"},
+ {g:"J",h:"Argentina",a:"Austria"},
+ {g:"J",h:"Jordan",a:"Algeria"},
+ {g:"J",h:"Algeria",a:"Austria"},
+ {g:"J",h:"Jordan",a:"Argentina"},
+ {g:"K",h:"Portugal",a:"DR Congo"},
+ {g:"K",h:"Uzbekistan",a:"Colombia"},
+ {g:"K",h:"Portugal",a:"Uzbekistan"},
+ {g:"K",h:"Colombia",a:"DR Congo"},
+ {g:"K",h:"Colombia",a:"Portugal"},
+ {g:"K",h:"DR Congo",a:"Uzbekistan"},
+ {g:"L",h:"England",a:"Croatia"},
+ {g:"L",h:"Ghana",a:"Panama"},
+ {g:"L",h:"England",a:"Ghana"},
+ {g:"L",h:"Panama",a:"Croatia"},
+ {g:"L",h:"Panama",a:"England"},
+ {g:"L",h:"Croatia",a:"Ghana"},
+ {g:"R32",h:"2A",a:"2B",ko:1,slot:"Match 73"},
+ {g:"R32",h:"1E",a:"3rd A/B/C/D/F",ko:1,slot:"Match 74"},
+ {g:"R32",h:"1C",a:"2F",ko:1,slot:"Match 76"},
+ {g:"R32",h:"1F",a:"2C",ko:1,slot:"Match 75"},
+ {g:"R32",h:"2E",a:"2I",ko:1,slot:"Match 78"},
+ {g:"R32",h:"1I",a:"3rd C/D/F/G/H",ko:1,slot:"Match 77"},
+ {g:"R32",h:"1A",a:"3rd C/E/F/H/I",ko:1,slot:"Match 79"},
+ {g:"R32",h:"1L",a:"3rd E/H/I/J/K",ko:1,slot:"Match 80"},
+ {g:"R32",h:"1D",a:"3rd B/E/F/I/J",ko:1,slot:"Match 81"},
+ {g:"R32",h:"1H",a:"2J",ko:1,slot:"Match 84"},
+ {g:"R32",h:"1G",a:"3rd A/E/H/I/J",ko:1,slot:"Match 82"},
+ {g:"R32",h:"2K",a:"2L",ko:1,slot:"Match 83"},
+ {g:"R32",h:"1B",a:"3rd E/F/G/I/J",ko:1,slot:"Match 85"},
+ {g:"R32",h:"1J",a:"2H",ko:1,slot:"Match 86"},
+ {g:"R32",h:"1K",a:"3rd D/E/I/J/L",ko:1,slot:"Match 87"},
+ {g:"R32",h:"2D",a:"2G",ko:1,slot:"Match 88"},
+ {g:"R16",h:"W74",a:"W77",ko:1,slot:"Match 89"},
+ {g:"R16",h:"W73",a:"W75",ko:1,slot:"Match 90"},
+ {g:"R16",h:"W76",a:"W78",ko:1,slot:"Match 91"},
+ {g:"R16",h:"W79",a:"W80",ko:1,slot:"Match 92"},
+ {g:"R16",h:"W83",a:"W84",ko:1,slot:"Match 93"},
+ {g:"R16",h:"W81",a:"W82",ko:1,slot:"Match 94"},
+ {g:"R16",h:"W86",a:"W88",ko:1,slot:"Match 95"},
+ {g:"R16",h:"W85",a:"W87",ko:1,slot:"Match 96"},
+ {g:"QF",h:"W89",a:"W90",ko:1,slot:"Quarterfinal 1"},
+ {g:"QF",h:"W93",a:"W94",ko:1,slot:"Quarterfinal 2"},
+ {g:"QF",h:"W91",a:"W92",ko:1,slot:"Quarterfinal 3"},
+ {g:"QF",h:"W95",a:"W96",ko:1,slot:"Quarterfinal 4"},
+ {g:"SF",h:"W QF1",a:"W QF2",ko:1,slot:"Semifinal 1"},
+ {g:"SF",h:"W QF3",a:"W QF4",ko:1,slot:"Semifinal 2"},
+ {g:"3rd",h:"L SF1",a:"L SF2",ko:1,slot:"Third Place"},
+ {g:"FINAL",h:"W SF1",a:"W SF2",ko:1,slot:"The Final"}
 ];
 
 /* ============ STATE & HELPERS ============ */
-const ET=-4;
 const WEEKL=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-const FILTERS=[["ALL","All"],["TODAY","Today"],["FOLLOW","\u2605 Teams"],["TABLE","Tables"],["GROUP","Groups"],["R32","R32"],["R16","R16"],["QF","Quarters"],["SF","Semis"],["FINAL","Final"],["BRACKET","Bracket"]];
-let FILTER="ALL", Q="", OPEN=null, REFRESHING=false, LASTOK=null;
-const LIVE={};
-const CANON2TEAM={}; Object.keys(ISO).forEach(t=>CANON2TEAM[canon(t)]=t);
-const ALIAS={"unitedstates":"USA","congodr":"DR Congo"};
+const FILTERS=[["ALL","All"],["FOLLOW","\u2605 Teams"],["TABLE","Tables"],["GROUP","Groups"],["R32","R32"],["R16","R16"],["QF","Quarters"],["SF","Semis"],["FINAL","Final"],["BRACKET","Bracket"]];
+let FILTER="ALL", Q="", OPEN=null, READY=false, META={};
+/* Archived results keyed by the page's own match key. The 2026 World Cup is over, so the page makes no
+   score requests: ESPN's feed was read once and saved to data/results.json, which is loaded here. */
+const RES={};
 
-function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
 function key(m){return m.h+"|"+m.a;}
-function startDate(m){const ov=LIVE[key(m)];if(ov&&ov.kickoff)return new Date(ov.kickoff);const a=m.d.split("-").map(Number);return new Date(Date.UTC(a[0],a[1]-1,a[2],m.t+4,(m.t%1)*60));}
+function startDate(m){return m.kick;}
 function fmtTime(dt){const l=new Date(dt.getTime()+tzMinFor(dt)*60000);let h=l.getUTCHours(),mm=l.getUTCMinutes();const ap=h<12?"AM":"PM";let h12=h%12;if(h12===0)h12=12;return h12+":"+String(mm).padStart(2,"0")+" "+ap;}
 function localParts(dt){const l=new Date(dt.getTime()+tzMinFor(dt)*60000);return {dkey:l.getUTCFullYear()+"-"+String(l.getUTCMonth()+1).padStart(2,"0")+"-"+String(l.getUTCDate()).padStart(2,"0"),dow:l.getUTCDay(),dd:l.getUTCDate(),mo:l.getUTCMonth()};}
 function flagCode(n){const c=ISO[n];if(!c)return null;if(c==="_ENG")return "gb-eng";if(c==="_SCO")return "gb-sct";return c.toLowerCase();}
 function flagUrl(n){const c=flagCode(n);return c?("https://flagcdn.com/"+c+".svg"):null;}
 function flagTag(n,cls){const u=flagUrl(n);if(!u)return '<span class="'+cls+' ph"></span>';const code=((ISO[n]||"").replace(/^_/,"")||"?").slice(0,3).toUpperCase();return '<img class="'+cls+'" loading="lazy" src="'+u+'" alt="" onerror="flagFail(this,\''+code+'\',\''+cls+'\')">';}
 
+/* Every match has a final result; this is the only source of scores, teams, kickoff times and venues. */
 function stateOf(m){
- const ov=LIVE[key(m)];
- if(ov)return {st:ov.status,hs:ov.hs,as:ov.as,detail:ov.detail,homeTeam:ov.homeTeam,awayTeam:ov.awayTeam,winnerTeam:ov.winnerTeam,pensH:ov.pensH,pensA:ov.pensA,rt:ov.rt};
- if(m.ko)return {st:"up"};
- const now=new Date(),start=startDate(m),end=new Date(start.getTime()+115*60000);
- const hasScore=(m.hs!==undefined&&m.as!==undefined);
- if(now<start)return {st:"up",hs:m.hs,as:m.as};
- if(now>=end)return {st:hasScore?"final":"ended",hs:m.hs,as:m.as};
- return {st:hasScore?"final":"live",hs:m.hs,as:m.as};
+ const r=RES[key(m)], p=r.pens;
+ return {st:"final",hs:r.hs,as:r.as,homeTeam:r.home,awayTeam:r.away,winnerTeam:r.winner,pensH:p?p.h:null,pensA:p?p.a:null,rt:r.result};
+}
+/* Attach the archived result to each fixture: resolved teams (th/ta), ESPN kickoff and ESPN venue. */
+function ingest(data){
+ const R=(data&&data.matches)||{};
+ const missing=M.filter(m=>!R[key(m)]);
+ if(missing.length)throw new Error("results.json is missing "+missing.length+" of "+M.length+" matches");
+ M.forEach(m=>{
+  const r=R[key(m)], st=STADIUMS[r.venue], kick=new Date(r.kickoff);
+  if(!st)throw new Error("unknown venue \u201c"+r.venue+"\u201d for "+key(m));
+  if(isNaN(kick))throw new Error("bad kickoff for "+key(m));
+  RES[key(m)]=r; m.th=r.home; m.ta=r.away; m.kick=kick;
+  m.v=st.short; m.c=st.metro; m.vf=r.venue; m.vc=r.venueCity;
+ });
+ META=data.meta||{};
+}
+function championOf(){const f=M.find(m=>m.g==="FINAL");return f?RES[key(f)].winner:null;}
+function renderHero(){
+ let goals=0; M.forEach(m=>{const s=stateOf(m);goals+=(s.hs||0)+(s.as||0);});
+ document.getElementById("statDone").textContent=M.length;
+ document.getElementById("statGoals").textContent=goals;
+ const champ=championOf(), a=String(META.asOf||"").split("-").map(Number);
+ const when=(a.length===3&&a[0]&&a[1])?(MON[a[1]-1]+" "+a[2]+", "+a[0]):"Jul 19, 2026";
+ document.getElementById("archiveTxt").innerHTML='<b>Tournament complete</b> \u00b7 results as of '+esc(when)+(champ?' \u00b7 Champion: <b>'+esc(champ)+'</b>':'');
 }
 
 function strengthOf(n){const t=TEAMS[n];const r=(t&&t.rank)?t.rank:60;return Math.max(22,Math.min(100,118-r));}
@@ -599,165 +617,46 @@ function winProb(h,a){const sH=strengthOf(h),sA=strengthOf(a);let dr=Math.round(
 function initials(n){const p=String(n).replace(/[^A-Za-z\u00C0-\u017F ]/g,"").trim().split(/\s+/);return (((p[0]||" ")[0])+((p[p.length-1]||" ")[0])).toUpperCase();}
 function formationLines(f){const parts=String(f).split("-").map(Number).filter(x=>x>0);return parts.slice().reverse().concat([1]);}
 function canon(s){return (s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z]/g,"");}
-function toTeam(e){const k=canon(e);return ALIAS[k]||CANON2TEAM[k]||e;}
 function hashStr(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
-function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
-
-function decodeSlot(code){
- if(/^W\s/.test(code))return "Winner "+code.slice(2);
- if(/^L\s/.test(code))return "Loser "+code.slice(2);
- if(/^W\d+$/.test(code))return "Winner Match "+code.slice(1);
- if(/^3rd /.test(code))return "Best 3rd \u00b7 "+code.slice(4);
- if(/^[12][A-L]$/.test(code))return (code[0]==="1"?"Winner Grp ":"Runner-up Grp ")+code[1];
- return code;
-}
-function slotInfoHTML(code){
- let mm=code.match(/^([12])([A-L])$/);
- if(mm){ const pos=+mm[1], g=mm[2], rows=computeGroup(g), complete=rows.every(t=>t.pld===3), occ=(rows[pos-1]||{}).n;
-  let h='<div class="slottitle">Group '+g+' \u2014 '+(complete?'<b>'+esc(occ||"TBD")+'</b> confirmed':(rows.some(t=>t.pld>0)?'currently <b>'+esc(occ||"TBD")+'</b>':'not started'))+'</div>';
-  rows.forEach((t,i)=>{ h+='<div class="srow'+(i===pos-1?' tgt':'')+'"><span class="spos '+(i<2?"p1":i===2?"p2":"")+'">'+(i+1)+'</span>'+flagTag(t.n,"flag-sm")+'<span class="snm">'+esc(t.n)+'</span><span class="cell">'+t.pld+'</span><span class="cell pts">'+t.pts+'</span></div>'; });
-  return h;
- }
- mm=code.match(/^3rd (.+)$/);
- if(mm){ const gs=mm[1].split("/"); const proj=computeThirdProj()[code]; const qSet=new Set(bestThirds().slice(0,8).map(x=>x.g));
-  let h='<div class="slottitle">Best 3rd from '+esc(gs.join(", "))+(proj?' \u2014 likely <b>'+esc(proj.n)+'</b>':'')+'</div>';
-  gs.forEach(g=>{ const t=computeGroup(g)[2]; if(!t)return; const isP=proj&&proj.g===g, q=qSet.has(g);
-   h+='<div class="srow'+(isP?' tgt':'')+'"><span class="spos '+(q?'p1':'p2')+'">'+g+'</span>'+flagTag(t.n,"flag-sm")+'<span class="snm">'+esc(t.n)+(isP?' <span class="projpill">most likely</span>':'')+'</span><span class="cell">'+t.pld+'</span><span class="cell pts">'+t.pts+'</span></div>'; });
-  return h+'<div class="slotnote">8 of 12 third-placed teams reach the Round of 32 \u00b7 projection from current standings.</div>';
- }
- mm=code.match(/^W(\d+)$/);
- if(mm){ const fm=M.find(x=>x.slot==="Match "+mm[1]); if(fm)return '<div class="slottitle">Winner of'+(slotTeam(code)?' \u2014 likely <b>'+esc(slotTeam(code).name)+'</b>':'')+'</div><button type="button" class="slotlink" data-jump="'+esc(key(fm))+'"><b>'+esc(slotLabel(fm.h))+'</b> vs <b>'+esc(slotLabel(fm.a))+'</b><span class="jh">drill in \u203a</span></button>'; }
- mm=code.match(/^([WL]) (QF|SF)(\d)$/);
- if(mm){ const mp={QF:"Quarterfinal ",SF:"Semifinal "}; const fm=M.find(x=>x.slot===mp[mm[2]]+mm[3]); if(fm)return '<div class="slottitle">'+(mm[1]==="W"?"Winner":"Loser")+' of'+(slotTeam(code)?' \u2014 likely <b>'+esc(slotTeam(code).name)+'</b>':'')+'</div><button type="button" class="slotlink" data-jump="'+esc(key(fm))+'"><b>'+esc(slotLabel(fm.h))+'</b> vs <b>'+esc(slotLabel(fm.a))+'</b><span class="jh">drill in \u203a</span></button>'; }
- return null;
-}
 function roundLabel(m){
  if(!m.ko)return "Group "+m.g+" \u00b7 Group stage";
  const map={R32:"Round of 32",R16:"Round of 16",QF:"Quarter-final",SF:"Semi-final","3rd":"Third-place play-off",FINAL:"Final"};
  return (map[m.g]||"Knockout")+(m.slot?" \u00b7 "+m.slot:"");
 }
-function countdown(dt){const ms=dt.getTime()-Date.now();if(ms<=0)return "";const mins=Math.floor(ms/60000),d=Math.floor(mins/1440),h=Math.floor((mins%1440)/60),mm=mins%60;if(d>0)return "in "+d+"d "+h+"h";if(h>0)return "in "+h+"h "+mm+"m";return "in "+mm+"m";}
 function h2hOf(home,away){const r=H2H[[home,away].sort().join("|")];if(!r)return null;return {homeWins:(home===r.a?r.aw:r.bw),draws:r.d,awayWins:(away===r.a?r.aw:r.bw),last:r.last};}
 
 function computeGroup(group){
  const ms=M.filter(x=>x.g===group&&!x.ko);
  const tbl={};const ens=n=>tbl[n]||(tbl[n]={n,pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0});
  ms.forEach(x=>{ens(x.h);ens(x.a);});
- ms.forEach(x=>{const st=stateOf(x),hs=st.hs,as=st.as;if((st.st==="final"||st.st==="ended"||st.st==="live")&&hs!=null&&as!=null){const H=ens(x.h),A=ens(x.a);H.pld++;A.pld++;H.gf+=hs;H.ga+=as;A.gf+=as;A.ga+=hs;if(hs>as){H.w++;A.l++;H.pts+=3;}else if(as>hs){A.w++;H.l++;A.pts+=3;}else{H.d++;A.d++;H.pts++;A.pts++;}}});
+ ms.forEach(x=>{const st=stateOf(x),hs=st.hs,as=st.as;if(hs!=null&&as!=null){const H=ens(x.h),A=ens(x.a);H.pld++;A.pld++;H.gf+=hs;H.ga+=as;A.gf+=as;A.ga+=hs;if(hs>as){H.w++;A.l++;H.pts+=3;}else if(as>hs){A.w++;H.l++;A.pts+=3;}else{H.d++;A.d++;H.pts++;A.pts++;}}});
  return Object.values(tbl).map(t=>({...t,gd:t.gf-t.ga})).sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf||h2hPair(group,a.n,b.n)||a.n.localeCompare(b.n));
 }
 function bestThirds(){
  return "ABCDEFGHIJKL".split("").map(g=>{const t=computeGroup(g)[2];return t?{...t,g}:null;}).filter(Boolean)
   .sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf||a.n.localeCompare(b.n));
 }
-/* Project which 3rd-placed team most likely fills each open knockout slot.
-   Top 8 thirds qualify (by current standings); assign them to the slots'
-   candidate-group sets via bipartite matching so no team appears twice. */
-function _thirdSlotCodes(){return M.filter(m=>m.ko&&/^3rd /.test(m.a)).map(m=>m.a);}
-let _projCache=null;
-function computeThirdProj(){
- if(_projCache)return _projCache;
- const thirds=bestThirds();
- const rankByG={}; thirds.slice(0,8).forEach((t,i)=>{rankByG[t.g]={n:t.n,g:t.g,rank:i+1};});
- const slots=_thirdSlotCodes();
- const cand=slots.map(code=>code.slice(4).split("/").filter(g=>rankByG[g]));
- const groupToSlot={};
- function aug(si,seen){
-  for(const g of cand[si]){ if(seen[g])continue; seen[g]=true;
-   if(groupToSlot[g]===undefined||aug(groupToSlot[g],seen)){groupToSlot[g]=si;return true;} }
-  return false;
- }
- for(let si=0;si<slots.length;si++)aug(si,{});
- const out={}; for(const g in groupToSlot)out[slots[groupToSlot[g]]]=rankByG[g];
- _projCache=out; return out;
-}
-let _slotCache=null;
-function slotTeam(code){
- if(_slotCache&&(code in _slotCache))return _slotCache[code];
- const r=_slotTeamRaw(code);
- if(_slotCache)_slotCache[code]=r;
- return r;
-}
-function _slotTeamRaw(code){
- let mm=code.match(/^([12])([A-L])$/);
- if(mm){ const rows=computeGroup(mm[2]); if(!rows.length||!rows.some(t=>t.pld>0))return null;
-  const t=rows[mm[1]==="1"?0:1]; if(!t)return null;
-  return {name:t.n,group:mm[2],proj:!rows.every(x=>x.pld===3)}; }
- if(/^3rd /.test(code)){ const p=computeThirdProj()[code]; return p?{name:p.n,group:p.g,proj:true,rank:p.rank,sub:code.slice(4)}:null; }
- mm=code.match(/^W(\d+)$/);
- if(mm)return matchSideTeam("Match "+mm[1],"W");
- mm=code.match(/^([WL]) (QF|SF)(\d)$/);
- if(mm){ const mp={QF:"Quarterfinal ",SF:"Semifinal "}; return matchSideTeam(mp[mm[2]]+mm[3],mm[1]); }
- return null;
-}
-function matchSideTeam(slotName,side){
- const fm=M.find(x=>x.slot===slotName); if(!fm)return null;
- /* 1) Actual result known from the live feed -> confirmed winner/loser. */
- const ov=LIVE[key(fm)];
- if(ov&&ov.homeTeam&&ov.awayTeam&&ISO[ov.homeTeam]&&ISO[ov.awayTeam]){
-  if(ov.status==="final"){
-   let win=ov.winnerTeam;
-   if(!win&&ov.hs!=null&&ov.as!=null&&ov.hs!==ov.as)win=ov.hs>ov.as?ov.homeTeam:ov.awayTeam;
-   if(win){const lose=win===ov.homeTeam?ov.awayTeam:ov.homeTeam;const pick=side==="W"?win:lose;return {name:pick,proj:false};}
-  }
-  /* teams set but not decided -> project between the two ACTUAL teams. */
-  const strong=strengthOf(ov.homeTeam)>=strengthOf(ov.awayTeam)?ov.homeTeam:ov.awayTeam, weak=strong===ov.homeTeam?ov.awayTeam:ov.homeTeam;
-  return {name:side==="W"?strong:weak,proj:true};
- }
- /* 2) Fall back to projecting from the feeding slots. */
- const H=slotTeam(fm.h),A=slotTeam(fm.a); if(!H||!A)return null;
- const strong=strengthOf(H.name)>=strengthOf(A.name)?H:A, weak=strong===H?A:H;
- const pick=side==="W"?strong:weak;
- return {name:pick.name,group:pick.group,proj:true};
-}
-function slotLabel(code){ const r=slotTeam(code); return r?(r.name+(r.proj?" \u00b7 proj":"")):decodeSlot(code); }
 
 /* ============ LIST + TABLES RENDER ============ */
 function buildChips(){
- document.getElementById("chips").innerHTML=FILTERS.map(([k,l])=>'<button class="chip'+(k===FILTER?' active':'')+'" data-k="'+k+'">'+l+'</button>').join("");
+ const box=document.getElementById("chips"), ae=document.activeElement;
+ const fk=(ae&&box.contains(ae)&&ae.dataset)?ae.dataset.k:null;   /* keep keyboard focus on the chip across a rebuild */
+ box.innerHTML=FILTERS.map(([k,l])=>'<button class="chip'+(k===FILTER?' active':'')+'" data-k="'+k+'">'+l+'</button>').join("");
+ if(fk){const nb=box.querySelector('.chip[data-k="'+fk+'"]');if(nb)nb.focus({preventScroll:true});}
 }
-function teamRowHTML(name,score,win,ko,lose,resolved){
- if(ko){
-  if(resolved){
-   const ring=resolved.proj?"flag projflag":"flag";
-   const pill=resolved.proj?'<span class="projpill">proj</span>':'';
-   const sub=resolved.sub?'<span class="slotcode">'+esc(resolved.sub)+'</span>':'';
-   return '<div class="row koR">'+flagTag(resolved.name,ring)+'<span class="konm"><span class="nmline"><span class="nm">'+esc(resolved.name)+'</span>'+pill+'</span>'+sub+'</span></div>';
-  }
-  return '<div class="row"><span class="flag ph"></span><span class="nm" style="color:#8a7a2e">'+esc(name)+'</span></div>';
- }
+function teamRowHTML(name,score,win,lose){
  const sc=(score!==undefined&&score!==null)?'<span class="sc">'+score+'</span>':'';
  return '<div class="row'+(win?' win':'')+(lose?' lose':'')+'">'+flagTag(name,"flag")+'<span class="nm">'+esc(name)+(FOLLOW.has(name)?' <span class="fstar">\u2605</span>':'')+'</span>'+sc+'</div>';
 }
 function matchCardHTML(m){
- const s=stateOf(m),done=(s.st==="final"||s.st==="ended"),live=(s.st==="live"),ko=!!m.ko;
- /* Knockout with its two real teams now known from the live feed. */
- const koKnown=ko&&s.homeTeam&&s.awayTeam&&ISO[s.homeTeam]&&ISO[s.awayTeam];
+ const s=stateOf(m),ko=!!m.ko,hN=m.th,aN=m.ta;
  const parts=fmtTime(startDate(m)).split(" ");
- const pens=ko&&done&&s.winnerTeam&&s.hs!=null&&s.as!=null&&s.hs===s.as;
- let badge="";
- if(live)badge='<span class="badge live">'+esc(s.detail||"Live")+'</span>';
- else if(s.st==="final")badge='<span class="badge ft">'+(pens?"FT \u00b7 Pens":"FT")+'</span>';
- else if(s.st==="ended")badge='<span class="badge ft">Ended</span>';
+ const pens=(s.pensH!=null&&s.pensA!=null);
+ const badge='<span class="badge ft">'+(pens?"FT \u00b7 Pens":s.rt==="aet"?"AET":"FT")+'</span>';
  const gtag=ko?'<span class="mgroup ko">'+esc(m.slot)+'</span>':'<span class="mgroup">Group '+m.g+'</span>';
- let teamsHTML,hLbl,aLbl;
- if(koKnown){
-  const hN=s.homeTeam,aN=s.awayTeam,hasSc=(s.st!=="up"&&s.hs!=null&&s.as!=null);
-  const winH=s.winnerTeam?s.winnerTeam===hN:(hasSc&&s.hs>s.as);
-  const winA=s.winnerTeam?s.winnerTeam===aN:(hasSc&&s.as>s.hs);
-  teamsHTML=teamRowHTML(hN,hasSc?s.hs:undefined,done&&winH,false,done&&winA,null)
-           +teamRowHTML(aN,hasSc?s.as:undefined,done&&winA,false,done&&winH,null);
-  hLbl=hN;aLbl=aN;
- } else if(ko){
-  teamsHTML=teamRowHTML(m.h,undefined,false,true,false,slotTeam(m.h))+'<div class="vs">vs</div>'+teamRowHTML(m.a,undefined,false,true,false,slotTeam(m.a));
-  hLbl=decodeSlot(m.h);aLbl=decodeSlot(m.a);
- } else {
-  const hsv=s.hs,asv=s.as,have=(s.st!=="up"&&hsv!=null&&asv!=null);
-  const winH=have&&hsv>asv,winA=have&&asv>hsv,loseH=done&&winA,loseA=done&&winH;
-  teamsHTML=teamRowHTML(m.h,hsv,winH,false,loseH,null)+teamRowHTML(m.a,asv,winA,false,loseA,null);
-  hLbl=m.h;aLbl=m.a;
- }
- return '<div class="match'+(ko?' knockout':'')+(done?' done':'')+(live?' live':'')+'" role="button" tabindex="0" aria-label="'+esc(hLbl+" versus "+aLbl)+'" data-key="'+esc(key(m))+'">'
+ const winH=(s.winnerTeam===hN),winA=(s.winnerTeam===aN);
+ const teamsHTML=teamRowHTML(hN,s.hs,winH,winA)+teamRowHTML(aN,s.as,winA,winH);
+ return '<div class="match'+(ko?' knockout':'')+' done" role="button" tabindex="0" aria-label="'+esc(hN+" versus "+aN)+'" data-key="'+esc(key(m))+'">'
   +'<div class="mtime"><div class="t">'+parts[0]+'</div><div class="tz">'+parts[1]+' '+tzAbbr()+'</div>'+badge+'</div>'
   +'<div class="mteams">'+teamsHTML+'</div>'
   +'<div class="mmeta">'+gtag+'<div class="mvenue"><span class="mcity">'+esc(m.c)+'</span><br>'+esc(m.v)+'</div></div></div>';
@@ -767,7 +666,7 @@ function tablesHTML(){
  const pcls=i=>i<2?"p1":i===2?"p2":"p3";
  let h='<div class="sec-head"><div class="sec-title">Group tables</div><div class="legend">'
   +'<span><span class="sw" style="background:var(--field)"></span>Top 2 \u00b7 advance</span>'
-  +'<span><span class="sw" style="background:var(--gold-deep)"></span>3rd \u00b7 best-third race</span>'
+  +'<span><span class="sw" style="background:var(--gold-deep)"></span>3rd \u00b7 best-third ranking</span>'
   +'<span><span class="sw" style="background:#c2554e"></span>4th \u00b7 out</span></div></div>';
  h+='<div class="tgrid">';
  "ABCDEFGHIJKL".split("").forEach(g=>{
@@ -783,7 +682,7 @@ function tablesHTML(){
  });
  h+='</div>';
  const thirds=bestThirds();
- h+='<div class="sec-head"><div class="sec-title">Race for the last 8 spots</div><div class="sec-note">Best 3rd-placed teams \u00b7 8 of 12 reach the Round of 32</div></div>';
+ h+='<div class="sec-head"><div class="sec-title">Best third-placed teams</div><div class="sec-note">8 of 12 third-placed teams reached the Round of 32</div></div>';
  h+='<div class="thirds"><div class="th-h"><span style="text-align:center">#</span><span style="text-align:center">Grp</span><span></span><span>Team</span><span style="text-align:center">GD</span><span style="text-align:center">Pts</span></div>';
  const row3=(t,i)=>'<div class="trow3'+(i<8?' in':'')+'"><span class="pos '+(i<8?'p1':'')+'">'+(i+1)+'</span>'
    +'<span class="cell" style="color:'+(i<8?'var(--field)':'var(--faint)')+';font-weight:600">'+t.g+'</span>'
@@ -792,41 +691,36 @@ function tablesHTML(){
  thirds.slice(0,8).forEach((t,i)=>{h+=row3(t,i);});
  h+='<div class="cut"><span class="ln"></span>Qualification cut-off<span class="ln"></span></div>';
  thirds.slice(8).forEach((t,i)=>{h+=row3(t,i+8);});
- h+='<div style="margin-top:9px;font-family:\'Archivo Narrow\',sans-serif;font-size:11px;color:var(--muted2)">Ranked by points, then goal difference \u00b7 updates live as results land</div></div>';
+ h+='<div style="margin-top:9px;font-family:\'Archivo Narrow\',sans-serif;font-size:11px;color:var(--muted2)">Ranked by points, then goal difference \u00b7 final standings</div></div>';
  return h;
 }
 function render(){
- _projCache=null;
- _slotCache={};
+ if(!READY)return;
  buildChips();
  const list=document.getElementById("list");
- const todayP=localParts(new Date());
- if(FILTER==="TABLE"){list.innerHTML=tablesHTML();updateStats();return;}
- if(FILTER==="BRACKET"){list.innerHTML=bracketHTML();updateStats();return;}
+ if(FILTER==="TABLE"){list.innerHTML=tablesHTML();return;}
+ if(FILTER==="BRACKET"){list.innerHTML=bracketHTML();return;}
  const pls=n=>((TEAMS[n]&&TEAMS[n].players)||[]).map(p=>p.n).join(" ");
- let data=M.filter(m=>{
+ const data=M.filter(m=>{
   if(FILTER==="GROUP"&&m.ko)return false;
-  if(FILTER==="FOLLOW"&&!(FOLLOW.has(m.h)||FOLLOW.has(m.a)))return false;
+  if(FILTER==="FOLLOW"&&!(FOLLOW.has(m.th)||FOLLOW.has(m.ta)))return false;   /* resolved team names, so a followed team's knockout ties are included */
   if(["R32","R16","QF","SF","FINAL"].includes(FILTER)&&m.g!==FILTER)return false;
-  if(FILTER==="TODAY"){const p=localParts(startDate(m));if(!(p.dd===todayP.dd&&p.mo===todayP.mo))return false;}
-  if(Q){const hay=(m.h+" "+m.a+" "+m.v+" "+m.c+" "+m.g+" "+pls(m.h)+" "+pls(m.a)).toLowerCase();if(!hay.includes(Q))return false;}
+  if(Q){const hay=(m.th+" "+m.ta+" "+m.v+" "+m.vf+" "+m.c+" "+m.g+" "+(m.slot||"")+" "+pls(m.th)+" "+pls(m.ta)).toLowerCase();if(!hay.includes(Q))return false;}
   return true;
  });
  const days={};
  data.forEach(m=>{const p=localParts(startDate(m));(days[p.dkey]=days[p.dkey]||[]).push(m);});
  const keys=Object.keys(days).sort();
- if(!keys.length){list.innerHTML='<div class="empty"><div class="big">\u26bd</div>No matches match that filter.</div>';updateStats();return;}
+ if(!keys.length){list.innerHTML='<div class="empty"><div class="big">\u26bd</div>No matches match that filter.</div>';return;}
  let html="";
  keys.forEach(k=>{
   const items=days[k].sort((a,b)=>startDate(a)-startDate(b));
   const p=localParts(startDate(items[0]));
-  const isToday=(p.dd===todayP.dd&&p.mo===todayP.mo);
-  html+='<div class="daygroup"><div class="dayhead'+(isToday?' today':'')+'"><span class="dnum">'+p.dd+'</span><span class="dmon">'+MON[p.mo]+'</span>'+(isToday?'<span class="todaytag">Today</span>':'')+'<span class="dweek">'+WEEKL[p.dow]+'</span></div><div class="grid">';
+  html+='<div class="daygroup"><div class="dayhead"><span class="dnum">'+p.dd+'</span><span class="dmon">'+MON[p.mo]+'</span><span class="dweek">'+WEEKL[p.dow]+'</span></div><div class="grid">';
   items.forEach(m=>{html+=matchCardHTML(m);});
   html+='</div></div>';
  });
  list.innerHTML=html;
- updateStats();
 }
 
 /* ============ DETAIL MODAL ============ */
@@ -840,22 +734,34 @@ function teamColHTML(name,side){
  const t=TEAMS[name]||{players:[]};
  return '<div><div class="tt">'+flagTag(name,"")+esc(name)+'</div>'+(t.players||[]).map(p=>playerHTML(p,side)).join("")+'</div>';
 }
-function matchStatsHTML(m,hs,as,live){
- const r=mulberry(hashStr(m.h+m.a+m.d));
- const sH=strengthOf(m.h),sA=strengthOf(m.a);
- let pos=Math.round(50+(sH-sA)*0.22+(r()*8-4));pos=Math.max(35,Math.min(65,pos));
- const gH=hs||0,gA=as||0;
- const shH=Math.max(gH*2+3,Math.round(8+r()*10+(pos-50)*0.2));
- const shA=Math.max(gA*2+3,Math.round(8+r()*10+(50-pos)*0.2));
- const sotH=Math.max(gH,Math.round(shH*(0.32+r()*0.12))),sotA=Math.max(gA,Math.round(shA*(0.32+r()*0.12)));
- const xgH=(Math.max(gH*0.7,gH?gH-0.3+r()*0.8:0.4+r()*1.4)).toFixed(1);
- const xgA=(Math.max(gA*0.7,gA?gA-0.3+r()*0.8:0.4+r()*1.4)).toFixed(1);
- const rows=[["Possession",pos+"%",(100-pos)+"%",pos,100-pos],["Shots",shH,shA,shH,shA],["Shots on target",sotH,sotA,sotH,sotA],["Expected goals (xG)",xgH,xgA,parseFloat(xgH),parseFloat(xgA)],["Corners",Math.round(3+r()*7),Math.round(3+r()*7),0,0],["Fouls",Math.round(7+r()*8),Math.round(7+r()*8),0,0]];
- let h='<div class="panel"><div class="panel-t">'+(live?"Live match stats":"Match stats")+' <span class="tag">Model estimate</span></div>';
- rows.forEach(row=>{let[label,hh,aa,hv,av]=row;if(hv===0&&av===0){hv=Number(hh);av=Number(aa);}const tot=(hv+av)||1;const hp=Math.round(hv/tot*100);
-  h+='<div class="statrow"><div class="sh"><span>'+hh+'</span><span class="sl">'+label+'</span><span>'+aa+'</span></div><div class="bar"><div class="lh"><i class="h" style="width:'+hp+'%"></i></div><div class="rh"><i class="a" style="width:'+(100-hp)+'%"></i></div></div></div>';
+const NOTE_STYLE="font-family:'Archivo Narrow',sans-serif;font-size:11px;color:var(--muted2)";
+const EV_TAG='<span class="tag" style="background:var(--tintg);color:var(--field)">Full time \u00b7 ESPN</span>';
+function eventLabel(e){
+ /* ESPN feed text: every name goes through esc() before it reaches innerHTML */
+ let label=e.name?esc(e.name):({goal:"Goal",og:"Own goal",yc:"Yellow card",rc:"Red card"}[e.kind]||"");
+ if(e.kind==="goal"&&e.pen)label+=' <span class="evsub">(pen)</span>';
+ if(e.kind==="og")label+=' <span class="evsub">(OG)</span>';
+ return label;
+}
+function eventsHTML(r){
+ const evs=r.events||[];
+ let h='<div class="panel"><div class="panel-t">Match events '+EV_TAG+'</div>';
+ if(!evs.length)return h+'<div style="'+NOTE_STYLE+'">No goals or cards were recorded.</div></div>';
+ h+='<div class="evtl">';
+ evs.forEach(e=>{const label=eventLabel(e), side=(e.side==="a"?"a":"h");
+  const cell='<span class="evcell '+side+'">'+(side==="h"?evMarker(e.kind)+'<span class="evlbl">'+label+'</span>':'<span class="evlbl">'+label+'</span>'+evMarker(e.kind))+'</span>';
+  h+='<div class="evrow">'+(side==="h"?cell:'<span></span>')+'<span class="evmin">'+esc(e.min)+'</span>'+(side==="a"?cell:'<span></span>')+'</div>'; });
+ return h+'</div><div style="margin-top:9px;'+NOTE_STYLE+'">Goals and cards only \u00b7 substitutions are not archived.</div></div>';
+}
+function statsHTML(r){
+ const st=r.stats;
+ let h='<div class="panel"><div class="panel-t">Match stats <span class="tag" style="background:var(--tintg);color:var(--field)">Official \u00b7 ESPN</span></div>';
+ if(!st)return h+'<div style="'+NOTE_STYLE+'">Match stats are not archived for this match.</div></div>';
+ [["Possession","possession","%"],["Shots","shots"],["Shots on target","shotsOnTarget"],["Fouls","fouls"],["Corners","corners"]].forEach(([label,k,suf])=>{
+  const v=st[k]; if(!v)return;
+  const fmt=x=>suf?(Math.round(x*10)/10)+suf:x, tot=(v[0]+v[1])||1, hp=Math.round(v[0]/tot*100);
+  h+='<div class="statrow"><div class="sh"><span>'+fmt(v[0])+'</span><span class="sl">'+label+'</span><span>'+fmt(v[1])+'</span></div><div class="bar"><div class="lh"><i class="h" style="width:'+hp+'%"></i></div><div class="rh"><i class="a" style="width:'+(100-hp)+'%"></i></div></div></div>';
  });
- h+='<div style="margin-top:2px;font-family:\'Archivo Narrow\',sans-serif;font-size:11px;color:var(--muted2)">Modelled from team strength &amp; result — the live feed carries the score only, not detailed match stats.</div>';
  return h+'</div>';
 }
 function standingsHTML(group,home,away){
@@ -865,7 +771,7 @@ function standingsHTML(group,home,away){
  rows.forEach((t,i)=>{const me=(t.n===home||t.n===away);
   h+='<div class="stn'+(me?' me':'')+'"><span class="spos" style="color:'+(i<2?'var(--field)':i===2?'var(--gold-deep)':'var(--faint)')+'">'+(i+1)+'</span>'+flagTag(t.n,"flag-sm")+'<span class="snm">'+esc(t.n)+'</span><span class="cell gd">'+(t.gd>0?"+":"")+t.gd+'</span><span class="cell pts">'+t.pts+'</span></div>';
  });
- return h+'<div style="margin-top:9px;font-family:\'Archivo Narrow\',sans-serif;font-size:11px;color:var(--muted2)">Top two advance \u00b7 updates as results come in</div></div>';
+ return h+'<div style="margin-top:9px;font-family:\'Archivo Narrow\',sans-serif;font-size:11px;color:var(--muted2)">Top two advance \u00b7 final standings</div></div>';
 }
 /* ===== knockout match-center helpers ===== */
 const KO_RIDX={R32:0,R16:1,QF:2,SF:3,"3rd":3,FINAL:4};
@@ -886,21 +792,18 @@ function groupFinishOf(team){
 function koPathFor(team,beforeIdx){
  const steps=[]; const gf=groupFinishOf(team);
  if(gf)steps.push({kind:"grp",rr:"Group stage",label:gf.label});
- M.filter(m=>m.ko&&KO_RIDX[m.g]<beforeIdx).map(m=>({m,dt:startDate(m)})).sort((a,b)=>a.dt-b.dt).forEach(({m})=>{
-  const ov=LIVE[key(m)]; if(!ov||!ov.homeTeam||!ov.awayTeam)return;
-  if(ov.status!=="final"||(ov.homeTeam!==team&&ov.awayTeam!==team))return;
-  const isH=ov.homeTeam===team, opp=isH?ov.awayTeam:ov.homeTeam, my=isH?ov.hs:ov.as, th=isH?ov.as:ov.hs;
-  const won=ov.winnerTeam?ov.winnerTeam===team:(my>th); if(!won)return;
-  const pens=(ov.pensH!=null&&ov.pensA!=null&&my===th);
-  steps.push({kind:"ko",rr:koRoundShort(m.g),opp,my,th,pens,myPen:isH?ov.pensH:ov.pensA,thPen:isH?ov.pensA:ov.pensH});
+ M.filter(m=>m.ko&&KO_RIDX[m.g]<beforeIdx).sort((a,b)=>startDate(a)-startDate(b)).forEach(m=>{
+  const r=RES[key(m)];
+  if(r.winner!==team)return;   /* the road lists the ties this team won */
+  const isH=r.home===team, opp=isH?r.away:r.home, my=isH?r.hs:r.as, th=isH?r.as:r.hs;
+  const pens=!!r.pens;
+  steps.push({kind:"ko",rr:koRoundShort(m.g),opp,my,th,pens,myPen:pens?(isH?r.pens.h:r.pens.a):null,thPen:pens?(isH?r.pens.a:r.pens.h):null});
  });
  return steps;
 }
 function roadColHTML(team,ridx){
- if(!team||!ISO[team])return '<div class="roadcol"><div class="rh"><span class="flag-sm ph"></span><span class="nm" style="color:var(--faint)">To be decided</span></div><div class="rstep"><div class="rl" style="color:var(--muted2);font-weight:400">Fills in once the feeding tie finishes</div></div></div>';
  const steps=koPathFor(team,ridx);
  let h='<div class="roadcol"><div class="rh">'+flagTag(team,"flag-sm")+'<span class="nm">'+esc(team)+'</span></div>';
- if(!steps.length)h+='<div class="rstep"><div class="rl" style="color:var(--muted2);font-weight:400">Path fills in as results land</div></div>';
  steps.forEach(st=>{
   if(st.kind==="grp"){h+='<div class="rstep grp"><div class="rr">'+esc(st.rr)+'</div><div class="rl">'+esc(st.label)+'</div></div>';}
   else{const chip=st.pens?'<span class="rchip p">'+st.my+"\u2013"+st.th+' \u00b7 '+st.myPen+"\u2013"+st.thPen+' pens</span>':'<span class="rchip">'+st.my+"\u2013"+st.th+'</span>';
@@ -914,322 +817,25 @@ function koWinCode(m){
  mm=m.slot&&m.slot.match(/^Semifinal (\d)$/); if(mm)return "W SF"+mm[1];
  return null;
 }
-function koNextPanelHTML(m,winnerName){
+/* Where the winner went next, read from the archived result of that next tie. */
+function koNextPanelHTML(m){
  const c=koWinCode(m); if(!c)return "";
  const nx=M.find(x=>x.ko&&(x.h===c||x.a===c)); if(!nx)return "";
- const otherCode=nx.h===c?nx.a:nx.h, other=slotTeam(otherCode);
- const otherName=other?(other.name+(other.proj?" \u00b7 proj":"")):decodeSlot(otherCode);
- const line=winnerName?('<b>'+esc(winnerName)+'</b> would meet '+esc(otherName)):('<b>Winner</b> faces '+esc(otherName));
+ const win=RES[key(m)].winner, nr=RES[key(nx)]; if(!win)return "";
+ const isH=nr.home===win, opp=isH?nr.away:nr.home, my=isH?nr.hs:nr.as, th=isH?nr.as:nr.hs, won=(nr.winner===win), pn=nr.pens;
+ const chip=pn?'<span class="rchip p">'+my+"\u2013"+th+' \u00b7 '+(isH?pn.h:pn.a)+"\u2013"+(isH?pn.a:pn.h)+' pens</span>':'<span class="rchip">'+my+"\u2013"+th+(nr.result==="aet"?' aet':'')+'</span>';
+ const line='<b>'+esc(win)+'</b> went on to '+(won?'beat ':'lose to ')+'<b>'+esc(opp)+'</b> '+chip;
  return '<div class="ko-next"><span class="arw">\u2192</span><div class="nx"><div class="nr">Next \u00b7 '+esc(roundLabel(nx))+'</div><div class="nl">'+line+'</div></div></div>';
 }
 
-function detailHTML(m){
- const ko=!!m.ko,s=stateOf(m),dt=startDate(m);
- const koKnown=ko&&s.homeTeam&&s.awayTeam&&ISO[s.homeTeam]&&ISO[s.awayTeam];
- const live=s.st==="live",finalish=(s.st==="final"||s.st==="ended"),played=live||finalish;
- const hs=s.hs,as=s.as,hasScore=(s.st!=="up"&&hs!=null&&as!=null),showScore=hasScore||live;
- const pensK=ko&&finalish&&s.winnerTeam&&hs!=null&&as!=null&&hs===as;
- const tp=fmtTime(dt).split(" "),p=localParts(dt);
- const hSlot=(ko&&!koKnown)?slotTeam(m.h):null, aSlot=(ko&&!koKnown)?slotTeam(m.a):null;
- const hReal=!ko||koKnown||!!(hSlot&&ISO[hSlot.name]), aReal=!ko||koKnown||!!(aSlot&&ISO[aSlot.name]);
- const teamsReal=hReal&&aReal, koConfirmed=ko&&(koKnown||(teamsReal&&!(hSlot&&hSlot.proj)&&!(aSlot&&aSlot.proj)));
- const hTeam=koKnown?s.homeTeam:(hReal&&hSlot?hSlot.name:m.h), aTeam=koKnown?s.awayTeam:(aReal&&aSlot?aSlot.name:m.a);
- const hName=!ko?m.h:(hReal?hTeam:decodeSlot(m.h)), aName=!ko?m.a:(aReal?aTeam:decodeSlot(m.a));
- const hFlag=(ko&&!hReal)?'<div class="m-flag ph"></div>':flagTag(hTeam,"m-flag");
- const aFlag=(ko&&!aReal)?'<div class="m-flag ph"></div>':flagTag(aTeam,"m-flag");
- const hRank=(hReal&&TEAMS[hTeam])?'<div class="m-rank">FIFA #'+TEAMS[hTeam].rank+'</div>':'';
- const aRank=(aReal&&TEAMS[aTeam])?'<div class="m-rank">FIFA #'+TEAMS[aTeam].rank+'</div>':'';
- let badge;
- if(live)badge='<div class="m-badge live">'+esc(s.detail||"Live")+'</div>';
- else if(finalish)badge='<div class="m-badge ft">'+(s.st==="final"?(pensK?"Full time \u00b7 Pens":"Full time"):"Ended")+'</div>';
- else badge='<div class="m-badge up">'+(countdown(dt)||"Upcoming")+'</div>';
- const center=showScore
-  ? '<div class="m-score">'+(hasScore?(hs+" \u2013 "+as):"0 \u2013 0")+'</div>'+badge
-  : '<div class="m-time">'+tp[0]+'</div><div class="m-tmeta">'+tp[1]+' '+tzAbbr()+'</div>'+badge;
- const subline=WEEKL[p.dow]+" \u00b7 "+MON[p.mo]+" "+p.dd+" \u00b7 "+((STADIUMS[m.v]&&STADIUMS[m.v].city)||m.c);
-
- let body="";
- if(!ko){
-  const w=winProb(m.h,m.a);
-  body+='<div class="panel" id="probPanel">'+probInner(m,w,finalish?{title:"Win probability",tag:"Form-based forecast"}:live?{title:"Win probability",tag:"Pre-match forecast"}:{title:"Win probability",tag:"Form-based projection"})+'</div>';
-  body+='<div id="eventsSlot"></div>';
-  const fp=name=>(TEAMS[name]&&TEAMS[name].form||"").split("").filter(c=>"WDL".includes(c)).map(c=>'<span class="pill '+c+'">'+c+'</span>').join("");
-  body+='<div class="panel"><div class="panel-t">Recent form</div>'
-   +'<div class="formrow"><span class="fn">'+esc(m.h)+'</span><div class="pills">'+fp(m.h)+'</div></div>'
-   +'<div class="formrow"><span class="fn">'+esc(m.a)+'</span><div class="pills">'+fp(m.a)+'</div></div></div>';
-  const hh=h2hOf(m.h,m.a);
-  if(hh){body+='<div class="panel"><div class="panel-t">Head-to-head</div><div class="h2h">'
-   +'<div><div class="big g">'+hh.homeWins+'</div><div class="sm">'+esc(m.h)+' wins</div></div>'
-   +'<div><div class="big n">'+hh.draws+'</div><div class="sm">Draws</div></div>'
-   +'<div><div class="big a">'+hh.awayWins+'</div><div class="sm">'+esc(m.a)+' wins</div></div></div>'
-   +'<div class="h2h-last">Last meeting \u00b7 '+esc(hh.last)+'</div></div>';}
-  body+='<div class="panel"><div class="panel-t">Key players'+(played?'':' <span class="tag">Projected</span>')+'</div><div class="two">'+teamColHTML(m.h,"h")+teamColHTML(m.a,"a")+'</div></div>';
-  const fmH=(TEAMS[m.h]&&TEAMS[m.h].formation)||"4-3-3", fmA=(TEAMS[m.a]&&TEAMS[m.a].formation)||"4-3-3";
-  const mgH=(TEAMS[m.h]&&TEAMS[m.h].mgr)||"\u2014", mgA=(TEAMS[m.a]&&TEAMS[m.a].mgr)||"\u2014";
-  body+='<div class="panel"><div class="panel-t">'+(played?"Team shape":"Projected shape")+'</div><div class="two">'
-   +'<div><div class="shape-h"><span style="font-weight:700;font-size:12px">'+esc(m.h)+'</span><span class="fm h">'+fmH+'</span></div><div class="pitch">'+pitchHTML(fmH)+'</div><div class="coach">Coach \u00b7 '+esc(mgH)+'</div></div>'
-   +'<div><div class="shape-h"><span style="font-weight:700;font-size:12px">'+esc(m.a)+'</span><span class="fm a">'+fmA+'</span></div><div class="pitch">'+pitchHTML(fmA)+'</div><div class="coach">Coach \u00b7 '+esc(mgA)+'</div></div></div></div>';
-  body+='<div id="statsSlot">'+(showScore?matchStatsHTML(m,hs,as,live):"")+'</div>';
-  body+=standingsHTML(m.g,m.h,m.a);
- } else {
-  const ridx=KO_RIDX[m.g], stk=koStakes(m);
-  body+='<div class="ko-stakes"><span class="kx">'+esc(koRoundShort(m.g))+' \u00b7 '+stk.tag+'</span><span class="kd"></span><span class="kn">'+stk.line+'</span></div>';
-  /* Outcome (played) or stakes preview (live / upcoming) */
-  if(finalish&&koKnown){
-   const winner=s.winnerTeam||(hs>as?hTeam:as>hs?aTeam:null), loser=winner?(winner===hTeam?aTeam:hTeam):null;
-   const pens=(s.pensH!=null&&s.pensA!=null&&hs===as);
-   const how=pens?"Won on penalties":(s.rt==="aet"?"After extra time":"Full time \u2014 90 minutes");
-   const nextTxt=m.g==="FINAL"?"are World Champions":m.g==="3rd"?"take third place":"advance to "+(KO_NEXT[m.g]||"the next round");
-   let out='<div class="ko-out">';
-   if(winner){
-    out+='<div class="adv">'+flagTag(winner,"flag")+'<span>'+esc(winner)+' '+nextTxt+'</span></div><div class="how">'+esc(how)+'</div>';
-    if(pens){const pv=winner===hTeam?(s.pensH+"\u2013"+s.pensA):(s.pensA+"\u2013"+s.pensH);out+='<div class="ko-pens"><span class="pl">Shootout</span><span class="pv">'+pv+'</span></div>';}
-    if(m.g!=="FINAL"&&m.g!=="3rd"&&loser)out+='<div class="elim"><s>'+esc(loser)+'</s> are eliminated</div>';
-   }else out+='<div class="adv">Full time</div>';
-   body+=out+'</div>';
-  }else if(live){
-   body+='<div class="ko-out"><div class="adv">Live \u2014 win or go home</div><div class="how">'+esc(s.detail||"In play")+' \u00b7 next goal could decide it</div></div>';
-  }else{
-   const when=countdown(dt);
-   const mu=teamsReal?(esc(hName)+' vs '+esc(aName)+(koConfirmed?'':' <span class="projpill">projected</span>')):"Matchup to be confirmed";
-   body+='<div class="ko-out"><div class="adv">'+mu+'</div><div class="how">Kick-off '+(when||(tp[0]+" "+tp[1]+" "+tzAbbr()))+'</div></div>';
-  }
-  /* Win probability + live events (hydrate targets) */
-  if(teamsReal){
-   const w=winProb(hTeam,aTeam);
-   const meta=live?{title:"Who advances",tag:"Live forecast"}:finalish?{title:"Pre-match odds",tag:"Market"}:{title:"Who advances",tag:koConfirmed?"Form projection":"Projected tie"};
-   body+='<div class="panel" id="probPanel">'+probInner({h:hTeam,a:aTeam},w,meta)+'</div>';
-   if(koKnown)body+='<div id="eventsSlot"></div>';
-  }
-  /* Road to this match \u2014 each side's path through the tournament */
-  if(ridx>=0){
-   body+='<div class="panel"><div class="panel-t">Road to this match</div><div class="road">'+roadColHTML(hReal?hTeam:null,ridx)+roadColHTML(aReal?aTeam:null,ridx)+'</div></div>';
-  }
-  /* Match stats (hydrate target) for played ties */
-  if(koKnown&&showScore)body+='<div id="statsSlot">'+matchStatsHTML({h:hTeam,a:aTeam,d:m.d},hs,as,live)+'</div>';
-  else if(koKnown)body+='<div id="statsSlot"></div>';
-  /* Head-to-head */
-  if(teamsReal){const hh=h2hOf(hTeam,aTeam);
-   if(hh)body+='<div class="panel"><div class="panel-t">Head-to-head</div><div class="h2h">'
-    +'<div><div class="big g">'+hh.homeWins+'</div><div class="sm">'+esc(hTeam)+' wins</div></div>'
-    +'<div><div class="big n">'+hh.draws+'</div><div class="sm">Draws</div></div>'
-    +'<div><div class="big a">'+hh.awayWins+'</div><div class="sm">'+esc(aTeam)+' wins</div></div></div>'
-    +'<div class="h2h-last">Last meeting \u00b7 '+esc(hh.last)+'</div></div>';}
-  /* Danger men, or who-could-fill-the-slot when unresolved */
-  if(teamsReal){
-   body+='<div class="panel"><div class="panel-t">Players to watch'+(played?'':' <span class="tag">Projected</span>')+'</div><div class="two">'+teamColHTML(hTeam,"h")+teamColHTML(aTeam,"a")+'</div></div>';
-  }
-  if(!koConfirmed){
-   const hInfo=slotInfoHTML(m.h), aInfo=slotInfoHTML(m.a);
-   body+='<div class="panel ko"><div class="panel-t">Who could be here</div>'
-    +'<div class="slotwrap"><div class="slotcol"><div class="slothead">'+esc(hName)+'</div>'+(hInfo||'<div class="slotnote">Depends on earlier results.</div>')+'</div>'
-    +'<div class="slotcol"><div class="slothead">'+esc(aName)+'</div>'+(aInfo||'<div class="slotnote">Depends on earlier results.</div>')+'</div></div>'
-    +'<div class="ko-note">Provisional from current standings \u2014 confirmed once the feeding ties finish.</div></div>';
-  }
-  /* Where the winner goes next */
-  const wname=(finalish&&koKnown)?(s.winnerTeam||(hs>as?hTeam:as>hs?aTeam:null)):null;
-  body+=koNextPanelHTML(m,wname);
- }
- const v=STADIUMS[m.v]||{city:m.c,cap:"\u2014",opened:"\u2014",surface:"\u2014",roof:"\u2014"};
- body+='<div class="panel"><div class="panel-t">Venue</div><div class="vname">'+esc(m.v)+'</div><div class="vcity">'+esc(v.city)+'</div>'
-  +'<div class="vstats"><div class="vstat"><div class="vv">'+v.cap+'</div><div class="vk">Capacity</div></div>'
-  +'<div class="vstat"><div class="vv">'+v.opened+'</div><div class="vk">Opened</div></div>'
-  +'<div class="vstat"><div class="vv">'+esc(v.surface)+'</div><div class="vk">Surface</div></div>'
-  +'<div class="vstat"><div class="vv">'+esc(v.roof)+'</div><div class="vk">Roof</div></div></div></div>';
- body+='<div class="disc">'+(played?"Squads, form & lineups illustrative":"Projected preview \u00b7 squads & form illustrative")+'<br>Live scores via ESPN \u00b7 press Esc to close</div>';
-
- return '<div class="backdrop" id="backdrop"><div class="modal">'
-  +'<div class="m-head'+(ko?' ko':'')+'"><div class="m-topbar"><span class="m-round">'+esc(roundLabel(m))+'</span><button class="m-close" id="mClose">\u2715</button></div>'
-  +'<div class="m-teams"><div class="m-team">'+hFlag+'<div class="tn">'+esc(hName)+'</div>'+hRank+((ko&&!hReal)?'':'<button class="starbtn'+(FOLLOW.has(hTeam)?' on':'')+'" data-follow="'+esc(hTeam)+'" aria-pressed="'+FOLLOW.has(hTeam)+'" aria-label="Follow '+esc(hTeam)+'">\u2605</button>')+'</div>'
-  +'<div class="m-center">'+center+'</div>'
-  +'<div class="m-team">'+aFlag+'<div class="tn">'+esc(aName)+'</div>'+aRank+((ko&&!aReal)?'':'<button class="starbtn'+(FOLLOW.has(aTeam)?' on':'')+'" data-follow="'+esc(aTeam)+'" aria-pressed="'+FOLLOW.has(aTeam)+'" aria-label="Follow '+esc(aTeam)+'">\u2605</button>')+'</div></div>'
-  +'<div class="subline">'+esc(subline)+'</div></div>'
-  +'<div class="m-body"><div class="m-actions"><button class="actbtn" id="icsBtn" aria-label="Download calendar event">+ Add to calendar</button></div>'+body+'</div></div></div>';
-}
-function openDetail(k){const m=M.find(x=>key(x)===k);if(!m)return; if(OPEN!==k)LASTFOCUS=document.activeElement; OPEN=k; const mr=document.getElementById("modalRoot"); mr.innerHTML=detailHTML(m); document.body.style.overflow="hidden";
- const bd=document.getElementById("backdrop"), modal=bd.querySelector(".modal"); modal.setAttribute("role","dialog"); modal.setAttribute("aria-modal","true"); modal.setAttribute("aria-label",(m.ko?decodeSlot(m.h)+" vs "+decodeSlot(m.a):m.h+" vs "+m.a)+" match center");
- document.getElementById("mClose").onclick=closeDetail;
- bd.addEventListener("click",e=>{if(e.target.id==="backdrop")closeDetail();});
- bd.addEventListener("keydown",trapTab);
- const icsB=document.getElementById("icsBtn"); if(icsB)icsB.onclick=()=>icsFor(m);
- mr.querySelectorAll("[data-follow]").forEach(b=>b.onclick=()=>toggleFollow(b.dataset.follow));
- mr.querySelectorAll("[data-jump]").forEach(b=>b.onclick=()=>openDetail(b.dataset.jump));
- const cb=document.getElementById("mClose"); if(cb)cb.focus();
- hydrateLive(m);
- OPEN_SIG=matchSig(m);
- setHash();
-}
-function closeDetail(){OPEN=null;OPEN_SIG=null;document.getElementById("modalRoot").innerHTML="";document.body.style.overflow="";setHash(); if(LASTFOCUS&&LASTFOCUS.focus){try{LASTFOCUS.focus();}catch(e){}}}
-
-/* ============ STATS + LIVE BAR ============ */
-function updateStats(){
- let done=0,liveN=0;
- M.forEach(m=>{const s=stateOf(m);if(s.st==="final"||s.st==="ended")done++;if(s.st==="live")liveN++;});
- document.getElementById("statDone").textContent=done;
- document.getElementById("statLive").textContent=liveN;
- const dot=document.getElementById("liveDot"),txt=document.getElementById("liveTxt"),now=new Date();
- if(liveN>0){dot.classList.add("on");txt.innerHTML=LASTOK?('<b>Live \u2014 updated '+fmtTime(LASTOK)+' '+tzAbbr()+'.</b> '+liveN+' in play. Auto-refreshing.'):('<b>'+liveN+' match'+(liveN>1?'es':'')+' live now.</b> Tap refresh for scores.');}
- else{dot.classList.remove("on");
-  const up=M.filter(m=>!m.ko&&stateOf(m).st==="up").map(m=>({m,t:startDate(m)})).filter(x=>x.t>now).sort((a,b)=>a.t-b.t);
-  if(up.length){const nx=up[0],mins=Math.round((nx.t-now)/60000),when=mins<60?mins+"m":Math.round(mins/60)+"h";txt.innerHTML='Next up: <b>'+esc(nx.m.h)+' v '+esc(nx.m.a)+'</b> in '+when+' \u00b7 '+fmtTime(nx.t)+' '+tzAbbr();}
-  else txt.innerHTML=LASTOK?('Live scores synced '+fmtTime(LASTOK)+' '+tzAbbr()+'. Tap refresh for updates.'):'Schedule loaded. Tap refresh for live scores.'; if(OFFLINE)txt.innerHTML+=' <span style="color:var(--muted2)">\u00b7 offline, scores may be delayed</span>';
- }
-}
-
-/* ============ ESPN LIVE ============ */
-function ymd(dt){return dt.getUTCFullYear()+String(dt.getUTCMonth()+1).padStart(2,"0")+String(dt.getUTCDate()).padStart(2,"0");}
-function schedUTC(m){const a=m.d.split("-").map(Number);return Date.UTC(a[0],a[1]-1,a[2],m.t+4,(m.t%1)*60);}
-async function fetchDay(d){const r=await fetch("https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates="+d,{cache:"no-store"});if(!r.ok)throw new Error("http "+r.status);return r.json();}
-function ingestEvent(e){
- const comp=e.competitions&&e.competitions[0];if(!comp)return null;const cs=comp.competitors||[];if(cs.length<2)return null;
- const t1=toTeam((cs[0].team&&cs[0].team.displayName)||""),t2=toTeam((cs[1].team&&cs[1].team.displayName)||"");
- const kdate=e.date||comp.date;
- const kt=kdate?new Date(kdate).getTime():null;
- /* 1) Same event id we already mapped -> keep it stable across refreshes. */
- let hit=M.find(m=>EVID[key(m)]===e.id)||null;
- /* 2) Group fixture, matched by team pair AND date proximity so a knockout
-       rematch of the same two nations can't corrupt a group slot. */
- if(!hit)hit=M.find(m=>!m.ko&&((m.h===t1&&m.a===t2)||(m.h===t2&&m.a===t1))&&(kt==null||Math.abs(kt-schedUTC(m))<=36*3600*1000))||null;
- /* 3) Knockout slot: real teams (placeholder codes like 2A/W74 never appear in
-       the feed). Match on the actual PAIR of teams to the slot that resolves to
-       them \u2014 robust even though the mock kickoff times/venues don't line up
-       with the real fixtures. Score: 3 = both sides confirmed, 2 = both sides
-       (some projected), 1 = one confirmed anchor + an open/projected other side
-       (so a confirmed group winner adopts the real best-3rd it actually drew). */
- let koHit=false;
- if(!hit&&ISO[t1]&&ISO[t2]){
-  _projCache=null;_slotCache={};
-  const pair=[t1,t2];
-  let best=null,bestScore=0,bestDelta=Infinity;
-  M.forEach(m=>{
-   if(!m.ko)return;const claimed=EVID[key(m)];if(claimed&&claimed!==e.id)return;
-   const H=slotTeam(m.h),A=slotTeam(m.a);if(!H||!A)return;
-   const names=[H.name,A.name];let score=0;
-   if(pair.every(t=>names.includes(t)))score=(!H.proj&&!A.proj)?3:2;
-   else{const conf=(!H.proj&&pair.includes(H.name))||(!A.proj&&pair.includes(A.name));if(conf&&(H.proj||A.proj))score=1;}
-   if(!score)return;
-   const delta=kt!=null?Math.abs(kt-schedUTC(m)):0;
-   if(score>bestScore||(score===bestScore&&delta<bestDelta)){best=m;bestScore=score;bestDelta=delta;}
-  });
-  if(best){hit=best;koHit=true;}
- }
- if(!hit)return null;
- const stt=e.status&&e.status.type?e.status.type.state:"pre";
- const detail=e.status&&e.status.type?(e.status.type.shortDetail||e.status.type.detail||""):"";
- const status=stt==="post"?"final":stt==="in"?"live":"up";
- const kk=key(hit),prev=LIVE[kk];EVID[kk]=e.id;
- const sched=schedUTC(hit);
- let kickoff=(prev&&prev.kickoff)||null;
- if(kt!=null&&Math.abs(kt-sched)<=(hit.ko?150:90)*60000)kickoff=kt;
- const num=x=>x==null?null:parseInt(x,10);
- let rec;
- if(koHit||hit.ko){
-  const homeC=cs.find(c=>c.homeAway==="home")||cs[0], awayC=cs.find(c=>c.homeAway==="away")||cs[1];
-  const homeTeam=toTeam((homeC.team&&homeC.team.displayName)||""), awayTeam=toTeam((awayC.team&&awayC.team.displayName)||"");
-  const winC=cs.find(c=>c.winner===true), winnerTeam=winC?toTeam((winC.team&&winC.team.displayName)||""):null;
-  const pensH=homeC.shootoutScore!=null?Number(homeC.shootoutScore):null, pensA=awayC.shootoutScore!=null?Number(awayC.shootoutScore):null;
-  const rt=/pen/i.test(detail)?"pens":/aet|a\.e\.t|extra/i.test(detail)?"aet":"ft";
-  rec={status,hs:status==="up"?null:num(homeC.score),as:status==="up"?null:num(awayC.score),detail:status==="up"?"":detail,kickoff,homeTeam,awayTeam,winnerTeam,pensH,pensA,rt};
- }else{
-  const byTeam={};cs.forEach(x=>byTeam[toTeam((x.team&&x.team.displayName)||"")]={score:x.score==null?null:parseInt(x.score,10)});
-  rec={status,hs:status==="up"?null:(byTeam[hit.h]?byTeam[hit.h].score:null),as:status==="up"?null:(byTeam[hit.a]?byTeam[hit.a].score:null),detail:status==="live"?detail:"",kickoff,homeTeam:hit.h,awayTeam:hit.a,winnerTeam:null};
- }
- LIVE[kk]=rec;
- if(!prev||prev.hs!==rec.hs||prev.as!==rec.as||prev.status!==rec.status){const hn=rec.homeTeam||hit.h,an=rec.awayTeam||hit.a;return hn+" "+(rec.hs==null?0:rec.hs)+"\u2013"+(rec.as==null?0:rec.as)+" "+an;}
- return null;
-}
-let _backfilled=false;
-async function backfillIds(){
- if(_backfilled)return; _backfilled=true;
- const now=Date.now();
- const dates=[...new Set(M.filter(m=>startDate(m).getTime()<=now+86400000).map(m=>ymd(startDate(m))))].sort();
- const all=[],seen=new Set();
- for(let i=0;i<dates.length;i+=3){
-  await Promise.all(dates.slice(i,i+3).map(async d=>{ try{const j=await fetchDay(d);(j.events||[]).forEach(e=>{if(!seen.has(e.id)){seen.add(e.id);all.push(e);}});}catch(_){} }));
- }
- all.sort((a,b)=>new Date(a.date||0)-new Date(b.date||0));
- _projCache=null;_slotCache={};
- all.forEach(ingestEvent);
- OFFLINE=false;LASTOK=new Date();render();refreshOpenModal();
-}
-async function refreshLive(manual){
- if(REFRESHING)return;REFRESHING=true;
- const btn=document.getElementById("refreshBtn");btn.disabled=true;btn.textContent="\u2026";
- try{
-  const now=new Date(),days=[-1,0,1].map(off=>ymd(new Date(now.getTime()+off*86400000)));
-  const events=[],seen=new Set(),changes=[];
-  for(const d of days){try{const j=await fetchDay(d);(j.events||[]).forEach(e=>{if(!seen.has(e.id)){seen.add(e.id);events.push(e);}});}catch(_){}}
-  if(!events.length)throw new Error("no events");
-  events.sort((a,b)=>new Date(a.date||0)-new Date(b.date||0));
-  _projCache=null;_slotCache={};
-  events.forEach(e=>{const c=ingestEvent(e);if(c)changes.push(c);});
-  OFFLINE=false;LASTOK=new Date();render();refreshOpenModal();if(changes.length)announce("Score update \u2014 "+changes.join("; "));
- }catch(_){OFFLINE=true;updateStats();}
- finally{REFRESHING=false;btn.disabled=false;btn.textContent="Refresh";}
-}
-
-/* ============ LIVE WIN PROBABILITY (from ESPN odds) ============ */
-const EVID={}, SUM={};
-function mlProb(ml){ ml=Number(ml); if(!isFinite(ml)||ml===0)return null; return ml<0?(-ml)/(-ml+100):100/(ml+100); }
+/* ============ ARCHIVED ODDS / FORECAST ============ */
 function probInner(m,w,meta){
  return '<div class="panel-t">'+meta.title+' <span class="tag">'+esc(meta.tag)+'</span></div>'
   +'<div class="prob"><div class="ph" style="width:'+w.h+'%">'+w.h+'%</div><div class="pd" style="width:'+w.d+'%">'+w.d+'%</div><div class="pa" style="width:'+w.a+'%">'+w.a+'%</div></div>'
   +'<div class="prob-l"><span style="width:'+w.h+'%;text-align:left">'+esc(m.h)+'</span><span style="width:'+w.d+'%;text-align:center">Draw</span><span style="width:'+w.a+'%;text-align:right">'+esc(m.a)+'</span></div>'
   +(meta.note?'<div style="margin-top:7px;font-family:\'Archivo Narrow\',sans-serif;font-size:11px;color:var(--muted2)">'+meta.note+'</div>':'');
 }
-async function getSummary(eid){
- if(!eid)return null;
- const c=SUM[eid]; if(c&&Date.now()-c.t<25000)return c.v;
- try{ const v=await fetch("https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/summary?event="+eid,{cache:"no-store"}).then(r=>r.json()); SUM[eid]={t:Date.now(),v}; return v; }
- catch(e){ return null; }
-}
-function sumHomeName(sum){ try{ const comp=sum.header.competitions[0]; const hc=(comp.competitors||[]).find(c=>c.homeAway==="home"); return hc?toTeam(hc.team.displayName||hc.team.name||""):null; }catch(e){ return null; } }
-function sumLive(sum){ try{ return sum.header.competitions[0].status.type.state==="in"; }catch(e){ return false; } }
-function parseOdds(sum,m){
- const list=(sum.pickcenter&&sum.pickcenter.length?sum.pickcenter:sum.odds)||[]; if(!list.length)return null;
- const pc=list.slice().sort((a,b)=>((a.provider&&a.provider.priority)||99)-((b.provider&&b.provider.priority)||99))[0];
- const gm=o=>{ if(o==null)return null; if(typeof o==="number")return o; return o.moneyLine!=null?o.moneyLine:(o.moneyline!=null?o.moneyline:null); };
- let pH=mlProb(gm(pc.homeTeamOdds)), pA=mlProb(gm(pc.awayTeamOdds)), pD=mlProb(gm(pc.drawOdds));
- if(pH==null||pA==null||pD==null)return null;
- if(sumHomeName(sum)&&sumHomeName(sum)!==m.h){ const t=pH; pH=pA; pA=t; }
- const tot=pH+pA+pD; const h=Math.round(pH/tot*100), a=Math.round(pA/tot*100), d=Math.max(0,100-h-a);
- return {h,d,a,prov:(pc.provider&&pc.provider.name)||"Bookmaker",live:sumLive(sum)};
-}
-function parseTeamStats(sum,m){
- const teams=(sum.boxscore&&sum.boxscore.teams)||[]; if(teams.length<2)return null;
- const grab=tm=>{ const o={}; (tm.statistics||[]).forEach(x=>{ o[x.name]={v:parseFloat(x.value!=null?x.value:x.displayValue)||0, d:x.displayValue!=null?x.displayValue:String(x.value)}; }); return o; };
- let A=grab(teams[0]), B=grab(teams[1]);
- const aHome=(teams[0].homeAway?teams[0].homeAway==="home":(toTeam((teams[0].team&&teams[0].team.displayName)||"")===m.h));
- const home=aHome?A:B, away=aHome?B:A;
- if(!Object.keys(home).length)return null;
- return {home,away};
-}
-function realStatsHTML(m,st,live){
- const defs=[["Possession","possessionPct",true],["Shots","totalShots"],["Shots on target","shotsOnTarget"],["Fouls","foulsCommitted"],["Yellow cards","yellowCards"],["Red cards","redCards","redOnly"],["Offsides","offsides"],["Corners","wonCorners"],["Saves","saves"],["Pass accuracy","passPct",true]];
- let rows="";
- defs.forEach(d=>{ const key=d[1],h=st.home[key],a=st.away[key]; if(!h&&!a)return;
-  const hv=(h&&h.v)||0, av=(a&&a.v)||0; if(d[2]==="redOnly"&&hv===0&&av===0)return;
-  const hd=(h&&h.d)||"0", ad=(a&&a.d)||"0"; const tot=(hv+av)||1; const hp=Math.round(hv/tot*100);
-  rows+='<div class="statrow"><div class="sh"><span>'+esc(hd)+'</span><span class="sl">'+d[0]+'</span><span>'+esc(ad)+'</span></div><div class="bar"><div class="lh"><i class="h" style="width:'+hp+'%"></i></div><div class="rh"><i class="a" style="width:'+(100-hp)+'%"></i></div></div></div>'; });
- if(!rows)return "";
- return '<div class="panel"><div class="panel-t">'+(live?"Live match stats":"Match stats")+' <span class="tag" style="background:var(--tintg);color:var(--field)">Official \u00b7 ESPN</span></div>'+rows+'</div>';
-}
-function parseEvents(sum,m){
- const ke=sum.keyEvents||[]; const home=sumHomeName(sum); const out=[];
- ke.forEach(k=>{ const tt=((k.type&&k.type.text)||"").toLowerCase(); let kind=null;
-  if(/own goal/.test(tt))kind="og"; else if(/goal/.test(tt))kind="goal"; else if(/yellow/.test(tt))kind="yc"; else if(/red/.test(tt))kind="rc"; else if(/substitution/.test(tt))kind="sub"; else if(/penalty/.test(tt))kind="pen"; else return;
-  const tn=k.team&&(k.team.displayName||k.team.name)?toTeam(k.team.displayName||k.team.name):null;
-  let side=tn?(tn===m.h?"h":"a"):"h"; if(home&&tn){ side=(tn===home?(home===m.h?"h":"a"):(home===m.h?"a":"h")); }
-  const pr=(k.participants||[]).map(p=>p.athlete&&p.athlete.displayName).filter(Boolean);
-  let label="";
-  if(kind==="sub")label=(pr[0]||"")+(pr[1]?'<span class="evsub"> for '+esc(pr[1])+'</span>':"");
-  else if(kind==="goal"||kind==="og"){ label=pr[0]||""; if(/penalt/i.test(k.text||""))label+=' <span class="evsub">(pen)</span>'; if(kind==="og")label+=' <span class="evsub">(OG)</span>'; }
-  else label=pr[0]||"";
-  if(!label&&!k.text)return;
-  out.push({min:(k.clock&&k.clock.displayValue)||"", side, kind, label:label||esc(k.text)});
- });
- return out;
-}
+const PROB_NOTE="Pre-match estimate from FIFA rankings \u00b7 market odds are not archived.";
 function evMarker(kind){
  if(kind==="goal"||kind==="og")return '<span class="evm ball"></span>';
  if(kind==="yc")return '<span class="evm yc"></span>';
@@ -1238,29 +844,118 @@ function evMarker(kind){
  if(kind==="sub")return '<span class="evm sub">\u21c4</span>';
  return '';
 }
-function eventsHTML(evs,m,live){
- if(!evs.length)return "";
- let h='<div class="panel"><div class="panel-t">Match events <span class="tag" style="background:var(--tintg);color:var(--field)">'+(live?"Live \u00b7 ESPN":"Full time \u00b7 ESPN")+'</span></div><div class="evtl">';
- evs.forEach(e=>{ const cell='<span class="evcell '+e.side+'">'+(e.side==="h"?evMarker(e.kind)+'<span class="evlbl">'+e.label+'</span>':'<span class="evlbl">'+e.label+'</span>'+evMarker(e.kind))+'</span>';
-  h+='<div class="evrow">'+(e.side==="h"?cell:'<span></span>')+'<span class="evmin">'+esc(e.min)+'</span>'+(e.side==="a"?cell:'<span></span>')+'</div>'; });
- return h+'</div></div>';
+
+function detailHTML(m){
+ const ko=!!m.ko,s=stateOf(m),dt=startDate(m),r=RES[key(m)];
+ const hTeam=m.th,aTeam=m.ta,hs=s.hs,as=s.as,p=localParts(dt);
+ const pens=(s.pensH!=null&&s.pensA!=null);
+ const hFlag=flagTag(hTeam,"m-flag"), aFlag=flagTag(aTeam,"m-flag");
+ const hRank=TEAMS[hTeam]?'<div class="m-rank">FIFA #'+TEAMS[hTeam].rank+'</div>':'';
+ const aRank=TEAMS[aTeam]?'<div class="m-rank">FIFA #'+TEAMS[aTeam].rank+'</div>':'';
+ const badge='<div class="m-badge ft">'+(pens?"Full time \u00b7 Pens":s.rt==="aet"?"Full time \u00b7 AET":"Full time")+'</div>';
+ const center='<div class="m-score">'+hs+" \u2013 "+as+'</div>'+badge;
+ const subline=WEEKL[p.dow]+" \u00b7 "+MON[p.mo]+" "+p.dd+" \u00b7 "+((STADIUMS[m.vf]&&STADIUMS[m.vf].city)||m.c);
+
+ let body="";
+ if(!ko){
+  body+='<div class="panel" id="probPanel">'+probInner({h:hTeam,a:aTeam},winProb(hTeam,aTeam),{title:"Win probability",tag:"Rank-based model",note:PROB_NOTE})+'</div>';
+  body+=eventsHTML(r);
+  const fp=name=>(TEAMS[name]&&TEAMS[name].form||"").split("").filter(c=>"WDL".includes(c)).map(c=>'<span class="pill '+c+'">'+c+'</span>').join("");
+  body+='<div class="panel"><div class="panel-t">Recent form</div>'
+   +'<div class="formrow"><span class="fn">'+esc(hTeam)+'</span><div class="pills">'+fp(hTeam)+'</div></div>'
+   +'<div class="formrow"><span class="fn">'+esc(aTeam)+'</span><div class="pills">'+fp(aTeam)+'</div></div></div>';
+  const hh=h2hOf(hTeam,aTeam);
+  if(hh){body+='<div class="panel"><div class="panel-t">Head-to-head</div><div class="h2h">'
+   +'<div><div class="big g">'+hh.homeWins+'</div><div class="sm">'+esc(hTeam)+' wins</div></div>'
+   +'<div><div class="big n">'+hh.draws+'</div><div class="sm">Draws</div></div>'
+   +'<div><div class="big a">'+hh.awayWins+'</div><div class="sm">'+esc(aTeam)+' wins</div></div></div>'
+   +'<div class="h2h-last">Last meeting \u00b7 '+esc(hh.last)+'</div></div>';}
+  body+='<div class="panel"><div class="panel-t">Key players</div><div class="two">'+teamColHTML(hTeam,"h")+teamColHTML(aTeam,"a")+'</div></div>';
+  const fmH=(TEAMS[hTeam]&&TEAMS[hTeam].formation)||"4-3-3", fmA=(TEAMS[aTeam]&&TEAMS[aTeam].formation)||"4-3-3";
+  const mgH=(TEAMS[hTeam]&&TEAMS[hTeam].mgr)||"\u2014", mgA=(TEAMS[aTeam]&&TEAMS[aTeam].mgr)||"\u2014";
+  body+='<div class="panel"><div class="panel-t">Team shape</div><div class="two">'
+   +'<div><div class="shape-h"><span style="font-weight:700;font-size:12px">'+esc(hTeam)+'</span><span class="fm h">'+fmH+'</span></div><div class="pitch">'+pitchHTML(fmH)+'</div><div class="coach">Coach \u00b7 '+esc(mgH)+'</div></div>'
+   +'<div><div class="shape-h"><span style="font-weight:700;font-size:12px">'+esc(aTeam)+'</span><span class="fm a">'+fmA+'</span></div><div class="pitch">'+pitchHTML(fmA)+'</div><div class="coach">Coach \u00b7 '+esc(mgA)+'</div></div></div></div>';
+  body+=statsHTML(r);
+  body+=standingsHTML(m.g,hTeam,aTeam);
+ } else {
+  const ridx=KO_RIDX[m.g], stk=koStakes(m);
+  body+='<div class="ko-stakes"><span class="kx">'+esc(koRoundShort(m.g))+' \u00b7 '+stk.tag+'</span><span class="kd"></span><span class="kn">'+stk.line+'</span></div>';
+  const winner=s.winnerTeam, loser=winner?(winner===hTeam?aTeam:hTeam):null;
+  const how=pens?"Won on penalties":(s.rt==="aet"?"After extra time":"Full time \u2014 90 minutes");
+  const nextTxt=m.g==="FINAL"?"are World Champions":m.g==="3rd"?"take third place":"advance to "+(KO_NEXT[m.g]||"the next round");
+  let out='<div class="ko-out">';
+  if(winner){
+   out+='<div class="adv">'+flagTag(winner,"flag")+'<span>'+esc(winner)+' '+nextTxt+'</span></div><div class="how">'+esc(how)+'</div>';
+   if(pens){const pv=winner===hTeam?(s.pensH+"\u2013"+s.pensA):(s.pensA+"\u2013"+s.pensH);out+='<div class="ko-pens"><span class="pl">Shootout</span><span class="pv">'+pv+'</span></div>';}
+   if(m.g!=="FINAL"&&m.g!=="3rd"&&loser)out+='<div class="elim"><s>'+esc(loser)+'</s> are eliminated</div>';
+  }else out+='<div class="adv">Full time</div>';
+  body+=out+'</div>';
+  body+='<div class="panel" id="probPanel">'+probInner({h:hTeam,a:aTeam},winProb(hTeam,aTeam),{title:"Pre-match estimate",tag:"Rank-based model",note:PROB_NOTE})+'</div>';
+  body+=eventsHTML(r);
+  body+='<div class="panel"><div class="panel-t">Road to this match</div><div class="road">'+roadColHTML(hTeam,ridx)+roadColHTML(aTeam,ridx)+'</div></div>';
+  body+=statsHTML(r);
+  const hh=h2hOf(hTeam,aTeam);
+  if(hh)body+='<div class="panel"><div class="panel-t">Head-to-head</div><div class="h2h">'
+   +'<div><div class="big g">'+hh.homeWins+'</div><div class="sm">'+esc(hTeam)+' wins</div></div>'
+   +'<div><div class="big n">'+hh.draws+'</div><div class="sm">Draws</div></div>'
+   +'<div><div class="big a">'+hh.awayWins+'</div><div class="sm">'+esc(aTeam)+' wins</div></div></div>'
+   +'<div class="h2h-last">Last meeting \u00b7 '+esc(hh.last)+'</div></div>';
+  body+='<div class="panel"><div class="panel-t">Players to watch</div><div class="two">'+teamColHTML(hTeam,"h")+teamColHTML(aTeam,"a")+'</div></div>';
+  body+=koNextPanelHTML(m);
+ }
+ const v=STADIUMS[m.vf];
+ body+='<div class="panel"><div class="panel-t">Venue</div><div class="vname">'+esc(m.vf)+'</div><div class="vcity">'+esc(v.city)+'</div>'
+  +'<div class="vstats"><div class="vstat"><div class="vv">'+v.cap+'</div><div class="vk">Capacity</div></div>'
+  +'<div class="vstat"><div class="vv">'+v.opened+'</div><div class="vk">Opened</div></div>'
+  +'<div class="vstat"><div class="vv">'+esc(v.surface)+'</div><div class="vk">Surface</div></div>'
+  +'<div class="vstat"><div class="vv">'+esc(v.roof)+'</div><div class="vk">Roof</div></div></div></div>';
+ body+='<div class="disc">Squads, form &amp; lineups illustrative<br>Results, events &amp; stats via ESPN \u00b7 press Esc to close</div>';
+
+ return '<div class="backdrop" id="backdrop"><div class="modal">'
+  +'<div class="m-head'+(ko?' ko':'')+'"><div class="m-topbar"><span class="m-round">'+esc(roundLabel(m))+'</span><button class="m-close" id="mClose">\u2715</button></div>'
+  +'<div class="m-teams"><div class="m-team">'+hFlag+'<div class="tn">'+esc(hTeam)+'</div>'+hRank+'<button class="starbtn'+(FOLLOW.has(hTeam)?' on':'')+'" data-follow="'+esc(hTeam)+'" aria-pressed="'+FOLLOW.has(hTeam)+'" aria-label="Follow '+esc(hTeam)+'">\u2605</button></div>'
+  +'<div class="m-center">'+center+'</div>'
+  +'<div class="m-team">'+aFlag+'<div class="tn">'+esc(aTeam)+'</div>'+aRank+'<button class="starbtn'+(FOLLOW.has(aTeam)?' on':'')+'" data-follow="'+esc(aTeam)+'" aria-pressed="'+FOLLOW.has(aTeam)+'" aria-label="Follow '+esc(aTeam)+'">\u2605</button></div></div>'
+  +'<div class="subline">'+esc(subline)+'</div></div>'
+  +'<div class="m-body"><div class="m-actions"><button class="actbtn" id="icsBtn" aria-label="Download calendar event">+ Add to calendar</button></div>'+body+'</div></div></div>';
 }
-async function hydrateLive(m){
- const eid=EVID[key(m)]; if(!eid)return;
- let hn=m.h,an=m.a;
- if(m.ko){ const ov=LIVE[key(m)]; if(ov&&ov.homeTeam&&ov.awayTeam&&ISO[ov.homeTeam]&&ISO[ov.awayTeam]){hn=ov.homeTeam;an=ov.awayTeam;} else return; }
- const sum=await getSummary(eid); if(!sum||OPEN!==key(m))return;
- const live=sumLive(sum);
- const mm=m.ko?{h:hn,a:an,d:m.d}:m;
- const o=parseOdds(sum,mm); if(o){ const el=document.getElementById("probPanel"); if(el)el.innerHTML=probInner(mm,{h:o.h,d:o.d,a:o.a},{title:(o.live?"Live win probability":"Market win probability"),tag:o.prov,note:"Implied from live bookmaker odds, margin removed."}); }
- const evs=parseEvents(sum,mm); const eslot=document.getElementById("eventsSlot"); if(eslot)eslot.innerHTML=eventsHTML(evs,mm,live);
- const st=parseTeamStats(sum,mm); const sslot=document.getElementById("statsSlot"); if(sslot&&st){ const html=realStatsHTML(mm,st,live); if(html)sslot.innerHTML=html; }
+function openDetail(k){const m=M.find(x=>key(x)===k);if(!m)return; if(OPEN!==k)LASTFOCUS=document.activeElement; OPEN=k; const mr=document.getElementById("modalRoot"); mr.innerHTML=detailHTML(m); document.body.style.overflow="hidden";
+ const bd=document.getElementById("backdrop"), modal=bd.querySelector(".modal"); modal.setAttribute("role","dialog"); modal.setAttribute("aria-modal","true"); modal.setAttribute("aria-label",m.th+" vs "+m.ta+" match center");
+ document.getElementById("mClose").onclick=closeDetail;
+ bd.addEventListener("click",e=>{if(e.target.id==="backdrop")closeDetail();});
+ bd.addEventListener("keydown",trapTab);
+ const icsB=document.getElementById("icsBtn"); if(icsB)icsB.onclick=()=>icsFor(m);
+ mr.querySelectorAll("[data-follow]").forEach(b=>b.onclick=()=>toggleFollow(b.dataset.follow));
+ const cb=document.getElementById("mClose"); if(cb)cb.focus();
+ setHash();
 }
+function closeDetail(){OPEN=null;document.getElementById("modalRoot").innerHTML="";document.body.style.overflow="";setHash(); if(LASTFOCUS&&LASTFOCUS.focus){try{LASTFOCUS.focus();}catch(e){}}}
 
 /* ============ KIOSK ============ */
-let wakeLock=null;
-async function keepAwake(){try{if("wakeLock"in navigator)wakeLock=await navigator.wakeLock.request("screen");}catch(_){}}
-function toggleFull(){const el=document.documentElement;if(!document.fullscreenElement){(el.requestFullscreen||el.webkitRequestFullscreen||function(){}).call(el);}else{(document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document);}}
+/* The screen wake lock is requested only after the user taps "Full", and released when they leave kiosk mode. */
+let wakeLock=null, KIOSK=false;
+async function acquireWake(){
+ if(!("wakeLock" in navigator)||wakeLock)return;
+ try{const wl=await navigator.wakeLock.request("screen");
+  if(!KIOSK){try{wl.release();}catch(_){}return;}
+  wakeLock=wl; wl.addEventListener("release",()=>{if(wakeLock===wl)wakeLock=null;});
+ }catch(_){}
+}
+function releaseWake(){KIOSK=false;const wl=wakeLock;wakeLock=null;if(wl){try{wl.release();}catch(_){}}}
+function toggleFull(){
+ const el=document.documentElement, fs=document.fullscreenElement||document.webkitFullscreenElement;
+ if(!KIOSK&&!fs){
+  KIOSK=true; acquireWake();
+  const rq=el.requestFullscreen||el.webkitRequestFullscreen;
+  if(rq){const pr=rq.call(el);if(pr&&pr.catch)pr.catch(releaseWake);}
+ }else{
+  releaseWake();
+  if(fs)(document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document);
+ }
+}
+document.addEventListener("fullscreenchange",()=>{if(!document.fullscreenElement)releaseWake();});
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&KIOSK)acquireWake();});
 
 /* ===== timezone ===== */
 const TZOFF={ET:-4,CT:-5,MT:-6,PT:-7,BST:1,CEST:2};
@@ -1270,46 +965,68 @@ function tzAbbr(){ return TZ==="Local"?"local":TZ; }
 /* ===== follow teams ===== */
 let FOLLOW=new Set(); try{FOLLOW=new Set(JSON.parse(localStorage.getItem("wc-follow")||"[]"));}catch(e){}
 function toggleFollow(team){ if(FOLLOW.has(team))FOLLOW.delete(team); else FOLLOW.add(team); try{localStorage.setItem("wc-follow",JSON.stringify([...FOLLOW]));}catch(e){} render(); if(OPEN)openDetail(OPEN); }
-/* ===== a11y + flags + offline ===== */
-let LASTFOCUS=null, OFFLINE=false, OPEN_SIG=null;
-function matchSig(m){const s=stateOf(m);return [s.st,s.hs,s.as,s.detail,s.homeTeam,s.awayTeam,s.winnerTeam].join("|");}
-function refreshOpenModal(){ if(!OPEN)return; const m=M.find(x=>key(x)===OPEN); if(!m){closeDetail();return;} if(matchSig(m)!==OPEN_SIG)openDetail(OPEN); else hydrateLive(m); }
+/* ===== a11y + flags ===== */
+let LASTFOCUS=null;
 function flagFail(img,code,cls){ img.outerHTML='<span class="'+cls+' code">'+code+'</span>'; }
-function announce(msg){ const r=document.getElementById("liveRegion"); if(r)r.textContent=msg; }
 /* ===== deep links ===== */
 function readHash(){ const h=location.hash.replace(/^#/,""); const o={}; if(h)h.split("&").forEach(p=>{const i=p.indexOf("="); if(i>0)o[p.slice(0,i)]=decodeURIComponent(p.slice(i+1));}); return o; }
 function setHash(){ const parts=[]; if(FILTER!=="ALL")parts.push("f="+FILTER); if(OPEN)parts.push("m="+encodeURIComponent(OPEN)); const h=parts.length?("#"+parts.join("&")):(location.pathname+location.search); try{history.replaceState(null,"",h);}catch(e){} }
-function applyHash(){ const hp=readHash(); const wantF=hp.f||"ALL"; if(wantF!==FILTER){FILTER=wantF;render();} const wantM=hp.m||null; if(wantM!==OPEN){ if(wantM&&M.find(x=>key(x)===wantM))openDetail(wantM); else if(!wantM&&OPEN)closeDetail(); } }
+function applyHash(){ const hp=readHash(); const wantF=FILTERS.some(f=>f[0]===hp.f)?hp.f:"ALL"; if(wantF!==FILTER){FILTER=wantF;render();} const wantM=hp.m||null; if(wantM!==OPEN){ if(wantM&&M.find(x=>key(x)===wantM))openDetail(wantM); else if(!wantM&&OPEN)closeDetail(); } }
 /* ===== head-to-head tiebreak ===== */
 function h2hPair(group,a,b){ const mm=M.find(x=>x.g===group&&!x.ko&&((x.h===a&&x.a===b)||(x.h===b&&x.a===a))); if(!mm)return 0; const st=stateOf(mm); if(st.hs==null||st.as==null)return 0; const ag=(mm.h===a?st.hs:st.as), bg=(mm.h===a?st.as:st.hs); return bg-ag; }
 /* ===== calendar (.ics) ===== */
-function icsFor(m){ const dt=startDate(m), end=new Date(dt.getTime()+115*60000); const pad=n=>String(n).padStart(2,"0"); const f=d=>d.getUTCFullYear()+pad(d.getUTCMonth()+1)+pad(d.getUTCDate())+"T"+pad(d.getUTCHours())+pad(d.getUTCMinutes())+"00Z"; const tt=(m.ko?decodeSlot(m.h)+" vs "+decodeSlot(m.a):m.h+" vs "+m.a)+" — World Cup 26"; const ics=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//WC26//EN","CALSCALE:GREGORIAN","BEGIN:VEVENT","UID:wc26-"+hashStr(key(m))+"@local","DTSTAMP:"+f(new Date()),"DTSTART:"+f(dt),"DTEND:"+f(end),"SUMMARY:"+tt,"LOCATION:"+(m.v+", "+m.c),"DESCRIPTION:"+roundLabel(m),"END:VEVENT","END:VCALENDAR"].join("\r\n"); const blob=new Blob([ics],{type:"text/calendar"}); const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download="wc26-"+(canon(m.ko?m.slot:m.h)||"match")+".ics"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),2000); }
+function icsEsc(t){const B=String.fromCharCode(92);return String(t).split(B).join(B+B).split(";").join(B+";").split(",").join(B+",").replace(/\r?\n/g,B+"n");}
+function icsFor(m){
+ const r=RES[key(m)], dt=startDate(m), end=new Date(dt.getTime()+(r.result==="pens"?165:r.result==="aet"?150:115)*60000);
+ const pad=n=>String(n).padStart(2,"0");
+ const f=d=>d.getUTCFullYear()+pad(d.getUTCMonth()+1)+pad(d.getUTCDate())+"T"+pad(d.getUTCHours())+pad(d.getUTCMinutes())+"00Z";
+ const tt=m.th+" vs "+m.ta+" \u2014 World Cup 26";
+ const ics=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//WC26//EN","CALSCALE:GREGORIAN","BEGIN:VEVENT","UID:wc26-"+hashStr(key(m))+"@local","DTSTAMP:"+f(new Date()),"DTSTART:"+f(dt),"DTEND:"+f(end),"SUMMARY:"+icsEsc(tt),"LOCATION:"+icsEsc(m.vf+", "+m.vc),"DESCRIPTION:"+icsEsc(roundLabel(m)),"END:VEVENT","END:VCALENDAR"].join("\r\n");
+ const blob=new Blob([ics],{type:"text/calendar;charset=utf-8"}), url=URL.createObjectURL(blob), a=document.createElement("a");
+ a.href=url; a.download="wc26-"+(canon(m.ko?m.slot:m.h)||"match")+".ics"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),2000);
+}
 /* ===== knockout bracket ===== */
-function bracketHTML(){ const rounds=[["R32","Round of 32"],["R16","Round of 16"],["QF","Quarter-finals"],["SF","Semi-finals"],["FINAL","Final"]]; let h='<div class="sec-head"><div class="sec-title">Knockout bracket</div><div class="sec-note">Tap a tie for its match center \u00b7 teams fill in as groups finish</div></div><div class="bracket">'; rounds.forEach(([g,lab])=>{ const ms=M.filter(x=>x.g===g); h+='<div class="bcol"><h4>'+lab+'</h4><div class="bties">'+ms.map(m=>{ const p=localParts(startDate(m)); return '<div class="btie" role="button" tabindex="0" data-key="'+esc(key(m))+'"><div class="bmeta">'+esc(m.slot)+' \u00b7 '+MON[p.mo]+' '+p.dd+'</div><div class="bt"><span>'+esc(slotLabel(m.h))+'</span></div><div class="bt"><span>'+esc(slotLabel(m.a))+'</span></div></div>'; }).join("")+'</div></div>'; }); h+='</div>'; const tp=M.find(x=>x.g==="3rd"); if(tp){const p=localParts(startDate(tp)); h+='<div style="margin-top:8px"><div class="btie" role="button" tabindex="0" data-key="'+esc(key(tp))+'" style="max-width:240px"><div class="bmeta">Third place \u00b7 '+MON[p.mo]+' '+p.dd+'</div><div class="bt"><span>'+esc(slotLabel(tp.h))+'</span></div><div class="bt"><span>'+esc(slotLabel(tp.a))+'</span></div></div></div>';} return h; }
+function bracketTie(m,extra){const p=localParts(startDate(m));return '<div class="btie" role="button" tabindex="0" data-key="'+esc(key(m))+'"'+(extra||'')+'><div class="bmeta">'+esc(m.slot)+' \u00b7 '+MON[p.mo]+' '+p.dd+'</div><div class="bt"><span>'+esc(m.th)+'</span></div><div class="bt"><span>'+esc(m.ta)+'</span></div></div>';}
+function bracketHTML(){
+ const rounds=[["R32","Round of 32"],["R16","Round of 16"],["QF","Quarter-finals"],["SF","Semi-finals"],["FINAL","Final"]];
+ let h='<div class="sec-head"><div class="sec-title">Knockout bracket</div><div class="sec-note">Tap a tie for its match center \u00b7 final results</div></div><div class="bracket">';
+ rounds.forEach(([g,lab])=>{h+='<div class="bcol"><h4>'+lab+'</h4><div class="bties">'+M.filter(x=>x.g===g).map(m=>bracketTie(m)).join("")+'</div></div>';});
+ h+='</div>';
+ const tp=M.find(x=>x.g==="3rd");
+ if(tp)h+='<div style="margin-top:8px">'+bracketTie(tp,' style="max-width:240px"')+'</div>';
+ return h;
+}
 function trapTab(e){ if(e.key!=="Tab")return; const bd=document.getElementById("backdrop"); if(!bd)return; const f=[...bd.querySelectorAll('button,select,a[href],[tabindex]:not([tabindex="-1"])')].filter(x=>x.offsetParent!==null); if(!f.length)return; const first=f[0],last=f[f.length-1]; if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();} else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();} }
 
 /* ============ EVENTS + INIT ============ */
 document.getElementById("chips").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;FILTER=b.dataset.k;render();setHash();window.scrollTo({top:0});});
 document.getElementById("list").addEventListener("click",e=>{const card=e.target.closest(".match")||e.target.closest(".btie");if(card)openDetail(card.dataset.key);});
 document.getElementById("list").addEventListener("keydown",e=>{if(e.key!=="Enter"&&e.key!==" ")return;const card=e.target.closest&&(e.target.closest(".match")||e.target.closest(".btie"));if(card){e.preventDefault();openDetail(card.dataset.key);}});
-window.addEventListener("hashchange",applyHash);
+window.addEventListener("hashchange",()=>{if(READY)applyHash();});
 (function(){const tzSel=document.getElementById("tz");if(tzSel){tzSel.value=TZ;tzSel.addEventListener("change",()=>{TZ=tzSel.value;try{localStorage.setItem("wc-tz",TZ);}catch(e){}render();if(OPEN)openDetail(OPEN);});}})();
 document.getElementById("search").addEventListener("input",e=>{Q=e.target.value.trim().toLowerCase();render();});
-document.getElementById("refreshBtn").addEventListener("click",()=>refreshLive(true));
 document.getElementById("fullBtn").addEventListener("click",toggleFull);
 const themeBtn=document.getElementById("themeBtn");
 function applyTheme(d){document.documentElement.classList.toggle("dark",d);themeBtn.textContent=d?"Light":"Dark";}
 let DARK=false;try{DARK=localStorage.getItem("wc-theme")==="dark";}catch(e){}applyTheme(DARK);
 themeBtn.addEventListener("click",()=>{DARK=!DARK;try{localStorage.setItem("wc-theme",DARK?"dark":"light");}catch(e){}applyTheme(DARK);});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&OPEN)closeDetail();});
-document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"){keepAwake();refreshLive(false);}});
+(async function init(){
+ const list=document.getElementById("list");
+ try{
+  const resp=await fetch("data/results.json");
+  if(!resp.ok)throw new Error("HTTP "+resp.status);
+  ingest(await resp.json());
+  READY=true;
+  {const hp=readHash();if(FILTERS.some(f=>f[0]===hp.f))FILTER=hp.f;}
+  renderHero(); render();
+  {const hp=readHash();if(hp.m&&M.find(x=>key(x)===hp.m))openDetail(hp.m);}
+ }catch(err){
+  document.getElementById("archiveTxt").textContent="Archived results unavailable";
+  list.innerHTML='<div class="empty"><div class="big">!</div>Could not load the archived results.<br>'+esc((err&&err.message)||err)+'</div>';
+ }
+})();
 
-try{
- {const hp=readHash();if(hp.f)FILTER=hp.f;} buildChips();render(); {const hp=readHash();if(hp.m&&M.find(x=>key(x)===hp.m))openDetail(hp.m);}
- setInterval(()=>{render();refreshOpenModal();},30000);
- refreshLive(false).then(backfillIds);setInterval(()=>refreshLive(false),60000);
- keepAwake();
-}catch(err){document.getElementById("list").innerHTML='<div class="empty"><div class="big">!</div>Something went wrong.<br>'+(err&&err.message||"")+'</div>';}
 </script>
 </body>
 </html>
