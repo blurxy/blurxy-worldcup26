@@ -446,7 +446,7 @@ body.listmode #sheet { top: calc(44px + env(safe-area-inset-top, 0px)); }
       ${m.cant.length ? `<div class="blk cant"><h3>Cannot establish</h3><ul>${m.cant.map(f => `<li>${flags(f)}</li>`).join("")}</ul></div>` : ""}`;
   }
   let current = null, opener = null;
-  function open(key) {
+  function open(key, fromPop) {
     const m = MODS.find(x => x.key === key); if (!m) return; current = key; dirty = true;
     const a = document.activeElement; if (a && a !== document.body && !a.closest('#sheet')) opener = a;
     const sh = $('sheet'); sh.innerHTML = sheetHTML(m); sh.inert = false; sh.scrollTop = 0; sh.classList.add('open'); document.body.classList.add('sheetopen');
@@ -457,6 +457,7 @@ body.listmode #sheet { top: calc(44px + env(safe-area-inset-top, 0px)); }
     $('crumb').textContent = `board / rafiul-bari / ${m.id.toLowerCase()} ${m.name}`;
     $('shClose').onclick = close; $('shTitle').focus({ preventScroll: true }); $('live').textContent = `${m.name} spec sheet opened`;
     if ($('list').hidden) focusOn(modEls[key]);
+    if (!fromPop) { try { history.pushState({ sheet: key }, '', '#' + encodeURIComponent(key)); } catch (e) {} }
   }
   function close() {
     if (!current) return; const key = current; current = null;
@@ -470,6 +471,7 @@ body.listmode #sheet { top: calc(44px + env(safe-area-inset-top, 0px)); }
     const shown = el => el && el.isConnected && el.getClientRects().length && !el.closest('[inert],[hidden]');
     const back = shown(opener) ? opener : ($('list').hidden ? modEls[key] : $('list').querySelector(`.mod[data-key="${key}"]`));
     opener = null; if (shown(back)) back.focus({ preventScroll: true });
+    if (!popping && location.hash) { try { history.back(); } catch (e) {} }
   }
 
   // ---------- list view ----------
@@ -492,13 +494,21 @@ body.listmode #sheet { top: calc(44px + env(safe-area-inset-top, 0px)); }
     if (list) buildList(); else requestAnimationFrame(() => { home(); if (current) focusOn(modEls[current]); });
   }
   $('vBoard').onclick = () => setView('board'); $('vList').onclick = () => setView('list');
+  let popping = false;
+  window.addEventListener('popstate', () => {
+    const k = decodeURIComponent((location.hash || '').slice(1));
+    const valid = MODS.some(x => x.key === k);
+    popping = true;
+    try { if (valid && k !== current) open(k, true); else if (!valid && current) close(); }
+    finally { popping = false; }
+  });
 
   // One breakpoint for CSS and JS. Narrowing past it switches to the list; widening keeps whatever view is showing.
   const narrow = matchMedia('(max-width: 760px)');
   narrow.addEventListener('change', e => { requestAnimationFrame(drawTraces); if (e.matches) setView('list'); });
   let rz = 0;
   window.addEventListener('resize', () => { if (rz) return; rz = requestAnimationFrame(() => { rz = 0; if (!$('list').hidden) return; if (!dirty) home(); else apply(); if (current) focusOn(modEls[current]); }); });
-  requestAnimationFrame(() => { if (narrow.matches) setView('list'); placeFaults(); drawTraces(); if ($('list').hidden) home(); });
+  requestAnimationFrame(() => { if (narrow.matches) setView('list'); placeFaults(); drawTraces(); if ($('list').hidden) home(); const h0 = decodeURIComponent((location.hash || '').slice(1)); if (MODS.some(x => x.key === h0)) { try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {} open(h0); } });
   document.fonts && document.fonts.ready.then(() => { placeFaults(); drawTraces(); if ($('list').hidden && !dirty) home(); });
 })();
 </script>
