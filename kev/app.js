@@ -9,7 +9,7 @@
   const EPSS_API = 'https://api.first.org/data/v1/epss?cve=';
   const PAGE = 100, SOON = 14, RECENT = 30, KIOSK_PAGE_MS = 15000, EPSS_RETRY_MS = 300000;
   const MIN_PLAUSIBLE = 1000, STALE_DAYS = 21;   // a "live" catalog smaller or older than this is flagged, not trusted silently
-  const AUTO_REFRESH_MS = 600000, FOCUS_REFRESH_MS = 120000;   // stay live: re-fetch every 10 min, and on tab focus if idle >2 min
+  const AUTO_REFRESH_MS = 300000, FOCUS_REFRESH_MS = 120000;   // stay live: re-fetch every 5 min, and on tab focus if idle >2 min
 
   const $ = id => document.getElementById(id);
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
