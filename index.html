@@ -221,6 +221,12 @@ body.listmode #sheet { top: calc(44px + env(safe-area-inset-top, 0px)); }
       line: "Thorn & Dust 3D: an early-build third-person browser game.",
       lang: "WebGL", last: "2026-10-13", links: [["Play", "https://cactus.blurxy.net"]],
       measures: "Runs in the browser on WebGL, no install.", facts: [], cant: ["Phone play: it needs a keyboard and mouse, with no touch controls yet."] },
+    { id: "L-05", key: "kev", zone: "live", x: 860, y: 330, status: "live", name: "KEV Watch",
+      line: "What CISA says attackers are exploiting right now, by fix-by date.",
+      lang: "HTML / JS", last: "2026-10-28", links: [["Open", "https://blurxy.net/kev/"], ["Source", GH + "blurxy-worldcup26"]],
+      measures: "CISA's Known Exploited Vulnerabilities catalog, loaded live from CISA's mirror and sorted by fix-by date: vendor follows, EPSS scores, calendar export and a wall-display mode. Re-fetches every five minutes.",
+      facts: ["Hosted on Cloudflare Workers.", "Opens with a Measured / Not established strip stating what the list is and is not."],
+      cant: ["Whether you run an affected version: the catalog names products, not your inventory.", "Fix-by dates bind US federal agencies only (BOD 22-01); for everyone else they are a priority signal, not a deadline."] },
   ];
   const ZONES = { measure: ["Measurement", -640, -290], sim: ["Simulation", -136, -530], systems: ["Systems", -400, 360], live: ["Live", 520, -360] };
   const FAULTS = { x: 860, y: -380 };
