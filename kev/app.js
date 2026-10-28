@@ -9,6 +9,7 @@
   const EPSS_API = 'https://api.first.org/data/v1/epss?cve=';
   const PAGE = 100, SOON = 14, RECENT = 30, KIOSK_PAGE_MS = 15000, EPSS_RETRY_MS = 300000;
   const MIN_PLAUSIBLE = 1000, STALE_DAYS = 21;   // a "live" catalog smaller or older than this is flagged, not trusted silently
+  const AUTO_REFRESH_MS = 600000, FOCUS_REFRESH_MS = 120000;   // stay live: re-fetch every 10 min, and on tab focus if idle >2 min
 
   const $ = id => document.getElementById(id);
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -84,7 +85,7 @@
   const catalog = j => { if (!isPlain(j) || !Array.isArray(j.vulnerabilities)) throw new Error('unexpected format'); return j; };
   function setStatus(kind, html) { const s = $('status'); s.className = 'status' + (kind ? ' ' + kind : ''); s.innerHTML = html; }
   function setPill(text, cls) { $('srcpill').textContent = text; $('srcpill').className = 'pill' + (cls ? ' ' + cls : ''); }
-  let loading = false;
+  let loading = false, lastLoad = 0;
   async function load() {
     if (loading) return; loading = true;
     try {
@@ -123,7 +124,7 @@
       else setStatus('', `${base}<span class="src">loaded live from CISA's mirror</span>`);
       $('controls').hidden = false; $('listhead').hidden = false;
       buildVendors(); render();
-    } finally { loading = false; }
+    } finally { loading = false; lastLoad = Date.now(); }
   }
   function buildVendors() {
     const counts = new Map(); DATA.forEach(d => counts.set(d.vendorProject, (counts.get(d.vendorProject) || 0) + 1));
@@ -373,7 +374,7 @@
       if (gen !== kioskGen) return;   // exited while fullscreen was pending
       await lockScreen(gen);
       if (gen !== kioskGen) return;
-      refresher = setInterval(load, 3600000); pager = setInterval(page, KIOSK_PAGE_MS);
+      pager = setInterval(page, KIOSK_PAGE_MS);   // data refresh is global now (AUTO_REFRESH_MS), runs in every mode
     } else {
       const w = wake; wake = null; try { await w?.release(); } catch { /* already released */ }
       if (document.fullscreenElement) { try { await document.exitFullscreen(); } catch { /* ignore */ } }
@@ -386,8 +387,10 @@
     if (document.visibilityState !== 'visible') return;
     if (document.body.classList.contains('kiosk') && !wake) lockScreen(kioskGen);
     if (DATA.length && ymd(today()) !== daysFor) render();   // came back on a new day
+    if (Date.now() - lastLoad > FOCUS_REFRESH_MS) load();     // and pull the latest catalog on return
   });
   setInterval(() => { if (DATA.length && ymd(today()) !== daysFor) render(); }, 60000);   // cross midnight while open
+  setInterval(load, AUTO_REFRESH_MS);   // keep the live CISA catalog current without a page reload
 
   // ---------- start ----------
   const hv = (location.hash || '').slice(1).toLowerCase(), saved = store.get('kev-view', 'due', v => typeof v === 'string');
