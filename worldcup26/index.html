@@ -324,6 +324,7 @@
 
 <header class="hero">
   <div class="inner hero-inner">
+      <a href="/" aria-label="Back to blurxy home" style="display:inline-block;margin-bottom:12px;color:#f5c542;text-decoration:none;font-weight:700;font-size:13px;letter-spacing:.04em">&lsaquo; blurxy</a>
     <div class="eyebrow">FIFA World Cup &middot; USA &middot; Canada &middot; Mexico</div>
     <h1>World Cup <span class="yr">26</span></h1>
     <div class="hero-sub">All 104 matches &middot; 48 teams &middot; 16 cities &middot; June 11 &ndash; July 19</div>
@@ -1072,7 +1073,7 @@ function updateStats(){
  else{dot.classList.remove("on");
   const up=M.filter(m=>!m.ko&&stateOf(m).st==="up").map(m=>({m,t:startDate(m)})).filter(x=>x.t>now).sort((a,b)=>a.t-b.t);
   if(up.length){const nx=up[0],mins=Math.round((nx.t-now)/60000),when=mins<60?mins+"m":Math.round(mins/60)+"h";txt.innerHTML='Next up: <b>'+esc(nx.m.h)+' v '+esc(nx.m.a)+'</b> in '+when+' \u00b7 '+fmtTime(nx.t)+' '+tzAbbr();}
-  else txt.innerHTML=LASTOK?('Live scores synced '+fmtTime(LASTOK)+' '+tzAbbr()+'. Tap refresh for updates.'):'Schedule loaded. Tap refresh for live scores.'; if(OFFLINE)txt.innerHTML+=' <span style="color:var(--muted2)">\u00b7 offline, scores may be delayed</span>';
+  else txt.innerHTML=LASTOK?('Full schedule. No matches in play now.'):'Schedule loaded. Tap refresh for live scores.'; if(OFFLINE)txt.innerHTML+=' <span style="color:var(--muted2)">\u00b7 offline, scores may be delayed</span>';
  }
 }
 
@@ -1259,7 +1260,7 @@ async function hydrateLive(m){
 
 /* ============ KIOSK ============ */
 let wakeLock=null;
-async function keepAwake(){try{if("wakeLock"in navigator)wakeLock=await navigator.wakeLock.request("screen");}catch(_){}}
+async function keepAwake(){const anyLive=M.some(m=>stateOf(m).st==="live");try{if(anyLive){if("wakeLock"in navigator&&!wakeLock)wakeLock=await navigator.wakeLock.request("screen");}else if(wakeLock){await wakeLock.release();wakeLock=null;}}catch(_){wakeLock=null;}}
 function toggleFull(){const el=document.documentElement;if(!document.fullscreenElement){(el.requestFullscreen||el.webkitRequestFullscreen||function(){}).call(el);}else{(document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document);}}
 
 /* ===== timezone ===== */
@@ -1277,7 +1278,7 @@ function refreshOpenModal(){ if(!OPEN)return; const m=M.find(x=>key(x)===OPEN); 
 function flagFail(img,code,cls){ img.outerHTML='<span class="'+cls+' code">'+code+'</span>'; }
 function announce(msg){ const r=document.getElementById("liveRegion"); if(r)r.textContent=msg; }
 /* ===== deep links ===== */
-function readHash(){ const h=location.hash.replace(/^#/,""); const o={}; if(h)h.split("&").forEach(p=>{const i=p.indexOf("="); if(i>0)o[p.slice(0,i)]=decodeURIComponent(p.slice(i+1));}); return o; }
+function readHash(){ const h=location.hash.replace(/^#/,""); const o={}; if(h)h.split("&").forEach(p=>{const i=p.indexOf("="); if(i>0){try{o[p.slice(0,i)]=decodeURIComponent(p.slice(i+1));}catch(_){}}}); return o; }
 function setHash(){ const parts=[]; if(FILTER!=="ALL")parts.push("f="+FILTER); if(OPEN)parts.push("m="+encodeURIComponent(OPEN)); const h=parts.length?("#"+parts.join("&")):(location.pathname+location.search); try{history.replaceState(null,"",h);}catch(e){} }
 function applyHash(){ const hp=readHash(); const wantF=hp.f||"ALL"; if(wantF!==FILTER){FILTER=wantF;render();} const wantM=hp.m||null; if(wantM!==OPEN){ if(wantM&&M.find(x=>key(x)===wantM))openDetail(wantM); else if(!wantM&&OPEN)closeDetail(); } }
 /* ===== head-to-head tiebreak ===== */
@@ -1299,15 +1300,15 @@ document.getElementById("refreshBtn").addEventListener("click",()=>refreshLive(t
 document.getElementById("fullBtn").addEventListener("click",toggleFull);
 const themeBtn=document.getElementById("themeBtn");
 function applyTheme(d){document.documentElement.classList.toggle("dark",d);themeBtn.textContent=d?"Light":"Dark";}
-let DARK=false;try{DARK=localStorage.getItem("wc-theme")==="dark";}catch(e){}applyTheme(DARK);
+let DARK=false;try{const st=localStorage.getItem("wc-theme");DARK=st?st==="dark":!!(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches);}catch(e){}applyTheme(DARK);
 themeBtn.addEventListener("click",()=>{DARK=!DARK;try{localStorage.setItem("wc-theme",DARK?"dark":"light");}catch(e){}applyTheme(DARK);});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&OPEN)closeDetail();});
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"){keepAwake();refreshLive(false);}});
 
 try{
  {const hp=readHash();if(hp.f)FILTER=hp.f;} buildChips();render(); {const hp=readHash();if(hp.m&&M.find(x=>key(x)===hp.m))openDetail(hp.m);}
- setInterval(()=>{render();refreshOpenModal();},30000);
- refreshLive(false).then(backfillIds);setInterval(()=>refreshLive(false),60000);
+ setInterval(()=>{if(!document.hidden&&!document.getElementById("list").contains(document.activeElement)){render();refreshOpenModal();}},30000);
+ refreshLive(false).then(backfillIds);setInterval(()=>{if(!document.hidden)refreshLive(false);},60000);
  keepAwake();
 }catch(err){document.getElementById("list").innerHTML='<div class="empty"><div class="big">!</div>Something went wrong.<br>'+(err&&err.message||"")+'</div>';}
 </script>
