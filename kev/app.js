@@ -390,7 +390,7 @@
     if (Date.now() - lastLoad > FOCUS_REFRESH_MS) load();     // and pull the latest catalog on return
   });
   setInterval(() => { if (DATA.length && ymd(today()) !== daysFor) render(); }, 60000);   // cross midnight while open
-  setInterval(load, AUTO_REFRESH_MS);   // keep the live CISA catalog current without a page reload
+  setInterval(() => { if (!document.hidden) load(); }, AUTO_REFRESH_MS);   // keep the live catalog current; skip while the tab is hidden (saves data/battery)
 
   // ---------- start ----------
   const hv = (location.hash || '').slice(1).toLowerCase(), saved = store.get('kev-view', 'due', v => typeof v === 'string');

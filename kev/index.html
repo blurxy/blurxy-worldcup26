@@ -133,7 +133,7 @@ ul.list { list-style: none; margin: 0; padding: 0; border: 1px solid var(--line)
 .star[aria-pressed="true"] { color: var(--amber); }
 .star:focus-visible { outline: 2px solid var(--amber); }
 @media (max-width: 620px) {
-  .row { grid-template-columns: 76px minmax(0, 1fr); }
+  .row { grid-template-columns: 96px minmax(0, 1fr); }
   .side { grid-column: 2; grid-row: 2; display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 2px 14px; padding: 0 14px 11px; text-align: left; }
   .side > * { white-space: nowrap; }
   .side .star { margin-left: auto; }
@@ -175,7 +175,6 @@ footer { font-size: 13px; color: var(--muted); display: grid; gap: 6px; }
 @media (max-width: 620px) {
   #kiosk { display: none; }                         /* a wall display is for big screens */
   .legend { display: none; }                        /* the countdown column carries urgency on its own */
-  .truth .lines p.m { display: none; }              /* keep the caveat that changes decisions; the rest is under details */
   .status .rel, .status .src { display: none; }     /* the header pill already says live or snapshot */
   .head { gap: 6px; }
   main { gap: 12px; padding-block: 14px 48px; }
@@ -218,7 +217,7 @@ body.kiosk .dayhead { font-size: .8em; }
   </div>
   <div class="truth">
     <div class="lines">
-      <p class="m"><b>Measured</b>CISA has evidence each entry was exploited in the wild, and sets a fix-by date.</p>
+      <p class="m"><b>Measured</b>CISA (the US cyber agency) has evidence attackers are actually using each entry, and sets a deadline to fix it.</p>
       <p class="c"><b>Not established</b>Whether you run it. Fix-by dates bind US federal agencies only.</p>
     </div>
     <details><summary>What this can and cannot tell you</summary>
@@ -256,7 +255,7 @@ body.kiosk .dayhead { font-size: .8em; }
   </div>
   <footer>
     <span>Data: <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" rel="noopener noreferrer" target="_blank">CISA KEV catalog</a> via CISA's <a href="https://github.com/cisagov/kev-data" rel="noopener noreferrer" target="_blank">cisagov/kev-data</a> mirror (refreshed on load), with a bundled snapshot if the mirror is unreachable. Exploit probabilities: <a href="https://www.first.org/epss/" rel="noopener noreferrer" target="_blank">EPSS by FIRST</a>.</span>
-    <span>Follows are stored in this browser only, and this page sets no cookies and runs no analytics. To load, it contacts GitHub (the catalog), Google Fonts (typefaces) and FIRST (EPSS scores for the CVEs on screen, so FIRST can see which CVEs you view). Part of <a href="../">blurxy</a>.</span>
+    <span>Follows are stored in this browser only, and this page sets no cookies and runs no analytics. To load, it contacts GitHub (the catalog), Google Fonts (typefaces) and FIRST (EPSS scores for the CVEs on screen, so FIRST can see which CVEs you view). Part of <a href="../">blurxy</a>. Independent project, not affiliated with CISA or FIRST.</span>
   </footer>
 </main>
 

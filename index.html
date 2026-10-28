@@ -3,21 +3,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>blurxy.net</title>
-<meta name="description" content="blurxy.net — a small hub of things I build: a World Cup 26 live dashboard and KEV Watch, a board of CISA's known-exploited vulnerabilities.">
+<meta name="description" content="blurxy.net — a small hub of things I build: a World Cup 2026 match dashboard and KEV Watch, a board of CISA's known-exploited vulnerabilities.">
 <meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#07130d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpolygon points='0,0 16,0 16,16' fill='%23f5c542'/%3E%3C/svg%3E">
 <style>
-  :root{--bg:#07130d;--panel:#0d1f16;--panel2:#102619;--line:#1d3a29;--ink:#eef4ee;--muted:#8fae9c;--gold:#f5c542;--live:#39d98a}
+  :root{--bg:#07130d;--panel:#0d1f16;--panel2:#102619;--line:#1d3a29;--ink:#eef4ee;--muted:#9fc0ad;--gold:#f5c542;--live:#39d98a}
   *{box-sizing:border-box}
-  html,body{margin:0;min-height:100%}
+  html,body{margin:0}
   body{background:radial-gradient(1100px 560px at 50% -10%, #0f2a1c 0%, transparent 60%), var(--bg);
        color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-       display:flex;flex-direction:column;align-items:center;justify-content:center;
-       min-height:100vh;padding:40px 16px;gap:30px;-webkit-font-smoothing:antialiased}
+       display:flex;align-items:center;justify-content:center;
+       min-height:100vh;min-height:100dvh;padding:40px 16px;-webkit-font-smoothing:antialiased}
+  main.wrap{display:flex;flex-direction:column;align-items:center;gap:26px;width:100%;max-width:540px}
   .brand{text-align:center}
-  .brand .mark{font-weight:800;font-size:clamp(30px,7vw,46px);letter-spacing:.01em;display:inline-flex;align-items:center;gap:13px;line-height:1}
+  .brand .mark{margin:0;font-weight:800;font-size:clamp(30px,7vw,46px);letter-spacing:.01em;display:inline-flex;align-items:center;gap:13px;line-height:1}
   .brand .mark i{width:15px;height:15px;background:var(--gold);display:inline-block;clip-path:polygon(0 0,100% 0,100% 100%)}
-  .brand .sub{color:var(--muted);text-transform:uppercase;letter-spacing:.2em;font-size:12px;margin-top:10px}
-  nav.apps{display:grid;gap:14px;width:100%;max-width:540px}
+  .brand .sub{margin:12px 0 0;color:var(--muted);font-size:14px}
+  nav.apps{display:grid;gap:14px;width:100%}
   a.app{display:flex;align-items:center;gap:16px;text-decoration:none;color:inherit;background:var(--panel);
         border:1px solid var(--line);border-radius:14px;padding:18px 20px;
         transition:border-color .15s ease,transform .15s ease,background .15s ease}
@@ -32,29 +35,31 @@
         text-transform:uppercase;letter-spacing:.09em;border:1px solid color-mix(in srgb,var(--live) 55%,transparent);border-radius:999px;padding:2px 7px}
   .live i{width:7px;height:7px;border-radius:50%;background:var(--live);animation:p 2s infinite}
   @keyframes p{0%{box-shadow:0 0 0 0 rgba(57,217,138,.45)}70%{box-shadow:0 0 0 6px rgba(57,217,138,0)}100%{box-shadow:0 0 0 0 rgba(57,217,138,0)}}
-  footer{color:var(--muted);font-size:12px;opacity:.75}
+  footer{color:var(--muted);font-size:12.5px}
   @media (prefers-reduced-motion:reduce){.live i{animation:none}a.app,.app .arrow{transition:none}}
 </style>
 </head><body>
-  <header class="brand">
-    <div class="mark"><i aria-hidden="true"></i>blurxy</div>
-    <div class="sub">blurxy.net</div>
-  </header>
-  <nav class="apps" aria-label="Projects">
-    <a class="app" href="/worldcup26/">
-      <div class="body">
-        <div class="t">World Cup 26</div>
-        <div class="d">Live match dashboard — all 104 matches, 48 teams, 16 cities.</div>
-      </div>
-      <div class="arrow" aria-hidden="true">&rsaquo;</div>
-    </a>
-    <a class="app" href="/kev/">
-      <div class="body">
-        <div class="t">KEV Watch <span class="live"><i aria-hidden="true"></i>live</span></div>
-        <div class="d">CISA known-exploited vulnerabilities, sorted by fix-by date. Updates on its own.</div>
-      </div>
-      <div class="arrow" aria-hidden="true">&rsaquo;</div>
-    </a>
-  </nav>
-  <footer>Built by blurxy</footer>
+  <main class="wrap">
+    <header class="brand">
+      <h1 class="mark"><i aria-hidden="true"></i>blurxy</h1>
+      <p class="sub">Small things I build. Two of them live right now.</p>
+    </header>
+    <nav class="apps" aria-label="Projects">
+      <a class="app" href="/worldcup26/">
+        <span class="body">
+          <span class="t">World Cup 26</span>
+          <span class="d">FIFA World Cup 2026 (soccer) — the full match schedule and scores.</span>
+        </span>
+        <span class="arrow" aria-hidden="true">&rsaquo;</span>
+      </a>
+      <a class="app" href="/kev/">
+        <span class="body">
+          <span class="t">KEV Watch <span class="live"><i aria-hidden="true"></i>live</span></span>
+          <span class="d">Security flaws attackers are using right now, from the US cyber agency CISA. Updates on its own.</span>
+        </span>
+        <span class="arrow" aria-hidden="true">&rsaquo;</span>
+      </a>
+    </nav>
+    <footer>Built by blurxy</footer>
+  </main>
 </body></html>
