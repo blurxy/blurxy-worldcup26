@@ -2,10 +2,10 @@
 <html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Rafiul Bari — Cybersecurity · blurxy</title>
+<title>blurxy — cybersecurity</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpolygon points='0,0 16,0 16,16' fill='%23f2b705'/%3E%3C/svg%3E">
 <meta name="theme-color" content="#08090c">
-<meta property="og:title" content="Rafiul Bari — Cybersecurity">
+<meta property="og:title" content="blurxy — cybersecurity">
 <meta property="og:description" content="Measurement &amp; security tools that state what they cannot establish. Cybersecurity at CUNY City Tech.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://blurxy.net/">
@@ -144,7 +144,7 @@ body.listmode #sheet { top: calc(44px + env(safe-area-inset-top, 0px)); }
 
 <header class="bar">
   <span class="mark"><i aria-hidden="true"></i>blurxy</span>
-  <span class="crumb" id="crumb">board / rafiul-bari / all modules</span>
+  <span class="crumb" id="crumb">board / blurxy / all modules</span>
   <span class="spacer"></span>
   <button class="tbtn" id="vBoard" aria-pressed="true">Board</button>
   <button class="tbtn" id="vList" aria-pressed="false">List</button>
@@ -249,9 +249,9 @@ body.listmode #sheet { top: calc(44px + env(safe-area-inset-top, 0px)); }
   // ---------- build board ----------
   const core = document.createElement('section');
   core.className = 'core'; core.style.left = CORE.x + 'px'; core.style.top = CORE.y + 'px';
-  core.innerHTML = `<div class="tag">CORE · RAFIUL BARI</div>
-    <h1>Rafiul Bari</h1>
-    <div class="who">blurxy · cybersecurity · NYC College of Technology (CUNY)</div>
+  core.innerHTML = `<div class="tag">CORE · BLURXY</div>
+    <h1>blurxy</h1>
+    <div class="who">cybersecurity · NYC College of Technology (CUNY) · legal name Rafiul Bari</div>
     <p class="thesis">How do you know your check <em>actually checked anything?</em></p>
     <p class="sub">I build measurement tools that state what they cannot establish as prominently as what they can. Where a module has a known limit, its spec sheet lists it under Cannot establish.</p>
     <div class="links"><a href="https://github.com/blurxy" target="_blank" rel="noopener" draggable="false">github.com/blurxy</a><a href="#faults" class="toFaults" draggable="false">Fault log</a></div>`;
@@ -454,7 +454,7 @@ body.listmode #sheet { top: calc(44px + env(safe-area-inset-top, 0px)); }
     document.querySelectorAll('.mod').forEach(el => el.setAttribute('aria-expanded', String(el.dataset.key === key)));
     Object.values(modEls).forEach(el => el.classList.toggle('sel', el.dataset.key === key));
     $('traces').querySelectorAll('path').forEach(p => { const on = p.dataset.k === key; p.setAttribute('stroke', on ? 'var(--amber)' : 'var(--trace)'); p.setAttribute('stroke-width', on ? 2 : 1.5); });
-    $('crumb').textContent = `board / rafiul-bari / ${m.id.toLowerCase()} ${m.name}`;
+    $('crumb').textContent = `board / blurxy / ${m.id.toLowerCase()} ${m.name}`;
     $('shClose').onclick = close; $('shTitle').focus({ preventScroll: true }); $('live').textContent = `${m.name} spec sheet opened`;
     if ($('list').hidden) focusOn(modEls[key]);
     if (!fromPop) { try { history.pushState({ sheet: key }, '', '#' + encodeURIComponent(key)); } catch (e) {} }
@@ -467,7 +467,7 @@ body.listmode #sheet { top: calc(44px + env(safe-area-inset-top, 0px)); }
     setTimeout(() => { if (!current) sh.innerHTML = ''; }, 260);   // after the slide-out, so no stale links stay behind
     Object.values(modEls).forEach(el => el.classList.remove('sel'));
     $('traces').querySelectorAll('path').forEach(p => { p.setAttribute('stroke', 'var(--trace)'); p.setAttribute('stroke-width', 1.5); });
-    $('crumb').textContent = 'board / rafiul-bari / all modules';
+    $('crumb').textContent = 'board / blurxy / all modules';
     const shown = el => el && el.isConnected && el.getClientRects().length && !el.closest('[inert],[hidden]');
     const back = shown(opener) ? opener : ($('list').hidden ? modEls[key] : $('list').querySelector(`.mod[data-key="${key}"]`));
     opener = null; if (shown(back)) back.focus({ preventScroll: true });
