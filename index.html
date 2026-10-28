@@ -1,65 +1,489 @@
-<!DOCTYPE html>
-<html lang="en"><head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>blurxy.net</title>
-<meta name="description" content="blurxy.net — a small hub of things I build: a World Cup 2026 match dashboard and KEV Watch, a board of CISA's known-exploited vulnerabilities.">
-<meta name="color-scheme" content="dark">
-<meta name="theme-color" content="#07130d">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpolygon points='0,0 16,0 16,16' fill='%23f5c542'/%3E%3C/svg%3E">
+<title>blurxy</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Rafiul Bari (blurxy). Cybersecurity at NYC College of Technology. Measurement tools that state what they cannot establish.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <style>
-  :root{--bg:#07130d;--panel:#0d1f16;--panel2:#102619;--line:#1d3a29;--ink:#eef4ee;--muted:#9fc0ad;--gold:#f5c542;--live:#39d98a}
-  *{box-sizing:border-box}
-  html,body{margin:0}
-  body{background:radial-gradient(1100px 560px at 50% -10%, #0f2a1c 0%, transparent 60%), var(--bg);
-       color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-       display:flex;align-items:center;justify-content:center;
-       min-height:100vh;min-height:100dvh;padding:40px 16px;-webkit-font-smoothing:antialiased}
-  main.wrap{display:flex;flex-direction:column;align-items:center;gap:26px;width:100%;max-width:540px}
-  .brand{text-align:center}
-  .brand .mark{margin:0;font-weight:800;font-size:clamp(30px,7vw,46px);letter-spacing:.01em;display:inline-flex;align-items:center;gap:13px;line-height:1}
-  .brand .mark i{width:15px;height:15px;background:var(--gold);display:inline-block;clip-path:polygon(0 0,100% 0,100% 100%)}
-  .brand .sub{margin:12px 0 0;color:var(--muted);font-size:14px}
-  nav.apps{display:grid;gap:14px;width:100%}
-  a.app{display:flex;align-items:center;gap:16px;text-decoration:none;color:inherit;background:var(--panel);
-        border:1px solid var(--line);border-radius:14px;padding:18px 20px;
-        transition:border-color .15s ease,transform .15s ease,background .15s ease}
-  a.app:hover,a.app:focus-visible{border-color:var(--gold);background:var(--panel2);transform:translateY(-2px)}
-  a.app:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
-  .app .body{display:flex;flex-direction:column;gap:4px;min-width:0}
-  .app .t{font-weight:700;font-size:17.5px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-  .app .d{color:var(--muted);font-size:13.5px;line-height:1.45}
-  .app .arrow{margin-left:auto;color:var(--muted);font-size:22px;line-height:1;transition:color .15s,transform .15s}
-  a.app:hover .arrow,a.app:focus-visible .arrow{color:var(--gold);transform:translateX(2px)}
-  .live{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;color:var(--live);
-        text-transform:uppercase;letter-spacing:.09em;border:1px solid color-mix(in srgb,var(--live) 55%,transparent);border-radius:999px;padding:2px 7px}
-  .live i{width:7px;height:7px;border-radius:50%;background:var(--live);animation:p 2s infinite}
-  @keyframes p{0%{box-shadow:0 0 0 0 rgba(57,217,138,.45)}70%{box-shadow:0 0 0 6px rgba(57,217,138,0)}100%{box-shadow:0 0 0 0 rgba(57,217,138,0)}}
-  footer{color:var(--muted);font-size:12.5px}
-  @media (prefers-reduced-motion:reduce){.live i{animation:none}a.app,.app .arrow{transition:none}}
+/* Layout: a 2D engineering schematic you pan and zoom. Rafiul is the core; each project is a module wired to it,
+   with a spec sheet that opens on click. Design-tool chrome (rulers, crosshair, coordinates) frames the board.
+   Single dark theme by choice: industrial instrument panel. */
+:root {
+  --bg: #08090c; --grid: #11161c; --grid-major: #1a212a; --panel: #0e1217; --raised: #141a21; --line: #26303b;
+  --ink: #e9edf1; --muted: #8893a1; --dim: #78838f; --amber: #f2b705; --pass: #39d98a; --fault: #ff5a47; --trace: #3a4654;
+  --display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 var(--display); overflow: hidden; -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+/* Inside the scaled board the ring keeps a fixed on-screen thickness (--s is the camera scale). */
+#world :focus-visible { outline-width: round(up, calc(2px / var(--s, 1)), 1px); outline-offset: round(up, calc(2px / var(--s, 1)), 1px); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* ---- chrome: top bar, rulers, HUD ---- */
+.bar { position: fixed; top: 0; left: 0; right: 0; z-index: 30; height: calc(44px + env(safe-area-inset-top, 0px)); padding-top: env(safe-area-inset-top, 0px);
+  padding-left: max(14px, env(safe-area-inset-left, 0px)); padding-right: max(14px, env(safe-area-inset-right, 0px));
+  display: flex; align-items: center; gap: 14px; background: color-mix(in srgb, var(--bg) 88%, transparent); border-bottom: 1px solid var(--line); backdrop-filter: blur(6px); }
+.mark { font: 800 17px/1 var(--display); font-stretch: 125%; letter-spacing: .02em; display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+.mark i { width: 10px; height: 10px; background: var(--amber); display: inline-block; clip-path: polygon(0 0, 100% 0, 100% 100%); }
+.crumb { font: 500 12px var(--mono); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.spacer { flex: 1; }
+.tbtn { background: var(--raised); border: 1px solid var(--line); border-radius: 3px; padding: 5px 10px; font: 500 12px var(--mono); cursor: pointer; white-space: nowrap; }
+.tbtn:hover { border-color: var(--muted); }
+@media (pointer: coarse) { .tbtn { min-height: 44px; padding: 10px 14px; } .kbd { display: none; } }
+.tbtn[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.ruler { position: fixed; z-index: 20; background: var(--panel); pointer-events: none; }
+.ruler.x { top: calc(44px + env(safe-area-inset-top, 0px)); left: 22px; right: 0; height: 22px; border-bottom: 1px solid var(--line); }
+.ruler.y { top: calc(66px + env(safe-area-inset-top, 0px)); left: 0; bottom: 0; width: 22px; border-right: 1px solid var(--line); }
+.ruler canvas { display: block; }
+.corner { position: fixed; z-index: 21; top: calc(44px + env(safe-area-inset-top, 0px)); left: 0; width: 22px; height: 22px; background: var(--panel); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.hud { position: fixed; z-index: 25; left: 34px; right: 200px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); display: flex; gap: 8px; flex-wrap: wrap; pointer-events: none; }
+.hud span { white-space: pre; font: 500 11.5px var(--mono); color: var(--muted); background: color-mix(in srgb, var(--panel) 92%, transparent); border: 1px solid var(--line); border-radius: 3px; padding: 3px 8px; font-variant-numeric: tabular-nums; }
+.zoomer { position: fixed; z-index: 25; right: max(14px, env(safe-area-inset-right, 0px)); bottom: calc(12px + env(safe-area-inset-bottom, 0px)); display: flex; gap: 6px; }
+
+/* ---- the board ---- */
+#stage { position: fixed; inset: calc(66px + env(safe-area-inset-top, 0px)) 0 0 22px; overflow: clip; cursor: grab; touch-action: none; }
+#stage.drag { cursor: grabbing; }
+#grid { position: absolute; inset: 0; }
+#world { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; }
+#traces { position: absolute; overflow: visible; pointer-events: none; }
+.xh { position: absolute; pointer-events: none; background: color-mix(in srgb, var(--amber) 35%, transparent); }
+.xh.v { top: 0; bottom: 0; width: 1px; } .xh.h { left: 0; right: 0; height: 1px; }
+
+.core { position: absolute; width: 440px; padding: 22px 24px 20px; background: var(--panel); border: 1px solid var(--line); border-top: 3px solid var(--amber); }
+.core .tag { font: 600 11px var(--mono); color: var(--amber); letter-spacing: .14em; }
+.core h1 { margin: 10px 0 6px; font: 800 44px/0.95 var(--display); font-stretch: 112%; letter-spacing: -.01em; text-wrap: balance; }
+.core .who { font: 500 13px var(--mono); color: var(--muted); }
+.core .thesis { margin: 16px 0 0; font: 600 21px/1.25 var(--display); font-stretch: 88%; text-wrap: balance; }
+.core .thesis em { font-style: normal; color: var(--amber); }
+.core .sub { margin: 10px 0 0; color: #c2c9d1; font-size: 14px; max-width: 46ch; }
+.core .links { margin-top: 16px; display: flex; gap: 8px; flex-wrap: wrap; }
+.core .links a { font: 500 12px var(--mono); border: 1px solid var(--line); border-radius: 3px; padding: 6px 10px; text-decoration: none; background: var(--raised); }
+.core .links a:hover { border-color: var(--amber); color: var(--amber); }
+
+.zone { position: absolute; font: 600 11px var(--mono); color: var(--dim); letter-spacing: .2em; text-transform: uppercase; white-space: nowrap; }
+.zone::before { content: ""; display: inline-block; width: 18px; height: 1px; background: var(--dim); vertical-align: middle; margin-right: 8px; }
+
+.mod { position: absolute; width: 272px; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 2px; padding: 0; cursor: pointer; display: grid; transition: border-color .15s; }
+.mod:hover, .mod.sel { border-color: var(--amber); }
+.mod.sel { box-shadow: 0 0 0 1px var(--amber), 0 0 40px -12px var(--amber); }
+.mod .mh { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--line); font: 600 11px var(--mono); color: var(--muted); letter-spacing: .08em; }
+.led { display: inline-flex; align-items: center; gap: 6px; }
+.led::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 8px currentColor; }
+.led.live { color: var(--pass); } .led.repo { color: #7fb4ff; } .led.beta { color: var(--amber); } .led.stage { color: #c79bff; }
+.mod .mb { padding: 12px 12px 12px; display: grid; gap: 6px; }
+.mod .mn, .mod .md { display: block; }
+.mod .mn { font: 700 19px/1.1 var(--display); font-stretch: 105%; }
+.mod .md { font-size: 13.5px; color: #bcc4cd; line-height: 1.42; }
+.mod .mf { display: flex; gap: 10px; flex-wrap: wrap; padding: 8px 12px; border-top: 1px dashed var(--line); font: 500 11px var(--mono); color: var(--dim); }
+.mod .mf b { color: var(--muted); font-weight: 500; }
+
+.faults { position: absolute; width: 520px; background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--fault); }
+.faults .fh { padding: 10px 14px; border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 4px 12px; justify-content: space-between; font: 600 11px var(--mono); color: var(--fault); letter-spacing: .12em; }
+.faults ol { list-style: none; margin: 0; padding: 6px 0; counter-reset: f; }
+.faults li { counter-increment: f; display: grid; grid-template-columns: 74px 1fr; gap: 10px; padding: 7px 14px; font-size: 13.5px; color: #c9d0d7; }
+.faults li::before { content: "FAULT " counter(f, decimal-leading-zero); font: 600 11px/1.9 var(--mono); color: var(--fault); }
+.faults code { font: 500 12.5px var(--mono); color: var(--ink); background: var(--raised); padding: 0 4px; border-radius: 2px; }
+.faults .ff { padding: 10px 14px 12px; border-top: 1px dashed var(--line); font-size: 13.5px; color: var(--ink); }
+.faults .ff b { color: var(--amber); font-weight: 600; }
+.faults .fh span:last-child { white-space: nowrap; }
+
+/* ---- spec sheet ---- */
+#sheet { position: fixed; z-index: 40; top: calc(66px + env(safe-area-inset-top, 0px)); right: 0; bottom: 0; width: min(440px, 100%); background: var(--panel); border-left: 1px solid var(--line);
+  transform: translateX(100%); transition: transform .22s ease; overflow-y: auto; padding: 18px max(18px, env(safe-area-inset-right, 0px)) calc(28px + env(safe-area-inset-bottom, 0px)) 20px; display: grid; gap: 14px; align-content: start; }
+#sheet.open { transform: none; }
+#shTitle:focus, #sheet:focus { outline: none; }
+#sheet code { font: 500 12.5px var(--mono); white-space: nowrap; color: var(--ink); }
+.sh-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; font: 600 11px var(--mono); color: var(--muted); letter-spacing: .1em; }
+#sheet h2 { margin: 0; font: 800 30px/1 var(--display); font-stretch: 110%; text-wrap: balance; }
+#sheet .lead { margin: 0; color: #c9d0d7; }
+.spec { border: 1px solid var(--line); border-radius: 2px; }
+.spec div { display: grid; grid-template-columns: 120px 1fr; gap: 10px; padding: 7px 12px; border-bottom: 1px solid var(--line); font-size: 13.5px; }
+.spec div:last-child { border-bottom: 0; }
+.spec dt { font: 500 11.5px/1.9 var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.spec dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.blk h3 { margin: 0 0 6px; font: 600 11px var(--mono); color: var(--amber); letter-spacing: .14em; text-transform: uppercase; }
+.blk ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; color: #c9d0d7; font-size: 14px; }
+.blk.cant h3 { color: var(--fault); }
+.acts { display: flex; gap: 8px; flex-wrap: wrap; }
+.acts a { font: 600 12.5px var(--mono); text-decoration: none; padding: 8px 12px; border-radius: 3px; border: 1px solid var(--line); background: var(--raised); }
+.acts a.pri { background: var(--amber); color: #111; border-color: var(--amber); }
+.acts .soon { font: 600 12.5px var(--mono); padding: 8px 12px; border-radius: 3px; border: 1px dashed var(--line); color: var(--muted); }
+
+/* ---- list view (also the phone default) ---- */
+#list { position: fixed; z-index: 15; inset: calc(44px + env(safe-area-inset-top, 0px)) 0 0 0; overflow-y: auto; background: var(--bg);
+  padding-block: 20px calc(40px + env(safe-area-inset-bottom, 0px)); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+#list .inner { max-width: 980px; margin: 0 auto; display: grid; gap: 16px; }
+#list .core, #list .faults, #list .mod { position: static; width: auto; }
+#list .mods { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: 12px; }
+#list .zone { position: static; margin-top: 8px; }
+body.listmode .ruler, body.listmode .corner, body.listmode .hud, body.listmode .zoomer { display: none; }
+body.listmode #sheet { top: calc(44px + env(safe-area-inset-top, 0px)); }
+/* While a sheet is open the zoom buttons move left of it instead of hiding under it; on narrow screens the sheet covers everything, so they hide. */
+@media (min-width: 761px) { body.sheetopen .zoomer { right: calc(min(440px, 100%) + 14px); } }
+@media (max-width: 760px) { body.sheetopen .zoomer { visibility: hidden; } }
+@media (max-width: 1100px) { body.sheetopen .hud { display: none; } }
+@media (max-width: 760px) { .core h1 { font-size: 38px; } .crumb { display: none; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
-</head><body>
-  <main class="wrap">
-    <header class="brand">
-      <h1 class="mark"><i aria-hidden="true"></i>blurxy</h1>
-      <p class="sub">Small things I build. Two of them live right now.</p>
-    </header>
-    <nav class="apps" aria-label="Projects">
-      <a class="app" href="/worldcup26/">
-        <span class="body">
-          <span class="t">World Cup 26</span>
-          <span class="d">FIFA World Cup 2026 (soccer) — the full match schedule and scores.</span>
-        </span>
-        <span class="arrow" aria-hidden="true">&rsaquo;</span>
-      </a>
-      <a class="app" href="/kev/">
-        <span class="body">
-          <span class="t">KEV Watch <span class="live"><i aria-hidden="true"></i>live</span></span>
-          <span class="d">Security flaws attackers are using right now, from the US cyber agency CISA. Updates on its own.</span>
-        </span>
-        <span class="arrow" aria-hidden="true">&rsaquo;</span>
-      </a>
-    </nav>
-    <footer>Built by blurxy</footer>
-  </main>
-</body></html>
+
+<header class="bar">
+  <span class="mark"><i aria-hidden="true"></i>blurxy</span>
+  <span class="crumb" id="crumb">board / rafiul-bari / all modules</span>
+  <span class="spacer"></span>
+  <button class="tbtn" id="vBoard" aria-pressed="true">Board</button>
+  <button class="tbtn" id="vList" aria-pressed="false">List</button>
+</header>
+
+<div class="corner" aria-hidden="true"></div>
+<div class="ruler x" aria-hidden="true"><canvas id="rx"></canvas></div>
+<div class="ruler y" aria-hidden="true"><canvas id="ry"></canvas></div>
+
+<main id="stage" aria-label="Project board. Drag to pan, scroll to zoom, or switch to List.">
+  <canvas id="grid" aria-hidden="true"></canvas>
+  <div class="xh v" id="xv" hidden></div><div class="xh h" id="xhz" hidden></div>
+  <div id="world"><svg id="traces" aria-hidden="true"></svg></div>
+</main>
+
+<div class="hud" aria-hidden="true"><span id="hPos">X     0 · Y     0</span><span id="hZoom">ZOOM 100%</span><span id="hMods"></span></div>
+<div class="zoomer"><button class="tbtn" id="zOut" aria-label="Zoom out">−</button><button class="tbtn" id="zFit">Fit</button><button class="tbtn" id="zIn" aria-label="Zoom in">+</button></div>
+
+<div id="sheet" role="dialog" aria-labelledby="shTitle" tabindex="-1" inert></div>
+<div class="sr" id="live" aria-live="polite"></div>
+<noscript><style>.ruler,.corner,.hud,.zoomer,.tbtn{display:none}</style><p style="position:fixed;z-index:50;top:80px;left:36px;right:16px;margin:0;color:#e9edf1;font:15px/1.5 system-ui,sans-serif">Rafiul Bari (blurxy), cybersecurity at NYC College of Technology. This board needs JavaScript; the projects are at <a href="https://github.com/blurxy" style="color:#f2b705">github.com/blurxy</a>.</p></noscript>
+<section id="list" hidden aria-label="All projects"><div class="inner" id="listInner"></div></section>
+
+<script>
+(() => {
+  const GH = "https://github.com/blurxy/";
+  const MODS = [
+    { id: "M-01", key: "aur", zone: "measure", x: -640, y: -230, status: "repo", name: "aur-build-diff",
+      line: "Builds an AUR package twice and diffs what each version actually does.",
+      lang: "Python", last: "2026-09-17", links: [["Source", GH + "aur-build-diff"]],
+      measures: "What a new package revision does that the last known-good one never did: new outbound endpoints, binaries it didn't run before, writes outside the build tree. Built under bubblewrap with strace.",
+      facts: ["The sandbox blocks DNS through the io.systemd.Resolve unix socket, not just the network namespace. --unshare-net alone still resolves names; the repo runs that control on every check.",
+        "--static reads what a PKGBUILD declares in 1.3 s with no sandbox. It fired on 1 of 6 real pkgcacheclean transitions and stayed silent on the other 5.",
+        "The README documents 8 defects in the tool and 3 in the --static differ. Seven of my own passing tests caught none of those three."],
+      cant: ["Behaviour that only shows up in a completed build, because completing the build is what the sandbox exists to prevent. --static covers part of that gap."] },
+    { id: "M-02", key: "beacon", zone: "measure", x: -640, y: 110, status: "repo", name: "beacon-spectrum",
+      line: "Finds periodic C2 beacons in connection timing alone. No payload, no TLS inspection.",
+      lang: "Python", last: "2026-09-16", links: [["Source", GH + "beacon-spectrum"]],
+      measures: "Phase coherence of connection timestamps with a Rayleigh / Z² periodogram. Dependency-free pcap and Zeek ingest.",
+      facts: ["It publishes a table against itself: a dispersion/skew control detector wins every headline benchmark, then alarms on 98% of benign periodic traffic (NTP, telemetry, backups). It detects regularity, not beacons.",
+        "The limit is derived, not discovered: Z² = 2N·R² and R ≤ 1, so the statistic is bounded by 2N. A perfect beacon seen N times cannot score above twice its check-in count."],
+      cant: ["Telling a beacon from NTP by periodicity alone. Below the 2N floor the honest output is \"not enough data\", not \"no beacon\"."] },
+    { id: "M-03", key: "chladni", zone: "sim", x: -136, y: -470, status: "repo", name: "chladni-tui",
+      line: "A Chladni sand plate simulated from first principles, drawn in the terminal from live audio.",
+      lang: "Python", last: "2026-09-18", links: [["Source", GH + "chladni-tui"]],
+      measures: "Bessel eigenmodes of a clamped circular membrane, U_mn(r,θ) = J_m(α_mn·r)·cos(mθ), driven by the frequency content of real audio and rendered in Braille sub-cells. No GPU.",
+      facts: ["Energy is an incoherent sum Σaᵢ²Uᵢ², not (ΣaᵢUᵢ)². Squaring a coherent sum invents interference nodes no real plate has.",
+        "One clean tone gives lines; a chord gives isolated dots, because the common zeros of several independent functions are points, not curves."],
+      cant: ["A real Chladni plate: a metal plate has a free edge and obeys the biharmonic equation, so its modes aren't Bessel functions. This is the clamped-membrane model, and it says so."] },
+    { id: "M-04", key: "spore", zone: "systems", x: -400, y: 420, status: "repo", name: "spore",
+      line: "An off-web mycelial mesh: Discord and Telegram raised by fungi. Communities, channels and presence with no server anywhere.",
+      lang: "JavaScript", last: "2026-09-18", links: [["Source", GH + "spore"]],
+      measures: "A peer-to-peer community mesh over a LAN or a phone hotspot with no uplink. No install, no registry, no bootstrap node, no signalling server, and an empty dependencies list.",
+      facts: ["The vocabulary is literal: a spore is a node, a hypha a live authenticated peer connection, the substrate a replicated append-only log.",
+        "Five roles (RELAY, VAULT, INDEX, FORGE, BEACON) live on every spore and shard out as peers appear. At N=1 they all collapse onto one device."],
+      cant: ["That it really gets faster as people join. In simulation, yes. On real hardware, not yet established: the first real run exposed a ceiling in its own request path, six blocks in flight per peer."] },
+    { id: "M-05", key: "pyexec", zone: "systems", x: 60, y: 440, status: "repo", name: "py-exec-mcp",
+      line: "Run Python from an MCP client without a shell mangling your code.",
+      lang: "Python", last: "2026-10-05", links: [["Source", GH + "py-exec-mcp"]],
+      measures: "Code arrives as a JSON string in the MCP tool call and goes to the interpreter over stdin (python -). No shell, no argv, nothing re-parses it.",
+      facts: ["python -c passes code through three parsers before Python sees it, and the usual failure is a wrong answer, not an error: a vanished backslash, a quote that closes early.",
+        "On PyPI (uvx py-exec-mcp) and works on both MCP SDK majors."],
+      cant: ["Isolation: it is not sandboxed and runs code with your own permissions. Isolation has to come from a container or VM underneath."] },
+    { id: "L-01", key: "worldcup", zone: "live", x: 520, y: -300, status: "live", name: "World Cup 2026",
+      line: "All 104 matches of the 2026 World Cup, with final scores.",
+      lang: "HTML / JS", last: "2026-07-11", links: [["Open", "https://blurxy.net/worldcup26/"], ["Source", GH + "blurxy-worldcup26"]],
+      measures: "104 matches, 48 teams, 16 cities, June 11 to July 19. Kickoff times in a time zone you pick, a match center for every game, scores from ESPN.",
+      facts: ["Hosted on Cloudflare Workers."], cant: ["Score accuracy beyond ESPN's own feed: scores come from ESPN's unofficial API and the site does not check them independently."] },
+    { id: "L-02", key: "osint", zone: "live", x: 560, y: -30, status: "stage", name: "OSINT Field Kit",
+      line: "2,141 OSINT tools from two directories, merged, link-checked and sorted by what you start from.",
+      lang: "HTML / JS", last: "2026-10-15", lastLabel: "updated", links: [["Coming to osint.blurxy.net", "#"]],
+      measures: "OSINT Framework (1,103 unique tools) and OSINT4ALL (1,153) overlap on only 115, so the merge nearly doubles either one. 1,813 answered a live link check.",
+      facts: ["Tools that touch the target are tagged ACTIVE, next to the PTES rule: start passive, confirm scope and authorization first.",
+        "A case notebook records each tool used with a timestamp and exports a recon report."],
+      cant: ["Passive status for untagged tools: the ACTIVE tag comes from a keyword check, so untagged doesn't mean verified passive.", "Links that fail an automated fetch but open fine in a browser."] },
+    { id: "L-03", key: "coursewake", zone: "live", x: 520, y: 250, status: "beta", name: "Coursewake",
+      line: "A calmer CUNY Brightspace: every deadline, grade estimate and reminder in one place.",
+      lang: "Chrome MV3", last: "v0.2.4", links: [["Chrome Web Store", "https://chromewebstore.google.com/detail/hgommmlnfhiajkfnpckfknhpekjmhcln"]],
+      measures: "Reads Brightspace with your own login and never submits, enrolls or changes anything. Optional encrypted cloud backup on a Cloudflare Worker.",
+      facts: ["Published on the Chrome Web Store and in private beta."],
+      cant: ["Anything your Brightspace account can't see. It reads, it never writes."] },
+    { id: "L-04", key: "cactus", zone: "live", x: 860, y: 110, status: "live", name: "Cactus McCoy",
+      line: "Thorn & Dust 3D: an early-build third-person browser game.",
+      lang: "WebGL", last: "2026-10-13", links: [["Play", "https://cactus.blurxy.net"]],
+      measures: "Runs in the browser on WebGL, no install.", facts: [], cant: ["Phone play: it needs a keyboard and mouse, with no touch controls yet."] },
+  ];
+  const ZONES = { measure: ["Measurement", -640, -290], sim: ["Simulation", -136, -530], systems: ["Systems", -400, 360], live: ["Live", 520, -360] };
+  const FAULTS = { x: 860, y: -380 };
+  const CORE = { x: -220, y: -170 };
+  const LED = { live: "LIVE", repo: "REPO", beta: "BETA", stage: "STAGING" };
+
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const world = $('world'), stage = $('stage');
+
+  // ---------- build board ----------
+  const core = document.createElement('section');
+  core.className = 'core'; core.style.left = CORE.x + 'px'; core.style.top = CORE.y + 'px';
+  core.innerHTML = `<div class="tag">CORE · RAFIUL BARI</div>
+    <h1>Rafiul Bari</h1>
+    <div class="who">blurxy · cybersecurity · NYC College of Technology (CUNY)</div>
+    <p class="thesis">How do you know your check <em>actually checked anything?</em></p>
+    <p class="sub">I build measurement tools that state what they cannot establish as prominently as what they can. Where a module has a known limit, its spec sheet lists it under Cannot establish.</p>
+    <div class="links"><a href="https://github.com/blurxy" target="_blank" rel="noopener" draggable="false">github.com/blurxy</a><a href="#faults" class="toFaults" draggable="false">Fault log</a></div>`;
+  world.appendChild(core);
+
+  for (const [label, x, y] of Object.values(ZONES)) {
+    const z = document.createElement('div'); z.className = 'zone'; z.textContent = label; z.style.left = x + 'px'; z.style.top = y + 'px'; world.appendChild(z);
+  }
+
+  const faults = document.createElement('section');
+  faults.className = 'faults'; faults.id = 'faults'; faults.style.left = FAULTS.x + 'px'; faults.style.top = FAULTS.y + 'px';
+  faults.innerHTML = `<div class="fh"><span>FAULT LOG · THE RECURRING BUG</span><span class="fcount"></span></div><ol>
+    <li><span><code>nmap -sn</code> unprivileged finds 2 hosts; as root, 4. Same command, same network.</span></li>
+    <li><span>A TCP probe says the sandbox has no network. DNS still resolves, over a unix socket.</span></li>
+    <li><span>A build diff says <code>unchanged</code>. Both builds failed identically.</span></li>
+    <li><span><code>pgrep -f pattern</code> returns a hit. The hit is its own command line.</span></li>
+    <li><span>52,667 IDS rules loaded, 0 alerts on a port scan. By the rules as written, the enabled scan rules match specific content or count repeats on one port, and the scan touched each port once or twice. The positive-control scan is still to run.</span></li>
+    <li><span>Seven unit tests pass. All seven encode the same wrong assumption the code does.</span></li></ol>
+    <div class="ff">Same defect, different costumes: <b>a check that is correct about what it examined, and silent about what was actually asked.</b> The fix isn't more tests. It's running the thing against real data you didn't author.</div>`;
+  faults.querySelector('.fcount').textContent = String(faults.querySelectorAll('li').length).padStart(2, '0') + ' ENTRIES';
+  world.appendChild(faults);
+  // The fault log sits right of World Cup and above Cactus, placed from its real height so it never covers a card.
+  const placeFaults = () => { FAULTS.y = modEls.cactus.offsetTop - faults.offsetHeight - 40; faults.style.top = FAULTS.y + 'px'; };
+
+  const modEls = {};
+  const lastLabel = m => m.lastLabel ?? (/^\d/.test(m.last) ? "last commit" : "");
+  function modHTML(m) {
+    const lbl = lastLabel(m);
+    return `<span class="mh"><span>${m.id}</span><span class="led ${m.status}">${LED[m.status]}</span></span>
+      <span class="mb"><span class="mn">${esc(m.name)}</span><span class="md">${esc(m.line)}</span></span>
+      <span class="mf"><span><b>${esc(m.lang)}</b></span><span>${lbl ? lbl + " " : ""}<b>${esc(m.last)}</b></span></span>`;
+  }
+  for (const m of MODS) {
+    const b = document.createElement('button'); b.className = 'mod'; b.style.left = m.x + 'px'; b.style.top = m.y + 'px';
+    b.dataset.key = m.key; b.setAttribute('aria-haspopup', 'dialog'); b.setAttribute('aria-controls', 'sheet'); b.innerHTML = modHTML(m);
+    world.appendChild(b); modEls[m.key] = b;
+  }
+  $('hMods').textContent = `${MODS.length} MODULES`;
+
+  // traces from core to each module: orthogonal, with a port on each end
+  function drawTraces() {
+    const svg = $('traces'); const cr = { x: CORE.x, y: CORE.y, w: core.offsetWidth, h: core.offsetHeight };
+    let minx = 0, miny = 0, maxx = 0, maxy = 0; const paths = [];
+    const cx = cr.x + cr.w / 2, cy = cr.y + cr.h / 2;
+    for (const m of MODS) {
+      const el = modEls[m.key]; const w = el.offsetWidth, h = el.offsetHeight; const mx = m.x + w / 2, my = m.y + h / 2;
+      let sx, sy, ex, ey, d;
+      if (Math.abs(mx - cx) > Math.abs(my - cy) * 1.1) {
+        sx = mx > cx ? cr.x + cr.w : cr.x; sy = Math.max(cr.y + 24, Math.min(cr.y + cr.h - 24, my));
+        ex = mx > cx ? m.x : m.x + w; ey = my; const midx = (sx + ex) / 2;
+        d = `M${sx},${sy} H${midx} V${ey} H${ex}`;
+      } else {
+        sy = my > cy ? cr.y + cr.h : cr.y; sx = Math.max(cr.x + 24, Math.min(cr.x + cr.w - 24, mx));
+        ey = my > cy ? m.y : m.y + h; ex = mx; const midy = (sy + ey) / 2;
+        d = `M${sx},${sy} V${midy} H${ex} V${ey}`;
+      }
+      paths.push({ d, k: m.key, sx, sy, ex, ey });
+      minx = Math.min(minx, sx, ex); miny = Math.min(miny, sy, ey); maxx = Math.max(maxx, sx, ex); maxy = Math.max(maxy, sy, ey);
+    }
+    const pad = 20; svg.setAttribute('width', maxx - minx + pad * 2); svg.setAttribute('height', maxy - miny + pad * 2);
+    svg.style.left = (minx - pad) + 'px'; svg.style.top = (miny - pad) + 'px';
+    svg.setAttribute('viewBox', `${minx - pad} ${miny - pad} ${maxx - minx + pad * 2} ${maxy - miny + pad * 2}`);
+    svg.innerHTML = paths.map(p => `<path data-k="${p.k}" d="${p.d}" fill="none" stroke="var(--trace)" stroke-width="1.5"/>
+      <rect x="${p.sx - 3.5}" y="${p.sy - 3.5}" width="7" height="7" fill="var(--bg)" stroke="var(--trace)"/>
+      <rect x="${p.ex - 3.5}" y="${p.ey - 3.5}" width="7" height="7" fill="var(--bg)" stroke="var(--trace)"/>`).join('');
+  }
+
+  // ---------- camera ----------
+  const cam = { x: 0, y: 0, s: 1 };
+  const clampS = s => Math.min(2.2, Math.max(0.25, s));
+  let ptr = null, redraw = 0, dirty = false;   // dirty: the visitor has moved the camera or opened something
+  function apply() {
+    world.style.transform = `translate(${cam.x}px,${cam.y}px) scale(${cam.s})`; world.style.setProperty('--s', cam.s);
+    $('hZoom').textContent = `ZOOM ${Math.round(cam.s * 100)}%`; readout();
+    if (!redraw) redraw = requestAnimationFrame(() => { redraw = 0; if (!document.body.classList.contains('listmode')) { drawGrid(); drawRulers(); } });
+  }
+  function readout() {
+    if (!ptr) return; const wx = Math.round((ptr.x - cam.x) / cam.s), wy = Math.round((ptr.y - cam.y) / cam.s);
+    $('hPos').textContent = `X ${String(wx).padStart(5, ' ')} · Y ${String(wy).padStart(5, ' ')}`;
+  }
+  function bbox() {
+    let minx = Infinity, miny = Infinity, maxx = -Infinity, maxy = -Infinity;
+    for (const el of world.children) { if (el.id === 'traces') continue; const x = el.offsetLeft, y = el.offsetTop; minx = Math.min(minx, x); miny = Math.min(miny, y); maxx = Math.max(maxx, x + el.offsetWidth); maxy = Math.max(maxy, y + el.offsetHeight); }
+    return { minx, miny, maxx, maxy };
+  }
+  function fit() {
+    const r = stage.getBoundingClientRect(), { minx, miny, maxx, maxy } = bbox();
+    const pad = 60, s = clampS(Math.min((r.width - pad * 2) / (maxx - minx), (r.height - pad * 2) / (maxy - miny)));
+    cam.s = s; cam.x = (r.width - (maxx - minx) * s) / 2 - minx * s; cam.y = (r.height - (maxy - miny) * s) / 2 - miny * s; apply();
+  }
+  // Home: the whole board if it fits at 62% or more; otherwise 62% (readable) centred on the whole board, not just the core.
+  function home() {
+    fit(); if (cam.s >= 0.62) return; const r = stage.getBoundingClientRect(), b = bbox(); cam.s = 0.62;
+    cam.x = r.width / 2 - (b.minx + b.maxx) / 2 * cam.s; cam.y = r.height / 2 - (b.miny + b.maxy) / 2 * cam.s; apply();
+  }
+  function zoomAt(f, px, py) {
+    const s = clampS(cam.s * f), k = s / cam.s; cam.x = px - (px - cam.x) * k; cam.y = py - (py - cam.y) * k; cam.s = s; apply();
+  }
+  function focusOn(el) {
+    const r = stage.getBoundingClientRect(); const s = Math.max(cam.s, 0.9); const sheetW = $('sheet').classList.contains('open') ? Math.min(440, r.width) : 0;
+    cam.s = s; cam.x = (r.width - sheetW) / 2 - (el.offsetLeft + el.offsetWidth / 2) * s; cam.y = r.height / 2 - (el.offsetTop + el.offsetHeight / 2) * s; apply();
+  }
+
+  // ---------- grid + rulers ----------
+  const dpr = () => Math.min(2, window.devicePixelRatio || 1);
+  function sizeCanvas(c, w, h) { const d = dpr(); if (c.width !== Math.round(w * d) || c.height !== Math.round(h * d)) { c.width = Math.round(w * d); c.height = Math.round(h * d); c.style.width = w + 'px'; c.style.height = h + 'px'; } const g = c.getContext('2d'); if (!g) return null; g.setTransform(d, 0, 0, d, 0, 0); return g; }
+  function step() { const raw = 100 / cam.s; const p = Math.pow(10, Math.floor(Math.log10(raw))); const n = raw / p; return (n < 2 ? 1 : n < 5 ? 2 : 5) * p; }
+  function drawGrid() {
+    const c = $('grid'), r = stage.getBoundingClientRect(), g = sizeCanvas(c, r.width, r.height); if (!g) return; g.clearRect(0, 0, r.width, r.height);
+    const css = getComputedStyle(document.documentElement); const minor = 20 * cam.s, major = 100 * cam.s;
+    const line = (sp, col) => { if (sp < 6) return; g.strokeStyle = col; g.lineWidth = 1; g.beginPath();
+      for (let x = ((cam.x % sp) + sp) % sp; x < r.width; x += sp) { g.moveTo(Math.round(x) + .5, 0); g.lineTo(Math.round(x) + .5, r.height); }
+      for (let y = ((cam.y % sp) + sp) % sp; y < r.height; y += sp) { g.moveTo(0, Math.round(y) + .5); g.lineTo(r.width, Math.round(y) + .5); } g.stroke(); };
+    line(minor, css.getPropertyValue('--grid')); line(major, css.getPropertyValue('--grid-major'));
+    // origin cross
+    g.strokeStyle = 'rgba(242,183,5,.35)'; g.beginPath(); g.moveTo(cam.x - 8, cam.y + .5); g.lineTo(cam.x + 8, cam.y + .5); g.moveTo(cam.x + .5, cam.y - 8); g.lineTo(cam.x + .5, cam.y + 8); g.stroke();
+  }
+  function drawRulers() {
+    const r = stage.getBoundingClientRect(), css = getComputedStyle(document.documentElement), mut = css.getPropertyValue('--dim'), font = '10px ' + css.getPropertyValue('--mono');
+    const sp = step();
+    const gx = sizeCanvas($('rx'), r.width, 22); if (!gx) return; gx.clearRect(0, 0, r.width, 22); gx.fillStyle = mut; gx.strokeStyle = mut; gx.font = font;
+    let v0 = Math.floor((-cam.x / cam.s) / sp) * sp;
+    for (let v = v0; (v * cam.s + cam.x) < r.width; v += sp) { const x = Math.round(v * cam.s + cam.x) + .5; gx.beginPath(); gx.moveTo(x, 12); gx.lineTo(x, 22); gx.stroke(); gx.fillText(String(Math.round(v)), x + 3, 10);
+      for (let t = 1; t < 5; t++) { const tx = Math.round((v + sp * t / 5) * cam.s + cam.x) + .5; gx.beginPath(); gx.moveTo(tx, 18); gx.lineTo(tx, 22); gx.stroke(); } }
+    const gy = sizeCanvas($('ry'), 22, r.height); if (!gy) return; gy.clearRect(0, 0, 22, r.height); gy.fillStyle = mut; gy.strokeStyle = mut; gy.font = font;
+    v0 = Math.floor((-cam.y / cam.s) / sp) * sp;
+    for (let v = v0; (v * cam.s + cam.y) < r.height; v += sp) { const y = Math.round(v * cam.s + cam.y) + .5; gy.beginPath(); gy.moveTo(12, y); gy.lineTo(22, y); gy.stroke();
+      gy.save(); gy.translate(10, y - 3); gy.rotate(-Math.PI / 2); gy.fillText(String(Math.round(v)), 0, 0); gy.restore();
+      for (let t = 1; t < 5; t++) { const ty = Math.round((v + sp * t / 5) * cam.s + cam.y) + .5; gy.beginPath(); gy.moveTo(18, ty); gy.lineTo(22, ty); gy.stroke(); } }
+  }
+
+  // ---------- input ----------
+  // Pointer capture starts only once the pointer has moved past 6px: capturing on pointerdown would retarget every click to
+  // the stage, so a mouse click on a module or link would do nothing. Keyboard clicks (detail 0) always count.
+  let drag = null, moved = 0;
+  stage.addEventListener('pointerdown', e => { if (e.button !== 0 || !e.isPrimary) return; drag = { x: e.clientX, y: e.clientY, cx: cam.x, cy: cam.y, id: e.pointerId }; moved = 0; });
+  stage.addEventListener('pointermove', e => {
+    if (!e.isPrimary) return;
+    const r = stage.getBoundingClientRect(); ptr = { x: e.clientX - r.left, y: e.clientY - r.top };
+    $('xv').hidden = $('xhz').hidden = false; $('xv').style.left = ptr.x + 'px'; $('xhz').style.top = ptr.y + 'px'; readout();
+    if (drag && e.pointerType === 'mouse' && !(e.buttons & 1)) { end(); return; }   // released outside the page: stop following the cursor
+    if (!drag) return; const dx = e.clientX - drag.x, dy = e.clientY - drag.y; moved = Math.max(moved, Math.abs(dx) + Math.abs(dy));
+    if (moved <= 6) return;
+    if (!stage.hasPointerCapture(drag.id)) { try { stage.setPointerCapture(drag.id); } catch (_) {} stage.classList.add('drag'); dirty = true; }
+    cam.x = drag.cx + dx; cam.y = drag.cy + dy; apply();
+  });
+  const end = e => { if (e && !e.isPrimary) return; drag = null; stage.classList.remove('drag'); };
+  window.addEventListener('pointerup', end); window.addEventListener('pointercancel', end); window.addEventListener('blur', () => end());
+  stage.addEventListener('pointerleave', () => { ptr = null; $('xv').hidden = $('xhz').hidden = true; });
+  stage.addEventListener('wheel', e => { e.preventDefault(); dirty = true; const r = stage.getBoundingClientRect(); zoomAt(Math.exp(-e.deltaY * 0.0015), e.clientX - r.left, e.clientY - r.top); }, { passive: false });
+  stage.addEventListener('click', e => { if (moved > 6 && e.detail !== 0) { moved = 0; return; } const b = e.target.closest('.mod'); if (b) open(b.dataset.key); });
+  // Tab to a module that is off screen: pan it into view (no zoom change) instead of letting the stage scroll.
+  stage.addEventListener('focusin', e => {
+    if (drag || !e.target.matches(':focus-visible')) return;   // a mouse or touch press is about to click it: don't move it away
+    let el = e.target.closest('.mod, .core, .faults'); if (!el) return;
+    const r = stage.getBoundingClientRect(), m = 40, right = r.right - ($('sheet').classList.contains('open') ? Math.min(440, r.width) : 0);
+    let b = el.getBoundingClientRect(); if (b.height > r.height - 2 * m || b.width > right - r.left - 2 * m) { el = e.target; b = el.getBoundingClientRect(); }
+    let dx = 0, dy = 0;
+    if (b.left < r.left + m) dx = r.left + m - b.left; else if (b.right > right - m) dx = Math.max(right - m - b.right, r.left + m - b.left);
+    if (b.top < r.top + m) dy = r.top + m - b.top; else if (b.bottom > r.bottom - m) dy = Math.max(r.bottom - m - b.bottom, r.top + m - b.top);
+    if (dx || dy) { cam.x += dx; cam.y += dy; dirty = true; apply(); }
+  });
+  $('zIn').onclick = () => { dirty = true; const r = stage.getBoundingClientRect(); zoomAt(1.25, r.width / 2, r.height / 2); };
+  $('zOut').onclick = () => { dirty = true; const r = stage.getBoundingClientRect(); zoomAt(0.8, r.width / 2, r.height / 2); };
+  $('zFit').onclick = () => { dirty = true; close(); fit(); };
+  window.addEventListener('keydown', e => {
+    if (e.ctrlKey || e.metaKey || e.altKey || !(e.target instanceof Element)) return;   // leave browser zoom and shortcuts alone
+    if (e.target.closest('input,textarea,select')) return;
+    if (e.key === 'Escape') { close(); return; }
+    if (document.body.classList.contains('sheetopen') || e.target.closest('#sheet, #list') || !$('list').hidden) return;
+    const k = { ArrowLeft: [60, 0], ArrowRight: [-60, 0], ArrowUp: [0, 60], ArrowDown: [0, -60] }[e.key];
+    if (k) { e.preventDefault(); dirty = true; cam.x += k[0]; cam.y += k[1]; apply(); }
+    if (e.key === '+' || e.key === '=') { dirty = true; $('zIn').click(); }
+    if (e.key === '-') { dirty = true; $('zOut').click(); }
+  });
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.toFaults')) return; e.preventDefault();
+    if ($('list').hidden) { dirty = true; focusOn(faults); faults.tabIndex = -1; faults.focus({ preventScroll: true }); }
+    else { const f = $('list').querySelector('.faults'); if (f) { f.tabIndex = -1; f.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' }); f.focus({ preventScroll: true }); } }
+  });
+
+  // ---------- spec sheet ----------
+  function sheetHTML(m) {
+    const acts = m.links.map(([t, u], i) => u === "#" ? `<span class="soon">${esc(t)}</span>` : `<a class="${i ? "" : "pri"}" href="${esc(u)}" target="_blank" rel="noopener">${esc(t)} ↗</a>`).join("");
+    const flags = s => esc(s).replace(/(^|\s)(--[a-z][a-z-]*)/g, '$1<code>$2</code>');   // keep CLI flags like --static on one line
+    const lbl = lastLabel(m);
+    return `<div class="sh-top"><span>${m.id} · ${LED[m.status]}</span><button class="tbtn" id="shClose">Close<span class="kbd"> · Esc</span></button></div>
+      <h2 id="shTitle" tabindex="-1">${esc(m.name)}</h2><p class="lead">${esc(m.line)}</p>
+      <div class="acts">${acts}</div>
+      <dl class="spec"><div><dt>Measures</dt><dd>${esc(m.measures)}</dd></div><div><dt>Stack</dt><dd>${esc(m.lang)}</dd></div><div><dt>${lbl ? lbl : "Version"}</dt><dd>${esc(m.last)}</dd></div></dl>
+      ${m.facts.length ? `<div class="blk"><h3>Measured</h3><ul>${m.facts.map(f => `<li>${flags(f)}</li>`).join("")}</ul></div>` : ""}
+      ${m.cant.length ? `<div class="blk cant"><h3>Cannot establish</h3><ul>${m.cant.map(f => `<li>${flags(f)}</li>`).join("")}</ul></div>` : ""}`;
+  }
+  let current = null, opener = null;
+  function open(key) {
+    const m = MODS.find(x => x.key === key); if (!m) return; current = key; dirty = true;
+    const a = document.activeElement; if (a && a !== document.body && !a.closest('#sheet')) opener = a;
+    const sh = $('sheet'); sh.innerHTML = sheetHTML(m); sh.inert = false; sh.scrollTop = 0; sh.classList.add('open'); document.body.classList.add('sheetopen');
+    if (window.innerWidth <= 760) { $('list').inert = true; stage.inert = true; }   // the sheet covers the whole screen: keep Tab inside it
+    document.querySelectorAll('.mod').forEach(el => el.setAttribute('aria-expanded', String(el.dataset.key === key)));
+    Object.values(modEls).forEach(el => el.classList.toggle('sel', el.dataset.key === key));
+    $('traces').querySelectorAll('path').forEach(p => { const on = p.dataset.k === key; p.setAttribute('stroke', on ? 'var(--amber)' : 'var(--trace)'); p.setAttribute('stroke-width', on ? 2 : 1.5); });
+    $('crumb').textContent = `board / rafiul-bari / ${m.id.toLowerCase()} ${m.name}`;
+    $('shClose').onclick = close; $('shTitle').focus({ preventScroll: true }); $('live').textContent = `${m.name} spec sheet opened`;
+    if ($('list').hidden) focusOn(modEls[key]);
+  }
+  function close() {
+    if (!current) return; const key = current; current = null;
+    const sh = $('sheet'); sh.classList.remove('open'); sh.inert = true; document.body.classList.remove('sheetopen');
+    $('list').inert = false; stage.inert = !$('list').hidden;
+    document.querySelectorAll('.mod').forEach(el => el.setAttribute('aria-expanded', 'false'));
+    setTimeout(() => { if (!current) sh.innerHTML = ''; }, 260);   // after the slide-out, so no stale links stay behind
+    Object.values(modEls).forEach(el => el.classList.remove('sel'));
+    $('traces').querySelectorAll('path').forEach(p => { p.setAttribute('stroke', 'var(--trace)'); p.setAttribute('stroke-width', 1.5); });
+    $('crumb').textContent = 'board / rafiul-bari / all modules';
+    const shown = el => el && el.isConnected && el.getClientRects().length && !el.closest('[inert],[hidden]');
+    const back = shown(opener) ? opener : ($('list').hidden ? modEls[key] : $('list').querySelector(`.mod[data-key="${key}"]`));
+    opener = null; if (shown(back)) back.focus({ preventScroll: true });
+  }
+
+  // ---------- list view ----------
+  function buildList() {
+    const inner = $('listInner'); inner.innerHTML = "";
+    const c = core.cloneNode(true); c.querySelectorAll('[id]').forEach(el => el.removeAttribute('id')); inner.appendChild(c);
+    for (const z of ["live", "measure", "sim", "systems"]) {
+      const h = document.createElement('div'); h.className = 'zone'; h.textContent = ZONES[z][0]; inner.appendChild(h);
+      const grid = document.createElement('div'); grid.className = 'mods';
+      for (const m of MODS.filter(x => x.zone === z)) { const b = document.createElement('button'); b.className = 'mod'; b.dataset.key = m.key; b.setAttribute('aria-haspopup', 'dialog'); b.setAttribute('aria-controls', 'sheet'); b.innerHTML = modHTML(m); b.onclick = () => open(m.key); grid.appendChild(b); }
+      inner.appendChild(grid);
+    }
+    const f = faults.cloneNode(true); f.removeAttribute('id'); inner.appendChild(f);
+  }
+  function setView(v) {
+    const list = v === 'list'; if (list === !$('list').hidden) return;   // already there: clicking the active view does nothing
+    $('list').hidden = !list; $('vList').setAttribute('aria-pressed', String(list)); $('vBoard').setAttribute('aria-pressed', String(!list));
+    document.body.classList.toggle('listmode', list);
+    stage.inert = list; document.querySelector('.zoomer').inert = list;   // the covered board leaves the tab order and the accessibility tree
+    if (list) buildList(); else requestAnimationFrame(() => { home(); if (current) focusOn(modEls[current]); });
+  }
+  $('vBoard').onclick = () => setView('board'); $('vList').onclick = () => setView('list');
+
+  // One breakpoint for CSS and JS. Narrowing past it switches to the list; widening keeps whatever view is showing.
+  const narrow = matchMedia('(max-width: 760px)');
+  narrow.addEventListener('change', e => { requestAnimationFrame(drawTraces); if (e.matches) setView('list'); });
+  let rz = 0;
+  window.addEventListener('resize', () => { if (rz) return; rz = requestAnimationFrame(() => { rz = 0; if (!$('list').hidden) return; if (!dirty) home(); else apply(); if (current) focusOn(modEls[current]); }); });
+  requestAnimationFrame(() => { if (narrow.matches) setView('list'); placeFaults(); drawTraces(); if ($('list').hidden) home(); });
+  document.fonts && document.fonts.ready.then(() => { placeFaults(); drawTraces(); if ($('list').hidden && !dirty) home(); });
+})();
+</script>
