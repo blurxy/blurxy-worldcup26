@@ -238,6 +238,33 @@ body.listmode #depth { visibility: hidden; }
   #list .mod.featured .mn { font-size: 25px; }
 }
 
+
+/* v4 / experience record. The teaser uses the journal's existing dialog interaction. */
+.led.private { color: #a8b1c2; }
+.resume-teaser { width: 480px; display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; padding: 10px 16px; border-left-color: var(--amber); }
+.resume-teaser .journal-title, .resume-teaser .journal-intro, .resume-teaser .journal-action { margin: 0; }
+.resume-teaser .journal-title, .resume-teaser .journal-intro { grid-column: 1 / -1; }
+.resume-teaser .journal-action { grid-column: 2; grid-row: 1; align-self: center; }
+.resume-teaser .journal-title { font-size: 20px; }
+.resume-teaser .journal-intro { font-size: 12px; }
+.resume-section { border-top: 1px solid var(--line); padding-top: 18px; }
+.resume-section > h3 { margin: 0 0 16px; font: 600 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--amber); }
+.resume-role + .resume-role { margin-top: 24px; padding-top: 20px; border-top: 1px dashed var(--line); }
+.resume-role h4 { margin: 6px 0; font: 700 21px/1.2 var(--display); }
+.resume-role .position { margin: 0 0 6px; color: var(--ink); font-weight: 600; }
+.resume-date { font: 500 11px/1.6 var(--mono); color: var(--muted); }
+.resume-promotion { margin: 6px 0 12px; font-size: 12.5px; color: #d2b969; }
+.resume-role ul { margin: 12px 0 0; padding-left: 17px; display: grid; gap: 10px; font-size: 14px; color: #c9d0d7; }
+.resume-certifications { list-style: none; margin: 0 0 20px; padding: 0; display: grid; gap: 9px; }
+.resume-certifications li { display: flex; justify-content: space-between; gap: 16px; color: #c9d0d7; font-size: 14px; }
+.resume-certifications time { flex: 0 0 auto; color: var(--muted); font: 500 11px/1.9 var(--mono); }
+.resume-education { border-left: 2px solid var(--line); padding-left: 12px; font-size: 14px; }
+.resume-education p { margin: 5px 0; color: #c9d0d7; }
+.resume-skills { margin: 0; display: grid; gap: 14px; }
+.resume-skills dt { margin-bottom: 5px; font-weight: 600; font-size: 14px; }
+.resume-skills dd { margin: 0; color: #b5c0cc; font-size: 13.5px; line-height: 1.6; }
+#list .resume-teaser { position: static; width: auto; }
+
 </style>
 
 <header class="bar">
@@ -271,7 +298,7 @@ body.listmode #depth { visibility: hidden; }
 <script>
 (() => {
   // Set this one value when the PDF is ready. No placeholder link is rendered.
-  const RESUME_URL = null;
+  const RESUME_URL = '/resume.pdf';
   const MODS = [
   {
     "id": "L-02",
@@ -520,11 +547,31 @@ body.listmode #depth { visibility: hidden; }
     ],
     "summary": "An early-build, playable 3D game that runs directly in the browser without installation.",
     "note": "Play requires a keyboard and mouse."
-  }
+  },
+{
+  "id": "M-06",
+  "key": "trading",
+  "zone": "systems",
+  "x": 200,
+  "y": 760,
+  "status": "private",
+  "name": "Automated Futures Trading System",
+  "line": "Risk-control engineering: preventive order controls, dependency gates, and model-risk checks.",
+  "lang": "Python · PostgreSQL/pgvector · local LLMs",
+  "last": "Independent project",
+  "lastLabel": "",
+  "links": [],
+  "summary": "An independent futures trading system operating live on funded-evaluation accounts, with a layered control stack around execution and model decisions.",
+  "facts": [
+    "A kill switch and loss/drawdown circuit breakers sit alongside a preflight gate that halts trading when any dependency is degraded.",
+    "The broker’s written rulebook—contract caps, consistency limits, and daily loss limits—is enforced as hard clamps at order construction.",
+    "Model-risk controls include purged and walk-forward cross-validation, mandatory transaction-cost floors, explicit overfitting thresholds, and drift monitoring with retrain triggers."
+  ]
+}
 ];
   const ZONES = { security: ["Selected security work", 560, -42], systems: ["Systems", 560, 718], builds: ["Builds & experiments", 560, 988] };
   const CORE = { x: 0, y: 0 };
-  const LED = { live: "LIVE", repo: "REPO", beta: "BETA", stage: "STAGING" };
+  const LED = { live: "LIVE", repo: "REPO", beta: "BETA", stage: "STAGING", private: "PRIVATE" };
 
   const $ = id => document.getElementById(id);
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -540,7 +587,7 @@ body.listmode #depth { visibility: hidden; }
     <p class="seeking">Seeking security internships and<br>full-time entry-level roles.</p>
     <p class="education">CUNY New York City College of Technology · Cybersecurity<br>Coursework complete December 2026<br>Commencement Spring 2027</p>
     <div class="links" aria-label="Contact"><a href="mailto:rafiulbari70@gmail.com" draggable="false">rafiulbari70@gmail.com</a><a href="https://linkedin.com/in/rafiul-bari" target="_blank" rel="noopener" draggable="false">LinkedIn ↗</a><a href="https://github.com/blurxy" target="_blank" rel="noopener" draggable="false">GitHub ↗</a>${RESUME_URL ? `<a href="${esc(RESUME_URL)}" target="_blank" rel="noopener" draggable="false">Resume ↗</a>` : ''}</div>
-    <div class="foot"><a href="#projects" class="browse" draggable="false">Explore all 10 projects ↓</a><span class="sig">— Rafiul Bari</span></div>`;
+    <div class="foot"><a href="#projects" class="browse" draggable="false">Explore all ${MODS.length} projects ↓</a><span class="sig">— Rafiul Bari</span></div>`;
   world.appendChild(core);
 
   for (const [key, [label, x, y]] of Object.entries(ZONES)) {
@@ -594,16 +641,107 @@ body.listmode #depth { visibility: hidden; }
   journal.innerHTML = `<span class="journal-meta">06 FIELD NOTES · OCT 2026</span><span class="journal-title">Investigation Notes</span>
     <span class="journal-intro">Network discovery, sandbox boundaries, and detection rules.</span><span class="journal-action">Read the entries ↗</span>`;
   world.appendChild(journal);
+
+  const RESUME = { id: 'E-01', key: 'resume', name: 'Experience & resume' };
+  const EXPERIENCE = [
+  {
+    "role": "Operations & Systems Associate",
+    "org": "Plant Powered Metro New York",
+    "dates": "Jul 2025 – Present",
+    "promotion": "Promoted from Operations Assistant, July 2026.",
+    "bullets": [
+      "Drafted a staff account policy requiring two-factor authentication and semiannual access review; reconciled the user roster against live Slack and Asana APIs to identify accounts for deprovisioning.",
+      "Designed and shipped an operations ticketing system with tiered intake, director approval above a defined threshold, scope-confirmation gates, and a full audit trail of tier and scope changes.",
+      "Migrated 379 attendance and 176 testimonial records when only 20% carried an email; escalated ambiguous identity matches for confirmation and preserved source tables for rollback.",
+      "Built a self-hosted signed-link service with expiring per-record tokens so approximately 130 constituents could update their own data without third-party vendor processing.",
+      "Own configuration and administration of NeonCRM, Asana, Airtable, and Google Workspace, including integrations, change logs, and configuration documentation."
+    ]
+  },
+  {
+    "role": "Vice President",
+    "org": "Bari & Sons Construction Inc.",
+    "dates": "Feb 2018 – Present",
+    "bullets": [
+      "Manage vendor and subcontractor relationships, including scoping, selection, oversight, and procurement.",
+      "Review contracts, permits, and project documentation for accuracy and regulatory compliance."
+    ]
+  },
+  {
+    "role": "IT Help Desk Support",
+    "org": "Bari & Sons Construction Inc.",
+    "dates": "Jan 2018 – Feb 2020",
+    "bullets": [
+      "Managed Active Directory users, groups, and password resets; removed stale accounts.",
+      "Triaged malware on Windows and macOS endpoints, applied patches and baseline hardening, and documented prevention steps in knowledge-base articles."
+    ]
+  }
+];
+  const CERTIFICATIONS = [
+  [
+    "CompTIA A+",
+    "2024"
+  ],
+  [
+    "Google Cybersecurity",
+    "2025"
+  ],
+  [
+    "CodePath Intermediate Cybersecurity",
+    "2025"
+  ],
+  [
+    "TEEX Network Assurance and Information Security Basics",
+    "2024"
+  ],
+  [
+    "Cisco Packet Tracer",
+    "2024"
+  ]
+];
+  const SKILLS = [
+  [
+    "Governance, risk & compliance",
+    "HIPAA; PCI-DSS; access reviews and recertification; least privilege; change management; approval gates; SOP and control documentation; audit trails."
+  ],
+  [
+    "Identity & access management",
+    "Active Directory; Google Workspace administration; provisioning and deprovisioning; MFA; stale-account remediation; permission auditing; role mapping."
+  ],
+  [
+    "Security operations",
+    "Log review; incident intake and escalation; malware triage; SIEM; root-cause documentation."
+  ],
+  [
+    "Networks & systems",
+    "TCP/IP, DNS, DHCP, VLANs, VPNs, firewalls, IDS/IPS; Windows, macOS, Linux; endpoint hardening; patch management."
+  ],
+  [
+    "Tools & platforms",
+    "Wireshark, Nmap; Python, Bash, PowerShell; NeonCRM, Asana, Airtable, Google Workspace, Slack."
+  ],
+  [
+    "Professional",
+    "Stakeholder communication; vendor and third-party risk review; technical documentation for non-technical audiences; staff training."
+  ]
+];
+  const resume = document.createElement('button');
+  resume.className = 'journal resume-teaser'; resume.id = 'resume'; resume.dataset.key = 'resume';
+  resume.setAttribute('aria-haspopup', 'dialog'); resume.setAttribute('aria-controls', 'sheet'); resume.setAttribute('aria-expanded', 'false');
+  resume.innerHTML = `<span class="journal-meta">E-01 · EXPERIENCE</span><span class="journal-title">Resume & experience</span>
+    <span class="journal-intro">Access policy, approval gates, and auditable systems.</span><span class="journal-action">Read the record ↗</span>`;
+  world.appendChild(resume);
+
   // Stack rows from measured card heights; writes happen only after all measurements.
   function placeBoard() {
     const h = Object.fromEntries(MODS.map(m => [m.key, modEls[m.key].offsetHeight]));
     const rows = [0, h.osint + 40];
     rows[2] = rows[1] + Math.max(h.kev, h.beacon) + 40;
     rows[3] = Math.max(rows[2] + Math.max(h.aur, journal.offsetHeight), core.offsetHeight) + 100;
-    rows[4] = rows[3] + Math.max(h.pyexec, h.spore) + 100;
+    rows[4] = rows[3] + Math.max(h.pyexec, h.spore, h.trading) + 100;
     rows[5] = rows[4] + Math.max(h.coursewake, h.chladni) + 40;
-    const yByKey = {osint: rows[0], kev: rows[1], beacon: rows[1], aur: rows[2], pyexec: rows[3], spore: rows[3], coursewake: rows[4], chladni: rows[4], worldcup: rows[5], cactus: rows[5]};
+    const yByKey = {osint: rows[0], kev: rows[1], beacon: rows[1], aur: rows[2], pyexec: rows[3], spore: rows[3], trading: rows[3], coursewake: rows[4], chladni: rows[4], worldcup: rows[5], cactus: rows[5]};
     MODS.forEach(m => { m.y = yByKey[m.key]; modEls[m.key].style.top = m.y + 'px'; });
+    resume.style.left = '0px'; resume.style.top = (core.offsetHeight + 12) + 'px';
     journal.style.left = '880px'; journal.style.top = rows[2] + 'px';
     ZONES.systems[2] = rows[3] - 42; ZONES.builds[2] = rows[4] - 42;
     world.querySelectorAll('.zone').forEach(el => { el.style.top = ZONES[el.dataset.zone][2] + 'px'; });
@@ -785,8 +923,8 @@ body.listmode #depth { visibility: hidden; }
     const lbl = lastLabel(m);
     return `<div class="sh-top"><span>${m.id} · ${LED[m.status]}</span><button class="tbtn" id="shClose">Close<span class="kbd"> · Esc</span></button></div>
       <h2 id="shTitle" tabindex="-1">${esc(m.name)}</h2><p class="lead">${esc(m.line)}</p>
-      <div class="acts">${acts}</div>
-      <dl class="spec"><div><dt>Overview</dt><dd>${esc(m.summary)}</dd></div><div><dt>Stack</dt><dd>${esc(m.lang)}</dd></div><div><dt>${lbl ? lbl : "Version"}</dt><dd>${esc(m.last)}</dd></div></dl>
+      ${acts ? `<div class="acts">${acts}</div>` : ""}
+      <dl class="spec"><div><dt>Overview</dt><dd>${esc(m.summary)}</dd></div><div><dt>Stack</dt><dd>${esc(m.lang)}</dd></div><div><dt>${lbl ? lbl : m.status === "private" ? "Access" : "Version"}</dt><dd>${esc(m.status === "private" ? "Private · independent project" : m.last)}</dd></div></dl>
       ${m.facts.length ? `<div class="blk"><h3>Inside the project</h3><ul>${m.facts.map(f => `<li>${flags(f)}</li>`).join("")}</ul></div>` : ""}
       ${m.note ? `<p class="project-note">${esc(m.note)}</p>` : ""}`;
   }
@@ -800,8 +938,22 @@ body.listmode #depth { visibility: hidden; }
         <div><dt>Observation</dt><dd>${esc(e.observation)}</dd></div><div><dt>Finding</dt><dd>${esc(e.finding)}</dd></div><div><dt>My work</dt><dd>${esc(e.work)}</dd></div></dl></li>`).join('')}</ol>
       <p class="journal-provenance"><a href="https://github.com/blurxy/blurxy-worldcup26/blob/b8b190ee7171b3d4f300d031100495c2d3f14871/index.html" target="_blank" rel="noopener">Source notes ↗</a></p>`;
   }
-  const item = key => key === 'journal' ? JOURNAL : MODS.find(m => m.key === key);
-  const boardItem = key => key === 'journal' ? journal : modEls[key];
+
+  function resumeHTML() {
+    return `<div class="sh-top"><span>E-01 · EXPERIENCE</span><button class="tbtn" id="shClose">Close<span class="kbd"> · Esc</span></button></div>
+      <h2 id="shTitle" tabindex="-1">Experience & resume</h2>
+      <p class="lead">IT audit, technology risk, GRC, and identity & access management.</p>
+      <div class="acts"><a class="pri" href="${esc(RESUME_URL)}" target="_blank" rel="noopener">Resume PDF ↗</a><a href="/resume.html" target="_blank" rel="noopener">Print-ready view ↗</a></div>
+      <section class="resume-section"><h3>Experience</h3>${EXPERIENCE.map(e => `<article class="resume-role">
+        <div class="resume-date">${esc(e.dates)}</div><h4>${esc(e.org)}</h4><p class="position">${esc(e.role)}</p>
+        ${e.promotion ? `<p class="resume-promotion">${esc(e.promotion)}</p>` : ''}<ul>${e.bullets.map(b => `<li>${esc(b)}</li>`).join('')}</ul></article>`).join('')}</section>
+      <section class="resume-section"><h3>Education and certifications</h3><ul class="resume-certifications">${CERTIFICATIONS.map(([name,year]) => `<li><span>${esc(name)}</span><time datetime="${year}">${year}</time></li>`).join('')}</ul>
+        <div class="resume-education"><strong>B.S. in Cybersecurity</strong><p>New York City College of Technology (CUNY)</p><p>Expected December 2026</p><p>Coursework: Network Security; Cryptography and Access Control; Systems Administration; HIPAA/PCI-DSS.</p></div></section>
+      <section class="resume-section"><h3>Skills</h3><dl class="resume-skills">${SKILLS.map(([label,detail]) => `<div><dt>${esc(label)}</dt><dd>${esc(detail)}</dd></div>`).join('')}</dl></section>`;
+  }
+
+  const item = key => key === 'resume' ? RESUME : key === 'journal' ? JOURNAL : MODS.find(m => m.key === key);
+  const boardItem = key => key === 'resume' ? resume : key === 'journal' ? journal : modEls[key];
   const hashKey = () => { try { const k = decodeURIComponent(location.hash.slice(1)); return k === 'faults' ? 'journal' : k; } catch (_) { return ''; } };
   let current = null, opener = null, popping = false;
   function syncAccessibility() {
@@ -816,9 +968,9 @@ body.listmode #depth { visibility: hidden; }
     const m = item(key); if (!m) return;
     const unchanged = current === key, switching = current !== null && !unchanged; current = key; dirty = true;
     const a = document.activeElement; if (a && a !== document.body && !a.closest('#sheet')) opener = a;
-    const sh = $('sheet'); sh.innerHTML = key === 'journal' ? journalHTML() : sheetHTML(m); sh.inert = false; sh.scrollTop = 0;
+    const sh = $('sheet'); sh.innerHTML = key === 'resume' ? resumeHTML() : key === 'journal' ? journalHTML() : sheetHTML(m); sh.inert = false; sh.scrollTop = 0;
     sh.classList.add('open'); document.body.classList.add('sheetopen'); motion.sync(); syncAccessibility();
-    [...Object.values(modEls), journal].forEach(el => el.classList.toggle('sel', el.dataset.key === key));
+    [...Object.values(modEls), journal, resume].forEach(el => el.classList.toggle('sel', el.dataset.key === key));
     motion.highlight(key);
     $('crumb').textContent = `board / blurxy / ${m.id.toLowerCase()} ${m.name}`;
     $('shClose').onclick = close; $('shTitle').focus({preventScroll:true}); $('live').textContent = `${m.name} opened`;
@@ -831,7 +983,7 @@ body.listmode #depth { visibility: hidden; }
     const sh = $('sheet'); sh.classList.remove('open'); sh.inert = true; document.body.classList.remove('sheetopen');
     motion.sync(); syncAccessibility();
     setTimeout(() => { if (!current) sh.innerHTML = ''; }, motion.reduced() ? 0 : 360);
-    [...Object.values(modEls), journal].forEach(el => el.classList.remove('sel')); motion.highlight(null);
+    [...Object.values(modEls), journal, resume].forEach(el => el.classList.remove('sel')); motion.highlight(null);
     $('crumb').textContent = 'board / blurxy / all modules';
     const shown = el => el && el.isConnected && el.getClientRects().length && !el.closest('[inert],[hidden]');
     const back = shown(opener) ? opener : ($('list').hidden ? boardItem(key) : $('list').querySelector(`[data-key="${key}"]`));
@@ -855,6 +1007,7 @@ body.listmode #depth { visibility: hidden; }
   function buildList() {
     const inner = $('listInner'); inner.innerHTML = '';
     inner.appendChild(core.cloneNode(true));
+    const experienceCard = resume.cloneNode(true); experienceCard.removeAttribute('id'); experienceCard.onclick = () => open('resume'); inner.appendChild(experienceCard);
     for (const z of ['security', 'systems', 'builds']) {
       const h = document.createElement('div'); h.className = 'zone'; h.textContent = ZONES[z][0]; inner.appendChild(h);
       const grid = document.createElement('div'); grid.className = 'mods';

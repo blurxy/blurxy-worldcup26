@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rafiul Bari · Resume | blurxy</title>
+<meta name="description" content="Rafiul Bari — cybersecurity, IT audit and technology risk, identity and access management. Experience, education, certifications, and technical projects.">
+<meta name="theme-color" content="#08090c">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpolygon points='0,0 16,0 16,16' fill='%23f2b705'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+:root { --bg:#08090c; --paper:#0e1217; --ink:#e9edf1; --muted:#abb5c1; --line:#303a45; --amber:#f2b705; --display:Archivo,Arial,sans-serif; --mono:'JetBrains Mono',monospace; color-scheme:dark; }
+* { box-sizing:border-box; }
+body { margin:0; color:var(--ink); background:var(--bg); font:14px/1.5 var(--display); -webkit-font-smoothing:antialiased; }
+a { color:inherit; text-decoration:none; } a:hover { text-decoration:underline; text-underline-offset:3px; }
+:focus-visible { outline:2px solid var(--amber); outline-offset:4px; }
+.toolbar { max-width:1060px; margin:0 auto; padding:22px 24px; display:flex; justify-content:space-between; align-items:center; gap:20px; font:500 12px var(--mono); }
+.brand { font:800 21px var(--display); letter-spacing:.015em; } .brand::before { content:''; display:inline-block; width:10px; height:10px; margin-right:9px; background:var(--amber); clip-path:polygon(0 0,100% 0,100% 100%); }
+.toolbar .actions { display:flex; align-items:center; gap:18px; }
+.toolbar button { font:inherit; color:var(--ink); background:var(--paper); padding:9px 12px; border:1px solid var(--line); border-radius:3px; cursor:pointer; }
+.document { max-width:1012px; margin:8px auto 48px; padding:44px; background:var(--paper); border:1px solid var(--line); border-top:3px solid var(--amber); }
+.identity { padding-bottom:24px; border-bottom:1px solid var(--line); }
+.identity-top { display:flex; justify-content:space-between; align-items:center; gap:20px; }
+.kicker { margin:0; color:var(--amber); font:500 11px var(--mono); letter-spacing:.12em; text-transform:uppercase; }
+.handle { font:500 12px var(--mono); color:var(--muted); }
+h1 { margin:10px 0 9px; font:800 50px/1 var(--display); letter-spacing:-.045em; }
+.focus { margin:0; font-size:15px; font-weight:600; color:var(--ink); }
+.contact { display:flex; flex-wrap:wrap; gap:6px 16px; margin-top:15px; font:400 11px/1.6 var(--mono); color:var(--muted); }
+.summary { margin:18px 0 0; max-width:83ch; color:#c9d0d7; font-size:14px; }
+.columns { display:grid; grid-template-columns:minmax(0,1fr) 245px; gap:32px; padding-top:24px; }
+.main-column, .side-column { min-width:0; }
+.side-column { border-left:1px solid var(--line); padding-left:24px; }
+section + section { margin-top:24px; }
+h2 { margin:0 0 15px; color:var(--amber); font:600 11px/1.3 var(--mono); letter-spacing:.12em; text-transform:uppercase; }
+.job + .job { margin-top:20px; }
+.job-heading { display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:4px 10px; }
+h3 { margin:0; font-size:16px; line-height:1.3; font-weight:700; }
+.dates { color:var(--muted); font:400 10px/1.5 var(--mono); white-space:nowrap; }
+.job-role { margin:4px 0 0; font-weight:600; font-size:13px; }
+.promotion { color:#d2b969; font-size:11.5px; margin:4px 0 8px; }
+ul { padding-left:16px; margin:9px 0 0; } li { margin:0 0 7px; }
+.project-stack { margin:6px 0 0; font:400 10px/1.5 var(--mono); color:var(--muted); }
+.certifications { list-style:none; margin:0; padding:0; }
+.certifications li { display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:11px; font-size:12.5px; }
+.certifications time { color:var(--muted); font:400 10px var(--mono); flex-shrink:0; }
+.education p { margin:5px 0; font-size:12.5px; } .education .degree { font-size:15px; font-weight:700; }
+.education .expected { color:var(--ink); font-weight:600; } .coursework { color:var(--muted); }
+.skills { margin:0; } .skills div + div { margin-top:12px; }
+.skills dt { font-size:12px; font-weight:700; margin-bottom:4px; }
+.skills dd { margin:0; font-size:11.5px; line-height:1.55; color:#c9d0d7; }
+.footer { margin-top:24px; padding-top:12px; border-top:1px solid var(--line); display:flex; justify-content:space-between; color:var(--muted); font:400 10px var(--mono); }
+@media screen and (max-width:760px) {
+ .toolbar { padding:18px 16px; } .toolbar .actions { gap:12px; }
+ .document { margin:0 12px 24px; padding:24px 20px; } h1 { font-size:42px; }
+ .columns { grid-template-columns:1fr; gap:26px; } .side-column { border-left:0; border-top:1px solid var(--line); padding:24px 0 0; }
+ .contact { font-size:10px; } .identity-top { gap:12px; } .kicker { font-size:10px; }
+}
+/* Native letter pagination: no scaling tricks, fixed heights, clipping, or animated print content. */
+@page { size:letter; margin:.42in .45in; }
+@media print {
+ :root { --bg:#fff; --paper:#fff; --ink:#111820; --muted:#46505b; --line:#bcc3cb; --amber:#795700; color-scheme:light; }
+ *, *::before, *::after { animation:none !important; transition:none !important; box-shadow:none !important; text-shadow:none !important; }
+ html, body { width:auto; height:auto; margin:0; background:#fff !important; color:var(--ink); font-size:9.2pt; line-height:1.3; }
+ .toolbar { display:none !important; }
+ .document { width:auto; max-width:none; margin:0; padding:0; border:0; }
+ .identity { padding-bottom:11px; border-top:3px solid #a77a00; padding-top:10px; }
+ .kicker { font-size:7pt; } .handle { font-size:8pt; }
+ h1 { margin:7px 0 6px; font-size:29pt; }
+ .focus { font-size:9pt; }
+ .contact { gap:3px 11px; margin-top:9px; font-size:7pt; line-height:1.45; }
+ .summary { margin-top:9px; font-size:9pt; line-height:1.35; color:var(--ink); }
+ .columns { grid-template-columns:minmax(0,1fr) 2.05in; gap:20px; padding-top:13px; }
+ .side-column { padding-left:16px; }
+ h2 { font-size:7.5pt; margin-bottom:9px; }
+ h3 { font-size:10pt; line-height:1.25; }
+ .dates { font-size:7pt; }
+ .job-role { font-size:8.7pt; margin-top:3px; }
+ .promotion { font-size:8pt; color:var(--muted); margin:3px 0 5px; }
+ ul { margin-top:6px; padding-left:13px; } li { margin-bottom:5px; }
+ .job + .job { margin-top:12px; } section + section { margin-top:16px; }
+ .project-stack { font-size:7.2pt; margin-top:4px; }
+ .certifications li { font-size:8.4pt; margin-bottom:8px; line-height:1.3; }
+ .certifications time { font-size:7pt; }
+ .education p { font-size:8.4pt; margin:4px 0; } .education .degree { font-size:9.5pt; }
+ .skills div + div { margin-top:9px; } .skills dt { font-size:8pt; margin-bottom:3px; }
+ .skills dd { font-size:8pt; line-height:1.35; color:var(--ink); }
+ .footer { margin-top:13px; padding-top:8px; font-size:7pt; }
+ .job, .project, .side-column section, .identity, .footer { break-inside:avoid; }
+ h2, h3, .job-role { break-after:avoid; }
+ a { text-decoration:none; color:inherit; }
+}
+</style>
+</head>
+<body>
+<nav class="toolbar" aria-label="Resume navigation"><a class="brand" href="/#resume">blurxy</a><div class="actions"><a href="/resume.pdf">PDF ↗</a><button type="button" onclick="window.print()">Print</button></div></nav>
+<main class="document">
+<header class="identity">
+ <div class="identity-top"><p class="kicker">Professional record</p><span class="handle">blurxy</span></div>
+ <h1>Rafiul Bari</h1>
+ <p class="focus">Cybersecurity · IT audit & technology risk · Identity & access management</p>
+ <div class="contact"><span>Brooklyn, NY</span><a href="mailto:rafiulbari70@gmail.com">rafiulbari70@gmail.com</a><a href="https://linkedin.com/in/rafiul-bari">linkedin.com/in/rafiul-bari</a><a href="https://github.com/blurxy">github.com/blurxy</a></div>
+ <p class="summary">Cybersecurity B.S. candidate and full-time Operations & Systems Associate owning configuration, access administration, and change documentation across four production platforms. Targeting IT audit, technology risk, GRC, and IAM roles.</p>
+</header>
+<div class="columns">
+ <div class="main-column">
+  <section aria-labelledby="experience"><h2 id="experience">Experience</h2>
+<article class="job"><div class="job-heading"><h3>Plant Powered Metro New York</h3><span class="dates">Jul 2025 – Present</span></div><p class="job-role">Operations &amp; Systems Associate</p><p class="promotion">Promoted from Operations Assistant, July 2026.</p><ul><li>Drafted staff policy requiring 2FA and semiannual access review; reconciled rosters with live Slack and Asana APIs to identify deprovisioning candidates.</li><li>Shipped tiered operations ticketing with director approval, scope-confirmation gates, and a full audit trail of tier and scope changes.</li><li>Migrated 379 attendance + 176 testimonial records with email present on only 20%; escalated ambiguous matches and preserved source tables for rollback.</li><li>Built a self-hosted signed-link service: expiring per-record tokens let approximately 130 constituents update their data without third-party processing.</li><li>Own NeonCRM, Asana, Airtable, and Google Workspace administration, integrations, change logs, and configuration documentation.</li></ul></article><article class="job"><div class="job-heading"><h3>Bari &amp; Sons Construction Inc.</h3><span class="dates">Feb 2018 – Present</span></div><p class="job-role">Vice President</p><ul><li>Manage vendor and subcontractor scoping, selection, oversight, and procurement; review contracts, permits, and project documentation for accuracy and regulatory compliance.</li></ul></article><article class="job"><div class="job-heading"><h3>Bari &amp; Sons Construction Inc.</h3><span class="dates">Jan 2018 – Feb 2020</span></div><p class="job-role">IT Help Desk Support</p><ul><li>Managed Active Directory users, groups, and password resets; removed stale accounts.</li><li>Triaged Windows/macOS malware, applied patches and baseline hardening, and wrote prevention knowledge-base articles.</li></ul></article>
+  </section>
+  <section class="project" aria-labelledby="project"><h2 id="project">Technical project</h2><h3>Automated Futures Trading System</h3><p class="project-stack">Independent · Python · PostgreSQL/pgvector · Local LLMs</p>
+   <ul><li>Operate live on funded-evaluation accounts behind a kill switch, loss/drawdown circuit breakers, and a preflight gate that halts trading when any dependency is degraded.</li>
+   <li>Enforce the broker’s rulebook—contract caps, consistency limits, daily loss limits—as hard clamps at order construction.</li>
+   <li>Apply purged and walk-forward cross-validation, transaction-cost floors, overfitting thresholds, and drift monitoring with retrain triggers.</li></ul>
+  </section>
+ </div>
+ <aside class="side-column" aria-label="Qualifications and skills">
+  <section><h2>Certifications</h2><ul class="certifications"><li><span>CompTIA A+</span><time datetime="2024">2024</time></li><li><span>Google Cybersecurity</span><time datetime="2025">2025</time></li><li><span>CodePath Intermediate Cybersecurity</span><time datetime="2025">2025</time></li><li><span>TEEX Network Assurance and Information Security Basics</span><time datetime="2024">2024</time></li><li><span>Cisco Packet Tracer</span><time datetime="2024">2024</time></li></ul></section>
+  <section class="education"><h2>Education</h2><p class="degree">B.S. in Cybersecurity</p><p>New York City College of Technology (CUNY)</p><p class="expected">Expected December 2026</p><p class="coursework">Network Security; Cryptography and Access Control; Systems Administration; HIPAA/PCI-DSS.</p></section>
+  <section><h2>Skills</h2><dl class="skills"><div><dt>GRC &amp; IAM</dt><dd>HIPAA, PCI-DSS; access reviews and recertification; least privilege; provisioning and deprovisioning; MFA; permission auditing; role mapping; change management; approval gates; SOPs; audit trails.</dd></div><div><dt>Security operations</dt><dd>Log review; incident intake/escalation; malware triage; SIEM; root-cause documentation; endpoint hardening; patch management.</dd></div><div><dt>Systems &amp; tools</dt><dd>Active Directory; Windows, macOS, Linux; TCP/IP, DNS, DHCP, VLANs, VPNs, firewalls, IDS/IPS; Wireshark, Nmap; Python, Bash, PowerShell.</dd></div><div><dt>Platforms &amp; practice</dt><dd>NeonCRM, Asana, Airtable, Google Workspace, Slack; stakeholder communication; vendor/third-party risk review; technical documentation; staff training.</dd></div></dl></section>
+ </aside>
+</div>
+<footer class="footer"><span>Rafiul Bari</span><a href="https://github.com/blurxy">github.com/blurxy</a></footer>
+</main>
+</body>
+</html>
