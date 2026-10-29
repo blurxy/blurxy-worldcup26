@@ -2,14 +2,14 @@
 <html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>blurxy — cybersecurity</title>
+<title>blurxy — follow the evidence</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpolygon points='0,0 16,0 16,16' fill='%23f2b705'/%3E%3C/svg%3E">
 <meta name="theme-color" content="#08090c">
-<meta property="og:title" content="blurxy — cybersecurity">
-<meta property="og:description" content="Measurement &amp; security tools that state what they cannot establish. Cybersecurity at CUNY City Tech.">
+<meta property="og:title" content="blurxy — follow the evidence">
+<meta property="og:description" content="Follow the evidence. Security investigations and practical tools by blurxy, a CUNY City Tech cybersecurity student seeking internships and entry-level roles.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://blurxy.net/">
-<meta name="description" content="Rafiul Bari (blurxy). Cybersecurity at NYC College of Technology. Measurement tools that state what they cannot establish.">
+<meta name="description" content="blurxy · Rafiul Bari. Cybersecurity student at CUNY City Tech. Investigations, OSINT tools, and security projects. Seeking internships and full-time entry-level roles.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=JetBrains+Mono:wght@400;500;600&display=swap">
@@ -19,7 +19,7 @@
    Single dark theme by choice: industrial instrument panel. */
 :root {
   --bg: #08090c; --grid: #11161c; --grid-major: #1a212a; --panel: #0e1217; --raised: #141a21; --line: #26303b;
-  --ink: #e9edf1; --muted: #8893a1; --dim: #78838f; --amber: #f2b705; --pass: #39d98a; --fault: #ff5a47; --trace: #3a4654;
+  --ink: #e9edf1; --muted: #8893a1; --dim: #78838f; --amber: #f2b705; --pass: #39d98a; --trace: #3a4654;
   --display: "Archivo", "Arial Narrow", system-ui, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   color-scheme: dark;
@@ -46,13 +46,15 @@ button { font: inherit; color: inherit; }
 .tbtn { background: var(--raised); border: 1px solid var(--line); border-radius: 3px; padding: 5px 10px; font: 500 12px var(--mono); cursor: pointer; white-space: nowrap; }
 .tbtn:hover { border-color: var(--muted); }
 @media (pointer: coarse) { .tbtn { min-height: 44px; padding: 10px 14px; } .kbd { display: none; } }
+/* In the 44px top bar, full-height buttons touched both edges; inset them (still well above the 24px target minimum). */
+@media (pointer: coarse) { .bar .tbtn { min-height: 36px; padding: 6px 14px; } }
 .tbtn[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 .ruler { position: fixed; z-index: 20; background: var(--panel); pointer-events: none; }
 .ruler.x { top: calc(44px + env(safe-area-inset-top, 0px)); left: 22px; right: 0; height: 22px; border-bottom: 1px solid var(--line); }
 .ruler.y { top: calc(66px + env(safe-area-inset-top, 0px)); left: 0; bottom: 0; width: 22px; border-right: 1px solid var(--line); }
 .ruler canvas { display: block; }
 .corner { position: fixed; z-index: 21; top: calc(44px + env(safe-area-inset-top, 0px)); left: 0; width: 22px; height: 22px; background: var(--panel); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.hud { position: fixed; z-index: 25; left: 34px; right: 200px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); display: flex; gap: 8px; flex-wrap: wrap; pointer-events: none; }
+.hud { position: fixed; z-index: 25; left: 34px; right: 260px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); display: flex; gap: 8px; flex-wrap: wrap; pointer-events: none; }
 .hud span { white-space: pre; font: 500 11.5px var(--mono); color: var(--muted); background: color-mix(in srgb, var(--panel) 92%, transparent); border: 1px solid var(--line); border-radius: 3px; padding: 3px 8px; font-variant-numeric: tabular-nums; }
 .zoomer { position: fixed; z-index: 25; right: max(14px, env(safe-area-inset-right, 0px)); bottom: calc(12px + env(safe-area-inset-bottom, 0px)); display: flex; gap: 6px; }
 
@@ -69,9 +71,6 @@ button { font: inherit; color: inherit; }
 .core .tag { font: 600 11px var(--mono); color: var(--amber); letter-spacing: .14em; }
 .core h1 { margin: 10px 0 6px; font: 800 44px/0.95 var(--display); font-stretch: 112%; letter-spacing: -.01em; text-wrap: balance; }
 .core .who { font: 500 13px var(--mono); color: var(--muted); }
-.core .thesis { margin: 16px 0 0; font: 600 21px/1.25 var(--display); font-stretch: 88%; text-wrap: balance; }
-.core .thesis em { font-style: normal; color: var(--amber); }
-.core .sub { margin: 10px 0 0; color: #c2c9d1; font-size: 14px; max-width: 46ch; }
 .core .links { margin-top: 16px; display: flex; gap: 8px; flex-wrap: wrap; }
 .core .links a { font: 500 12px var(--mono); border: 1px solid var(--line); border-radius: 3px; padding: 6px 10px; text-decoration: none; background: var(--raised); }
 .core .links a:hover { border-color: var(--amber); color: var(--amber); }
@@ -93,16 +92,6 @@ button { font: inherit; color: inherit; }
 .mod .mf { display: flex; gap: 10px; flex-wrap: wrap; padding: 8px 12px; border-top: 1px dashed var(--line); font: 500 11px var(--mono); color: var(--dim); }
 .mod .mf b { color: var(--muted); font-weight: 500; }
 
-.faults { position: absolute; width: 520px; background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--fault); }
-.faults .fh { padding: 10px 14px; border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 4px 12px; justify-content: space-between; font: 600 11px var(--mono); color: var(--fault); letter-spacing: .12em; }
-.faults ol { list-style: none; margin: 0; padding: 6px 0; counter-reset: f; }
-.faults li { counter-increment: f; display: grid; grid-template-columns: 74px 1fr; gap: 10px; padding: 7px 14px; font-size: 13.5px; color: #c9d0d7; }
-.faults li::before { content: "FAULT " counter(f, decimal-leading-zero); font: 600 11px/1.9 var(--mono); color: var(--fault); }
-.faults code { font: 500 12.5px var(--mono); color: var(--ink); background: var(--raised); padding: 0 4px; border-radius: 2px; }
-.faults .ff { padding: 10px 14px 12px; border-top: 1px dashed var(--line); font-size: 13.5px; color: var(--ink); }
-.faults .ff b { color: var(--amber); font-weight: 600; }
-.faults .fh span:last-child { white-space: nowrap; }
-
 /* ---- spec sheet ---- */
 #sheet { position: fixed; z-index: 40; top: calc(66px + env(safe-area-inset-top, 0px)); right: 0; bottom: 0; width: min(440px, 100%); background: var(--panel); border-left: 1px solid var(--line);
   transform: translateX(100%); transition: transform .22s ease; overflow-y: auto; padding: 18px max(18px, env(safe-area-inset-right, 0px)) calc(28px + env(safe-area-inset-bottom, 0px)) 20px; display: grid; gap: 14px; align-content: start; }
@@ -119,7 +108,6 @@ button { font: inherit; color: inherit; }
 .spec dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
 .blk h3 { margin: 0 0 6px; font: 600 11px var(--mono); color: var(--amber); letter-spacing: .14em; text-transform: uppercase; }
 .blk ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; color: #c9d0d7; font-size: 14px; }
-.blk.cant h3 { color: var(--fault); }
 .acts { display: flex; gap: 8px; flex-wrap: wrap; }
 .acts a { font: 600 12.5px var(--mono); text-decoration: none; padding: 8px 12px; border-radius: 3px; border: 1px solid var(--line); background: var(--raised); }
 .acts a.pri { background: var(--amber); color: #111; border-color: var(--amber); }
@@ -129,7 +117,7 @@ button { font: inherit; color: inherit; }
 #list { position: fixed; z-index: 15; inset: calc(44px + env(safe-area-inset-top, 0px)) 0 0 0; overflow-y: auto; background: var(--bg);
   padding-block: 20px calc(40px + env(safe-area-inset-bottom, 0px)); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 #list .inner { max-width: 980px; margin: 0 auto; display: grid; gap: 16px; }
-#list .core, #list .faults, #list .mod { position: static; width: auto; }
+#list .core, #list .journal, #list .mod { position: static; width: auto; }
 #list .mods { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: 12px; }
 #list .zone { position: static; margin-top: 8px; }
 body.listmode .ruler, body.listmode .corner, body.listmode .hud, body.listmode .zoomer { display: none; }
@@ -150,6 +138,14 @@ body.listmode #sheet { top: calc(44px + env(safe-area-inset-top, 0px)); }
 #stage::before, #stage::after { content: ""; position: absolute; inset: 0; pointer-events: none; }
 #stage::before { z-index: -1; background: radial-gradient(ellipse at 39% 47%, #f2b70508, transparent 57%); }
 #stage::after { z-index: 4; background: radial-gradient(ellipse at 50% 48%, transparent 48%, #08090c65 100%); }
+/* The vignette shades the substrate, never the text: the card plane sits above it. */
+#depth { z-index: 5; }
+/* A lifted card keeps its old footprint clickable, so the pointer never falls through the gap it leaves. */
+#world .mod::before { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 8px; }
+/* HUD readouts change often; keep each one from invalidating page layout. */
+.hud span { contain: layout paint; }
+#vMotion[aria-pressed="false"] { color: var(--muted); }
+@media (max-width: 760px) { #vMotion { display: none; } }
 /* An optical texture, not an animated filter over text. */
 #scanline { position: absolute; inset: -24px 0; pointer-events: none; opacity: 0;
   background: repeating-linear-gradient(0deg, transparent 0 5px, #b9c5d9 5px 6px); }
@@ -164,6 +160,7 @@ body.listmode #sheet { top: calc(44px + env(safe-area-inset-top, 0px)); }
   box-shadow: 0 8px 28px -12px #f2b70545, 0 0 16px -7px #f2b70533; opacity: 0; pointer-events: none; }
 .mod:is(:hover, :focus-visible, .sel)::after { opacity: 1; }
 .mod.sel { box-shadow: none; }
+#list .mod { position: relative; }
 #world .core { box-shadow: 0 18px 50px -24px #000a; }
 .hud #hClock { color: #9aa3ae; }
 body.listmode #depth { visibility: hidden; }
@@ -177,11 +174,64 @@ body.listmode #depth { visibility: hidden; }
   body.sheetopen #world .mod, #stage.drag .mod { transform: none; }
   #sheet { transition: transform 320ms cubic-bezier(.22,1,.36,1); }
   #stage.booting #traces { opacity: 0; }
+  #stage.pending #world { opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
   #depth, #grid { transform: none !important; }
   .trace-fx, #scanline, .xh { display: none !important; }
+}
+
+
+/* v3 / follow the evidence. The opening camera frames the core and four security projects.
+   The remaining projects retain their board positions and can also be read in order in List. */
+.core { width: 480px; padding: 24px; }
+.core h1 { font-size: 54px; margin: 12px 0 8px; }
+.core .who { font-size: 11.5px; }
+.core .role { margin: 20px 0 8px; font: 600 16px/1.4 var(--display); }
+.core .value { margin: 0; font: 650 27px/1.2 var(--display); letter-spacing: -.025em; text-wrap: balance; }
+.core .seeking { margin: 20px 0 0; padding-left: 12px; border-left: 2px solid var(--amber); color: var(--ink); font-size: 15px; line-height: 1.5; }
+.core .education { margin: 16px 0 0; font-size: 12.5px; line-height: 1.65; color: #b5c0cc; }
+.core .links { gap: 7px; margin-top: 18px; }
+/* Contact is the recruiter's next step: it must stay legible (≥ 11 px rendered) at the 1280×720 opening zoom. */
+.core .links a { font-size: 13.5px; padding: 7px 10px; }
+.core .browse { display: inline-block; margin-top: 16px; color: var(--muted); font: 500 12px var(--mono); text-decoration: none; }
+.core .browse:hover { color: var(--amber); }
+.mod { width: 280px; }
+.mod.featured { width: 600px; border-top: 2px solid var(--amber); background: linear-gradient(125deg, #181a17, var(--panel) 65%); }
+.mod.featured .mb { padding: 18px; gap: 10px; }
+.mod.featured .mn { font-size: 29px; }
+.mod.featured .md { font-size: 16px; line-height: 1.5; max-width: 52ch; }
+.mod.featured .mh, .mod.featured .mf { padding-inline: 18px; }
+.mod .project-action { margin-left: auto; color: var(--amber); }
+.journal { position: absolute; width: 280px; padding: 16px; text-align: left; background: var(--panel); border: 1px solid var(--line); border-left: 2px solid #8893a1; border-radius: 2px; cursor: pointer; }
+.journal:hover, .journal:focus-visible, .journal.sel { border-color: var(--amber); }
+.journal > span { display: block; }
+.journal .journal-meta { color: var(--dim); font: 500 10.5px/1.5 var(--mono); }
+.journal .journal-title { margin-top: 9px; font: 700 20px/1.2 var(--display); }
+.journal .journal-intro { margin-top: 8px; color: #bcc4cd; font-size: 13px; line-height: 1.5; }
+.journal .journal-action { margin-top: 12px; font: 500 11.5px var(--mono); color: var(--amber); }
+.journal-entries { list-style: none; padding: 0; margin: 0; display: grid; gap: 24px; counter-reset: entry; }
+.journal-entries li { padding-top: 16px; border-top: 1px solid var(--line); }
+.journal-entries time { font: 500 11px var(--mono); color: var(--muted); }
+.journal-entries h3 { margin: 8px 0 12px; font: 700 20px/1.2 var(--display); }
+.journal-entries dl { margin: 0; display: grid; gap: 10px; }
+.journal-entries dl div { display: grid; gap: 3px; }
+.journal-entries dt { font: 500 10.5px var(--mono); color: var(--amber); }
+.journal-entries dd { margin: 0; font-size: 14px; color: #c9d0d7; }
+.journal-provenance, .project-note { margin: 0; font-size: 13px; line-height: 1.6; color: #b5c0cc; }
+.journal-provenance a { text-underline-offset: 3px; }
+#list .mod.featured { width: auto; grid-column: 1 / -1; }
+#list .journal { width: auto; }
+#list .journal-collection { display: grid; gap: 12px; }
+#list .zone { margin-top: 12px; }
+@media (max-width: 760px) {
+  .core { padding: 20px; }
+  .core h1 { font-size: 46px; }
+  .core .value { font-size: 25px; }
+  .core .role { font-size: 15px; }
+  .core .links a { min-height: 40px; display: inline-flex; align-items: center; }
+  #list .mod.featured .mn { font-size: 25px; }
 }
 
 </style>
@@ -190,6 +240,7 @@ body.listmode #depth { visibility: hidden; }
   <span class="mark"><i aria-hidden="true"></i>blurxy</span>
   <span class="crumb" id="crumb">board / blurxy / all modules</span>
   <span class="spacer"></span>
+  <button class="tbtn" id="vMotion" aria-pressed="true" title="Pause or resume the board's ambient motion">Motion</button>
   <button class="tbtn" id="vBoard" aria-pressed="true">Board</button>
   <button class="tbtn" id="vList" aria-pressed="false">List</button>
 </header>
@@ -198,7 +249,7 @@ body.listmode #depth { visibility: hidden; }
 <div class="ruler x" aria-hidden="true"><canvas id="rx"></canvas></div>
 <div class="ruler y" aria-hidden="true"><canvas id="ry"></canvas></div>
 
-<main id="stage" aria-label="Project board. Drag to pan, scroll to zoom, or switch to List.">
+<main id="stage" class="pending" aria-label="Project board. Drag to pan, scroll to zoom, or switch to List.">
   <canvas id="grid" aria-hidden="true"></canvas>
   <div class="xh v" id="xv" hidden></div><div class="xh h" id="xhz" hidden></div>
   <div id="scanline" aria-hidden="true"></div>
@@ -206,85 +257,269 @@ body.listmode #depth { visibility: hidden; }
 </main>
 
 <div class="hud" aria-hidden="true"><span id="hPos">X     0 · Y     0</span><span id="hZoom">ZOOM 100%</span><span id="hMods"></span><span id="hClock">LOCAL --:--:--</span></div>
-<div class="zoomer"><button class="tbtn" id="zOut" aria-label="Zoom out">−</button><button class="tbtn" id="zFit">Fit</button><button class="tbtn" id="zIn" aria-label="Zoom in">+</button></div>
+<div class="zoomer"><button class="tbtn" id="zOut" aria-label="Zoom out">−</button><button class="tbtn" id="zHome">Home</button><button class="tbtn" id="zFit">Fit</button><button class="tbtn" id="zIn" aria-label="Zoom in">+</button></div>
 
 <div id="sheet" role="dialog" aria-labelledby="shTitle" tabindex="-1" inert></div>
 <div class="sr" id="live" aria-live="polite"></div>
-<noscript><style>.ruler,.corner,.hud,.zoomer,.tbtn{display:none}</style><p style="position:fixed;z-index:50;top:80px;left:36px;right:16px;margin:0;color:#e9edf1;font:15px/1.5 system-ui,sans-serif">Rafiul Bari (blurxy), cybersecurity at NYC College of Technology. This board needs JavaScript; the projects are at <a href="https://github.com/blurxy" style="color:#f2b705">github.com/blurxy</a>.</p></noscript>
+<noscript><style>.ruler,.corner,.hud,.zoomer,.tbtn{display:none}</style><p style="position:fixed;z-index:50;top:80px;left:36px;right:16px;margin:0;color:#e9edf1;font:15px/1.5 system-ui,sans-serif">blurxy — legal name Rafiul Bari. Cybersecurity student at CUNY New York City College of Technology. Seeking security internships and full-time entry-level roles. Contact <a href="mailto:rafiulbari70@gmail.com">rafiulbari70@gmail.com</a>. This board needs JavaScript; the projects are at <a href="https://github.com/blurxy" style="color:#f2b705">github.com/blurxy</a>.</p></noscript>
 <section id="list" hidden aria-label="All projects"><div class="inner" id="listInner"></div></section>
 
 <script>
 (() => {
-  const GH = "https://github.com/blurxy/";
+  // Set this one value when the PDF is ready. No placeholder link is rendered.
+  const RESUME_URL = null;
   const MODS = [
-    { id: "M-01", key: "aur", zone: "measure", x: -640, y: -230, status: "repo", name: "aur-build-diff",
-      line: "Builds an AUR package twice and diffs what each version actually does.",
-      lang: "Python", last: "2026-09-17", links: [["Source", GH + "aur-build-diff"]],
-      measures: "What a new package revision does that the last known-good one never did: new outbound endpoints, binaries it didn't run before, writes outside the build tree. Built under bubblewrap with strace.",
-      facts: ["The sandbox blocks DNS through the io.systemd.Resolve unix socket, not just the network namespace. --unshare-net alone still resolves names; the repo runs that control on every check.",
-        "--static reads what a PKGBUILD declares in 1.3 s with no sandbox. It fired on 1 of 6 real pkgcacheclean transitions and stayed silent on the other 5.",
-        "The README documents 8 defects in the tool and 3 in the --static differ. Seven of my own passing tests caught none of those three."],
-      cant: ["Behaviour that only shows up in a completed build, because completing the build is what the sandbox exists to prevent. --static covers part of that gap."] },
-    { id: "M-02", key: "beacon", zone: "measure", x: -640, y: 110, status: "repo", name: "beacon-spectrum",
-      line: "Finds periodic C2 beacons in connection timing alone. No payload, no TLS inspection.",
-      lang: "Python", last: "2026-09-16", links: [["Source", GH + "beacon-spectrum"]],
-      measures: "Phase coherence of connection timestamps with a Rayleigh / Z² periodogram. Dependency-free pcap and Zeek ingest.",
-      facts: ["It publishes a table against itself: a dispersion/skew control detector wins every headline benchmark, then alarms on 98% of benign periodic traffic (NTP, telemetry, backups). It detects regularity, not beacons.",
-        "The limit is derived, not discovered: Z² = 2N·R² and R ≤ 1, so the statistic is bounded by 2N. A perfect beacon seen N times cannot score above twice its check-in count."],
-      cant: ["Telling a beacon from NTP by periodicity alone. Below the 2N floor the honest output is \"not enough data\", not \"no beacon\"."] },
-    { id: "M-03", key: "chladni", zone: "sim", x: -136, y: -470, status: "repo", name: "chladni-tui",
-      line: "A Chladni sand plate simulated from first principles, drawn in the terminal from live audio.",
-      lang: "Python", last: "2026-09-18", links: [["Source", GH + "chladni-tui"]],
-      measures: "Bessel eigenmodes of a clamped circular membrane, U_mn(r,θ) = J_m(α_mn·r)·cos(mθ), driven by the frequency content of real audio and rendered in Braille sub-cells. No GPU.",
-      facts: ["Energy is an incoherent sum Σaᵢ²Uᵢ², not (ΣaᵢUᵢ)². Squaring a coherent sum invents interference nodes no real plate has.",
-        "One clean tone gives lines; a chord gives isolated dots, because the common zeros of several independent functions are points, not curves."],
-      cant: ["A real Chladni plate: a metal plate has a free edge and obeys the biharmonic equation, so its modes aren't Bessel functions. This is the clamped-membrane model, and it says so."] },
-    { id: "M-04", key: "spore", zone: "systems", x: -400, y: 420, status: "repo", name: "spore",
-      line: "An off-web mycelial mesh: Discord and Telegram raised by fungi. Communities, channels and presence with no server anywhere.",
-      lang: "JavaScript", last: "2026-09-18", links: [["Source", GH + "spore"]],
-      measures: "A peer-to-peer community mesh over a LAN or a phone hotspot with no uplink. No install, no registry, no bootstrap node, no signalling server, and an empty dependencies list.",
-      facts: ["The vocabulary is literal: a spore is a node, a hypha a live authenticated peer connection, the substrate a replicated append-only log.",
-        "Five roles (RELAY, VAULT, INDEX, FORGE, BEACON) live on every spore and shard out as peers appear. At N=1 they all collapse onto one device."],
-      cant: ["That it really gets faster as people join. In simulation, yes. On real hardware, not yet established: the first real run exposed a ceiling in its own request path, six blocks in flight per peer."] },
-    { id: "M-05", key: "pyexec", zone: "systems", x: 60, y: 440, status: "repo", name: "py-exec-mcp",
-      line: "Run Python from an MCP client without a shell mangling your code.",
-      lang: "Python", last: "2026-10-05", links: [["Source", GH + "py-exec-mcp"]],
-      measures: "Code arrives as a JSON string in the MCP tool call and goes to the interpreter over stdin (python -). No shell, no argv, nothing re-parses it.",
-      facts: ["python -c passes code through three parsers before Python sees it, and the usual failure is a wrong answer, not an error: a vanished backslash, a quote that closes early.",
-        "On PyPI (uvx py-exec-mcp) and works on both MCP SDK majors."],
-      cant: ["Isolation: it is not sandboxed and runs code with your own permissions. Isolation has to come from a container or VM underneath."] },
-    { id: "L-01", key: "worldcup", zone: "live", x: 520, y: -300, status: "live", name: "World Cup 2026",
-      line: "All 104 matches of the 2026 World Cup, with final scores.",
-      lang: "HTML / JS", last: "2026-07-11", links: [["Open", "https://blurxy.net/worldcup26/"], ["Source", GH + "blurxy-worldcup26"]],
-      measures: "104 matches, 48 teams, 16 cities, June 11 to July 19. Kickoff times in a time zone you pick, a match center for every game, scores from ESPN.",
-      facts: ["Hosted on Cloudflare Workers."], cant: ["Score accuracy beyond ESPN's own feed: scores come from ESPN's unofficial API and the site does not check them independently."] },
-    { id: "L-02", key: "osint", zone: "live", x: 560, y: -30, status: "stage", name: "OSINT Field Kit",
-      line: "2,141 OSINT tools from two directories, merged, link-checked and sorted by what you start from.",
-      lang: "HTML / JS", last: "2026-10-15", lastLabel: "updated", links: [["Coming to osint.blurxy.net", "#"]],
-      measures: "OSINT Framework (1,103 unique tools) and OSINT4ALL (1,153) overlap on only 115, so the merge nearly doubles either one. 1,813 answered a live link check.",
-      facts: ["Tools that touch the target are tagged ACTIVE, next to the PTES rule: start passive, confirm scope and authorization first.",
-        "A case notebook records each tool used with a timestamp and exports a recon report."],
-      cant: ["Passive status for untagged tools: the ACTIVE tag comes from a keyword check, so untagged doesn't mean verified passive.", "Links that fail an automated fetch but open fine in a browser."] },
-    { id: "L-03", key: "coursewake", zone: "live", x: 520, y: 250, status: "beta", name: "Coursewake",
-      line: "A calmer CUNY Brightspace: every deadline, grade estimate and reminder in one place.",
-      lang: "Chrome MV3", last: "v0.2.4", links: [["Chrome Web Store", "https://chromewebstore.google.com/detail/hgommmlnfhiajkfnpckfknhpekjmhcln"]],
-      measures: "Reads Brightspace with your own login and never submits, enrolls or changes anything. Optional encrypted cloud backup on a Cloudflare Worker.",
-      facts: ["Published on the Chrome Web Store and in private beta."],
-      cant: ["Anything your Brightspace account can't see. It reads, it never writes."] },
-    { id: "L-04", key: "cactus", zone: "live", x: 860, y: 110, status: "live", name: "Cactus McCoy",
-      line: "Thorn & Dust 3D: an early-build third-person browser game.",
-      lang: "WebGL", last: "2026-10-13", links: [["Play", "https://cactus.blurxy.net"]],
-      measures: "Runs in the browser on WebGL, no install.", facts: [], cant: ["Phone play: it needs a keyboard and mouse, with no touch controls yet."] },
-    { id: "L-05", key: "kev", zone: "live", x: 860, y: 330, status: "live", name: "KEV Watch",
-      line: "What CISA says attackers are exploiting right now, by fix-by date.",
-      lang: "HTML / JS", last: "2026-10-28", links: [["Open", "https://blurxy.net/kev/"], ["Source", GH + "blurxy-worldcup26/tree/main/kev"]],
-      measures: "CISA's Known Exploited Vulnerabilities catalog, loaded live from CISA's mirror and sorted by fix-by date: vendor follows, EPSS scores, calendar export and a wall-display mode. Re-fetches every five minutes.",
-      facts: ["Hosted on Cloudflare Workers.", "Opens with a Measured / Not established strip stating what the list is and is not."],
-      cant: ["Whether you run an affected version: the catalog names products, not your inventory.", "Fix-by dates bind US federal agencies only (BOD 22-01); for everyone else they are a priority signal, not a deadline."] },
-  ];
-  const ZONES = { measure: ["Measurement", -640, -290], sim: ["Simulation", -136, -530], systems: ["Systems", -400, 360], live: ["Live", 520, -360] };
-  const FAULTS = { x: 860, y: -380 };
-  const CORE = { x: -220, y: -170 };
+  {
+    "id": "L-02",
+    "key": "osint",
+    "zone": "security",
+    "x": 560,
+    "y": 0,
+    "status": "live",
+    "name": "OSINT Field Kit",
+    "line": "2,141 OSINT tools. One starting point for reconnaissance, with a case notebook and report export.",
+    "lang": "HTML / JS",
+    "last": "2026-10-28",
+    "lastLabel": "updated",
+    "links": [
+      [
+        "Open",
+        "https://blurxy.net/osint/"
+      ]
+    ],
+    "facts": [
+      "Merges 1,103 unique tools from OSINT Framework and 1,153 from OSINT4ALL; 115 overlap, giving 2,141 tools in one directory.",
+      "1,813 tools answered the recorded live link check.",
+      "Keyword-based ACTIVE tags flag tools that may interact with a target. The workflow starts with passive research and scope authorization.",
+      "A case notebook timestamps each tool used and exports a reconnaissance report."
+    ],
+    "summary": "Brings OSINT Framework and OSINT4ALL into one searchable field kit, organized by what you start an investigation with.",
+    "featured": true
+  },
+  {
+    "id": "L-05",
+    "key": "kev",
+    "zone": "security",
+    "x": 560,
+    "y": 240,
+    "status": "live",
+    "name": "KEV Watch",
+    "line": "Track CISA-listed exploited vulnerabilities with EPSS scores, vendor follows, and calendar export.",
+    "lang": "HTML / JS",
+    "last": "2026-10-28",
+    "links": [
+      [
+        "Open",
+        "https://blurxy.net/kev/"
+      ],
+      [
+        "Source",
+        "https://github.com/blurxy/blurxy-worldcup26/tree/main/kev"
+      ]
+    ],
+    "facts": [
+      "Follow vendors and review EPSS scores alongside catalog entries.",
+      "Export dates to a calendar or use the wall-display mode.",
+      "Hosted on Cloudflare Workers."
+    ],
+    "summary": "Loads CISA's Known Exploited Vulnerabilities catalog from its mirror and sorts entries by fix-by date, with a five-minute refresh cycle.",
+    "note": "CISA fix-by dates apply to US federal agencies; other organizations can use them as a prioritization signal."
+  },
+  {
+    "id": "M-02",
+    "key": "beacon",
+    "zone": "security",
+    "x": 880,
+    "y": 240,
+    "status": "repo",
+    "name": "beacon-spectrum",
+    "line": "Analyze connection timing for periodic patterns associated with C2 beaconing.",
+    "lang": "Python",
+    "last": "2026-09-16",
+    "links": [
+      [
+        "Source",
+        "https://github.com/blurxy/beacon-spectrum"
+      ]
+    ],
+    "facts": [
+      "Dependency-free ingestion of pcap and Zeek data.",
+      "Compares phase-coherence analysis with a dispersion/skew control detector.",
+      "Derives the relationship Z² = 2N·R² to connect sample count with the strength of the timing signal."
+    ],
+    "summary": "Uses a Rayleigh / Z² periodogram to analyze the phase coherence of connection timestamps, without reading payloads or inspecting TLS."
+  },
+  {
+    "id": "M-01",
+    "key": "aur",
+    "zone": "security",
+    "x": 560,
+    "y": 480,
+    "status": "repo",
+    "name": "aur-build-diff",
+    "line": "Compare AUR package revisions by the commands, connections, and file writes they produce.",
+    "lang": "Python",
+    "last": "2026-09-17",
+    "links": [
+      [
+        "Source",
+        "https://github.com/blurxy/aur-build-diff"
+      ]
+    ],
+    "facts": [
+      "Blocks DNS through the io.systemd.Resolve Unix socket as well as restricting the network namespace; reruns that control on every check.",
+      "A --static mode reads PKGBUILD declarations in 1.3 seconds without starting the sandbox.",
+      "Checked six real pkgcacheclean transitions: the static comparison flagged one and remained silent on five."
+    ],
+    "summary": "Runs package revisions under bubblewrap with strace to identify newly contacted endpoints, executed binaries, and writes outside the build tree."
+  },
+  {
+    "id": "M-05",
+    "key": "pyexec",
+    "zone": "systems",
+    "x": 560,
+    "y": 760,
+    "status": "repo",
+    "name": "py-exec-mcp",
+    "line": "Send Python directly from an MCP client to the interpreter, without shell quoting.",
+    "lang": "Python",
+    "last": "2026-10-28",
+    "links": [
+      [
+        "Source",
+        "https://github.com/blurxy/py-exec-mcp"
+      ]
+    ],
+    "facts": [
+      "Published on PyPI and available through uvx py-exec-mcp.",
+      "Supports both MCP SDK majors."
+    ],
+    "summary": "Accepts code as a JSON string and passes it to Python over stdin, avoiding shell and command-line argument parsing.",
+    "note": "Code runs unsandboxed with your user permissions; use a container or VM when isolation is required."
+  },
+  {
+    "id": "M-04",
+    "key": "spore",
+    "zone": "systems",
+    "x": 880,
+    "y": 760,
+    "status": "repo",
+    "name": "spore",
+    "line": "A peer-to-peer community mesh with channels and presence over a LAN or phone hotspot.",
+    "lang": "JavaScript",
+    "last": "2026-09-18",
+    "links": [
+      [
+        "Source",
+        "https://github.com/blurxy/spore"
+      ]
+    ],
+    "facts": [
+      "Authenticated peer connections share a replicated append-only log.",
+      "Five roles—RELAY, VAULT, INDEX, FORGE, and BEACON—run on one device and distribute across peers as they join."
+    ],
+    "summary": "Connects communities without an uplink, registry, bootstrap node, or signalling server, with an empty dependencies list."
+  },
+  {
+    "id": "L-03",
+    "key": "coursewake",
+    "zone": "builds",
+    "x": 560,
+    "y": 1030,
+    "status": "beta",
+    "name": "Coursewake",
+    "line": "Bring Brightspace deadlines, grade estimates, and reminders into one calmer view.",
+    "lang": "Chrome MV3",
+    "last": "v0.2.4",
+    "links": [
+      [
+        "Chrome Web Store",
+        "https://chromewebstore.google.com/detail/hgommmlnfhiajkfnpckfknhpekjmhcln"
+      ]
+    ],
+    "facts": [
+      "Published on the Chrome Web Store and in private beta.",
+      "Read-only access: the extension does not submit work, enroll in courses, or change Brightspace records."
+    ],
+    "summary": "A Chrome extension for CUNY Brightspace that reads information available through your existing login, with optional encrypted cloud backup on a Cloudflare Worker."
+  },
+  {
+    "id": "M-03",
+    "key": "chladni",
+    "zone": "builds",
+    "x": 880,
+    "y": 1030,
+    "status": "repo",
+    "name": "chladni-tui",
+    "line": "Turn live audio into a first-principles membrane simulation, rendered in the terminal.",
+    "lang": "Python",
+    "last": "2026-09-18",
+    "links": [
+      [
+        "Source",
+        "https://github.com/blurxy/chladni-tui"
+      ]
+    ],
+    "facts": [
+      "Runs without a GPU.",
+      "Adds modal energies as Σaᵢ²Uᵢ² to model how independent modes contribute.",
+      "A single tone produces lines; multiple modes can produce isolated points where their nodes meet."
+    ],
+    "summary": "Drives Bessel eigenmodes of a clamped circular membrane with live audio frequencies and renders the resulting patterns in Braille sub-cells."
+  },
+  {
+    "id": "L-01",
+    "key": "worldcup",
+    "zone": "builds",
+    "x": 560,
+    "y": 1270,
+    "status": "live",
+    "name": "World Cup 2026",
+    "line": "Explore all 104 World Cup 2026 matches, with final scores and local kickoff times.",
+    "lang": "HTML / JS",
+    "last": "2026-10-28",
+    "links": [
+      [
+        "Open",
+        "https://blurxy.net/worldcup26/"
+      ],
+      [
+        "Source",
+        "https://github.com/blurxy/blurxy-worldcup26"
+      ]
+    ],
+    "facts": [
+      "Covers the June 11–July 19 tournament schedule.",
+      "Hosted on Cloudflare Workers."
+    ],
+    "summary": "A match center covering 48 teams and 16 cities, with a selectable time zone and scores from ESPN."
+  },
+  {
+    "id": "L-04",
+    "key": "cactus",
+    "zone": "builds",
+    "x": 880,
+    "y": 1270,
+    "status": "live",
+    "name": "Cactus McCoy",
+    "line": "Thorn & Dust 3D: a third-person browser game built on WebGL.",
+    "lang": "WebGL",
+    "last": "2026-10-13",
+    "links": [
+      [
+        "Play",
+        "https://cactus.blurxy.net"
+      ]
+    ],
+    "facts": [
+      "WebGL rendering in the browser."
+    ],
+    "summary": "An early-build, playable 3D game that runs directly in the browser without installation.",
+    "note": "Play requires a keyboard and mouse."
+  }
+];
+  const ZONES = { security: ["Selected security work", 560, -42], systems: ["Systems", 560, 718], builds: ["Builds & experiments", 560, 988] };
+  const CORE = { x: 0, y: 0 };
   const LED = { live: "LIVE", repo: "REPO", beta: "BETA", stage: "STAGING" };
 
   const $ = id => document.getElementById(id);
@@ -294,44 +529,94 @@ body.listmode #depth { visibility: hidden; }
   // ---------- build board ----------
   const core = document.createElement('section');
   core.className = 'core'; core.style.left = CORE.x + 'px'; core.style.top = CORE.y + 'px';
-  core.innerHTML = `<div class="tag">CORE · BLURXY</div>
+  core.innerHTML = `<div class="tag">FOLLOW THE EVIDENCE</div>
     <h1>blurxy</h1>
-    <div class="who">cybersecurity · NYC College of Technology (CUNY) · legal name Rafiul Bari</div>
-    <p class="thesis">How do you know your check <em>actually checked anything?</em></p>
-    <p class="sub">I build measurement tools that state what they cannot establish as prominently as what they can. Where a module has a known limit, its spec sheet lists it under Cannot establish.</p>
-    <div class="links"><a href="https://github.com/blurxy" target="_blank" rel="noopener" draggable="false">github.com/blurxy</a><a href="#faults" class="toFaults" draggable="false">Fault log</a></div>`;
+    <div class="who">legal name Rafiul Bari</div>
+    <p class="role">Cybersecurity student at CUNY City Tech</p>
+    <p class="value">I investigate how systems behave and build tools that make the findings useful.</p>
+    <p class="seeking">Seeking security internships and<br>full-time entry-level roles.</p>
+    <p class="education">CUNY New York City College of Technology · Cybersecurity<br>Coursework complete December 2026<br>Commencement Spring 2027</p>
+    <div class="links" aria-label="Contact"><a href="mailto:rafiulbari70@gmail.com" draggable="false">rafiulbari70@gmail.com</a><a href="https://linkedin.com/in/rafiul-bari" target="_blank" rel="noopener" draggable="false">LinkedIn ↗</a><a href="https://github.com/blurxy" target="_blank" rel="noopener" draggable="false">GitHub ↗</a>${RESUME_URL ? `<a href="${esc(RESUME_URL)}" target="_blank" rel="noopener" draggable="false">Resume ↗</a>` : ''}</div>
+    <a href="#projects" class="browse" draggable="false">Explore all 10 projects ↓</a>`;
   world.appendChild(core);
 
-  for (const [label, x, y] of Object.values(ZONES)) {
-    const z = document.createElement('div'); z.className = 'zone'; z.textContent = label; z.style.left = x + 'px'; z.style.top = y + 'px'; world.appendChild(z);
+  for (const [key, [label, x, y]] of Object.entries(ZONES)) {
+    const z = document.createElement('div'); z.className = 'zone'; z.dataset.zone = key; z.textContent = label; z.style.left = x + 'px'; z.style.top = y + 'px'; world.appendChild(z);
   }
 
-  const faults = document.createElement('section');
-  faults.className = 'faults'; faults.id = 'faults'; faults.style.left = FAULTS.x + 'px'; faults.style.top = FAULTS.y + 'px';
-  faults.innerHTML = `<div class="fh"><span>FAULT LOG · THE RECURRING BUG</span><span class="fcount"></span></div><ol>
-    <li><span><code>nmap -sn</code> unprivileged finds 2 hosts; as root, 4. Same command, same network.</span></li>
-    <li><span>A TCP probe says the sandbox has no network. DNS still resolves, over a unix socket.</span></li>
-    <li><span>A build diff says <code>unchanged</code>. Both builds failed identically.</span></li>
-    <li><span><code>pgrep -f pattern</code> returns a hit. The hit is its own command line.</span></li>
-    <li><span>52,667 IDS rules loaded, 0 alerts on a port scan. By the rules as written, the enabled scan rules match specific content or count repeats on one port, and the scan touched each port once or twice. The positive-control scan is still to run.</span></li>
-    <li><span>Seven unit tests pass. All seven encode the same wrong assumption the code does.</span></li></ol>
-    <div class="ff">Same defect, different costumes: <b>a check that is correct about what it examined, and silent about what was actually asked.</b> The fix isn't more tests. It's running the thing against real data you didn't author.</div>`;
-  faults.querySelector('.fcount').textContent = String(faults.querySelectorAll('li').length).padStart(2, '0') + ' ENTRIES';
-  world.appendChild(faults);
-  // The fault log sits right of World Cup and above Cactus, placed from its real height so it never covers a card.
-  const placeFaults = () => { FAULTS.y = modEls.cactus.offsetTop - faults.offsetHeight - 40; faults.style.top = FAULTS.y + 'px'; };
+  // These observations are recorded in portfolio commit b8b190ee7171b3d4f300d031100495c2d3f14871
+  // (2026-10-28). The month below dates that record, not the original investigation.
+  const JOURNAL_ENTRIES = [
+  {
+    "title": "Two hosts or four?",
+    "observation": "The same nmap -sn command found two hosts without elevated privileges and four as root on the same network.",
+    "finding": "The discovery result changed with the privileges used to run the command.",
+    "work": "I compared the two runs on the same network and documented the privilege-dependent result."
+  },
+  {
+    "title": "Following DNS beyond the network namespace",
+    "observation": "A TCP probe indicated blocked network access, while DNS still resolved inside the sandbox.",
+    "finding": "DNS reached the system resolver through the io.systemd.Resolve Unix socket.",
+    "work": "I traced the resolver path. The package sandbox blocks that socket and reruns the DNS control on each check."
+  },
+  {
+    "title": "Reading the build behind the diff",
+    "observation": "A package comparison returned unchanged.",
+    "finding": "Both builds had failed in the same way, producing the same comparison outcome.",
+    "work": "I checked the underlying build outcomes and documented the shared failure behind the result."
+  },
+  {
+    "title": "Tracing a process-search self-match",
+    "observation": "A pgrep -f pattern search returned a matching process.",
+    "finding": "The hit was the search command line itself, which contained the pattern.",
+    "work": "I inspected the returned command line and identified the self-match."
+  },
+  {
+    "title": "Matching a scan to its detection rules",
+    "observation": "A port scan produced no alerts with 52,667 IDS rules loaded.",
+    "finding": "The enabled rules matched specific content or repeated activity on one port. The scan touched each port only once or twice.",
+    "work": "I reviewed the rule conditions against the scan pattern. A positive-control scan was identified as the next step."
+  },
+  {
+    "title": "Inspecting the assumptions inside a test",
+    "observation": "Seven unit tests returned passing results.",
+    "finding": "The tests shared the same assumption as the implementation they exercised.",
+    "work": "I examined what the tests asserted and documented the shared assumption."
+  }
+];
+  const JOURNAL = { id: 'J-01', key: 'journal', name: 'Investigation Notes' };
+  const journal = document.createElement('button');
+  journal.className = 'journal'; journal.id = 'journal'; journal.dataset.key = 'journal';
+  journal.setAttribute('aria-haspopup', 'dialog'); journal.setAttribute('aria-controls', 'sheet'); journal.setAttribute('aria-expanded', 'false');
+  journal.innerHTML = `<span class="journal-meta">06 FIELD NOTES · OCT 2026</span><span class="journal-title">Investigation Notes</span>
+    <span class="journal-intro">Network discovery, sandbox boundaries, and detection rules.</span><span class="journal-action">Read the entries ↗</span>`;
+  world.appendChild(journal);
+  // Stack rows from measured card heights; writes happen only after all measurements.
+  function placeBoard() {
+    const h = Object.fromEntries(MODS.map(m => [m.key, modEls[m.key].offsetHeight]));
+    const rows = [0, h.osint + 40];
+    rows[2] = rows[1] + Math.max(h.kev, h.beacon) + 40;
+    rows[3] = Math.max(rows[2] + Math.max(h.aur, journal.offsetHeight), core.offsetHeight) + 100;
+    rows[4] = rows[3] + Math.max(h.pyexec, h.spore) + 100;
+    rows[5] = rows[4] + Math.max(h.coursewake, h.chladni) + 40;
+    const yByKey = {osint: rows[0], kev: rows[1], beacon: rows[1], aur: rows[2], pyexec: rows[3], spore: rows[3], coursewake: rows[4], chladni: rows[4], worldcup: rows[5], cactus: rows[5]};
+    MODS.forEach(m => { m.y = yByKey[m.key]; modEls[m.key].style.top = m.y + 'px'; });
+    journal.style.left = '880px'; journal.style.top = rows[2] + 'px';
+    ZONES.systems[2] = rows[3] - 42; ZONES.builds[2] = rows[4] - 42;
+    world.querySelectorAll('.zone').forEach(el => { el.style.top = ZONES[el.dataset.zone][2] + 'px'; });
+  }
 
   const modEls = {};
   const lastLabel = m => m.lastLabel ?? (/^\d/.test(m.last) ? "last commit" : "");
   function modHTML(m) {
     const lbl = lastLabel(m);
-    return `<span class="mh"><span>${m.id}</span><span class="led ${m.status}">${LED[m.status]}</span></span>
+    return `<span class="mh"><span>${m.featured ? "FEATURED · " : ""}${m.id}</span><span class="led ${m.status}">${LED[m.status]}</span></span>
       <span class="mb"><span class="mn">${esc(m.name)}</span><span class="md">${esc(m.line)}</span></span>
-      <span class="mf"><span><b>${esc(m.lang)}</b></span><span>${lbl ? lbl + " " : ""}<b>${esc(m.last)}</b></span></span>`;
+      <span class="mf"><span><b>${esc(m.lang)}</b></span><span>${lbl ? lbl + " " : ""}<b>${esc(m.last)}</b></span>${m.featured ? '<span class="project-action">Explore project ↗</span>' : ""}</span>`;
   }
   for (const m of MODS) {
-    const b = document.createElement('button'); b.className = 'mod'; b.style.left = m.x + 'px'; b.style.top = m.y + 'px';
-    b.dataset.key = m.key; b.setAttribute('aria-haspopup', 'dialog'); b.setAttribute('aria-controls', 'sheet'); b.innerHTML = modHTML(m);
+    const b = document.createElement('button'); b.className = m.featured ? 'mod featured' : 'mod'; b.style.left = m.x + 'px'; b.style.top = m.y + 'px';
+    b.dataset.key = m.key; b.setAttribute('aria-haspopup', 'dialog'); b.setAttribute('aria-controls', 'sheet'); b.setAttribute('aria-expanded', 'false'); b.innerHTML = modHTML(m);
     world.appendChild(b); modEls[m.key] = b;
   }
   $('hMods').textContent = `${MODS.length} MODULES`;
@@ -391,10 +676,15 @@ body.listmode #depth { visibility: hidden; }
     const pad = 60, s = clampS(Math.min((r.width - pad * 2) / (maxx - minx), (r.height - pad * 2) / (maxy - miny)));
     cam.s = s; cam.x = (r.width - (maxx - minx) * s) / 2 - minx * s; cam.y = (r.height - (maxy - miny) * s) / 2 - miny * s; apply();
   }
-  // Home: the whole board if it fits at 62% or more; otherwise 62% (readable) centred on the whole board, not just the core.
+  // Home frames the entire core, selected security work, and compact journal teaser.
   function home() {
-    fit(); if (cam.s >= 0.62) return; const r = stage.getBoundingClientRect(), b = bbox(); cam.s = 0.62;
-    cam.x = r.width / 2 - (b.minx + b.maxx) / 2 * cam.s; cam.y = r.height / 2 - (b.miny + b.maxy) / 2 * cam.s; apply();
+    const r = stage.getBoundingClientRect();
+    const height = Math.max(core.offsetHeight, journal.offsetTop + journal.offsetHeight, modEls.aur.offsetTop + modEls.aur.offsetHeight);
+    const width = 1160, top = -42, padX = 48, padY = 38;
+    cam.s = clampS(Math.min(1, (r.width - padX * 2) / width, (r.height - padY * 2 - 30) / (height - top)));
+    cam.x = (r.width - width * cam.s) / 2;
+    cam.y = (r.height - 30 - (height - top) * cam.s) / 2 - top * cam.s;
+    apply();
   }
   function zoomAt(f, px, py) {
     const s = clampS(cam.s * f), k = s / cam.s; cam.x = px - (px - cam.x) * k; cam.y = py - (py - cam.y) * k; cam.s = s; apply();
@@ -451,11 +741,11 @@ body.listmode #depth { visibility: hidden; }
   window.addEventListener('pointerup', end); window.addEventListener('pointercancel', end); window.addEventListener('blur', () => end());
   stage.addEventListener('pointerleave', () => { ptr = null; $('xv').hidden = $('xhz').hidden = true; });
   stage.addEventListener('wheel', e => { e.preventDefault(); dirty = true; const r = stage.getBoundingClientRect(); zoomAt(Math.exp(-e.deltaY * 0.0015), e.clientX - r.left, e.clientY - r.top); }, { passive: false });
-  stage.addEventListener('click', e => { if (moved > 6 && e.detail !== 0) { moved = 0; return; } const b = e.target.closest('.mod'); if (b) open(b.dataset.key); });
+  stage.addEventListener('click', e => { if (moved > 6 && e.detail !== 0) { moved = 0; return; } const b = e.target.closest('.mod, .journal'); if (b) open(b.dataset.key); });
   // Tab to a module that is off screen: pan it into view (no zoom change) instead of letting the stage scroll.
   stage.addEventListener('focusin', e => {
     if (drag || !e.target.matches(':focus-visible')) return;   // a mouse or touch press is about to click it: don't move it away
-    let el = e.target.closest('.mod, .core, .faults'); if (!el) return;
+    let el = e.target.closest('.mod, .core, .journal'); if (!el) return;
     const r = stage.getBoundingClientRect(), m = 40, right = r.right - ($('sheet').classList.contains('open') ? Math.min(440, r.width) : 0);
     let b = el.getBoundingClientRect(); if (b.height > r.height - 2 * m || b.width > right - r.left - 2 * m) { el = e.target; b = el.getBoundingClientRect(); }
     let dx = 0, dy = 0;
@@ -465,6 +755,7 @@ body.listmode #depth { visibility: hidden; }
   });
   $('zIn').onclick = () => { dirty = true; const r = stage.getBoundingClientRect(); zoomAt(1.25, r.width / 2, r.height / 2); };
   $('zOut').onclick = () => { dirty = true; const r = stage.getBoundingClientRect(); zoomAt(0.8, r.width / 2, r.height / 2); };
+  $('zHome').onclick = () => { dirty = true; close(); home(); };
   $('zFit').onclick = () => { dirty = true; close(); fit(); };
   window.addEventListener('keydown', e => {
     if (e.ctrlKey || e.metaKey || e.altKey || !(e.target instanceof Element)) return;   // leave browser zoom and shortcuts alone
@@ -473,13 +764,15 @@ body.listmode #depth { visibility: hidden; }
     if (document.body.classList.contains('sheetopen') || e.target.closest('#sheet, #list') || !$('list').hidden) return;
     const k = { ArrowLeft: [60, 0], ArrowRight: [-60, 0], ArrowUp: [0, 60], ArrowDown: [0, -60] }[e.key];
     if (k) { e.preventDefault(); dirty = true; cam.x += k[0]; cam.y += k[1]; apply(); }
+    if (e.key === 'Home') { e.preventDefault(); dirty = true; home(); }
     if (e.key === '+' || e.key === '=') { dirty = true; $('zIn').click(); }
     if (e.key === '-') { dirty = true; $('zOut').click(); }
   });
   document.addEventListener('click', e => {
-    if (!e.target.closest('.toFaults')) return; e.preventDefault();
-    if ($('list').hidden) { dirty = true; focusOn(faults); faults.tabIndex = -1; faults.focus({ preventScroll: true }); }
-    else { const f = $('list').querySelector('.faults'); if (f) { f.tabIndex = -1; f.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' }); f.focus({ preventScroll: true }); } }
+    if (!e.target.closest('.browse')) return;
+    e.preventDefault(); setView('list');
+    const first = $('list').querySelector('.mod');
+    first?.focus({preventScroll:true}); first?.scrollIntoView({block:'start', behavior: motion.reduced() ? 'auto' : 'smooth'});
   });
 
   // ---------- spec sheet ----------
@@ -490,69 +783,103 @@ body.listmode #depth { visibility: hidden; }
     return `<div class="sh-top"><span>${m.id} · ${LED[m.status]}</span><button class="tbtn" id="shClose">Close<span class="kbd"> · Esc</span></button></div>
       <h2 id="shTitle" tabindex="-1">${esc(m.name)}</h2><p class="lead">${esc(m.line)}</p>
       <div class="acts">${acts}</div>
-      <dl class="spec"><div><dt>Measures</dt><dd>${esc(m.measures)}</dd></div><div><dt>Stack</dt><dd>${esc(m.lang)}</dd></div><div><dt>${lbl ? lbl : "Version"}</dt><dd>${esc(m.last)}</dd></div></dl>
-      ${m.facts.length ? `<div class="blk"><h3>Measured</h3><ul>${m.facts.map(f => `<li>${flags(f)}</li>`).join("")}</ul></div>` : ""}
-      ${m.cant.length ? `<div class="blk cant"><h3>Cannot establish</h3><ul>${m.cant.map(f => `<li>${flags(f)}</li>`).join("")}</ul></div>` : ""}`;
+      <dl class="spec"><div><dt>Overview</dt><dd>${esc(m.summary)}</dd></div><div><dt>Stack</dt><dd>${esc(m.lang)}</dd></div><div><dt>${lbl ? lbl : "Version"}</dt><dd>${esc(m.last)}</dd></div></dl>
+      ${m.facts.length ? `<div class="blk"><h3>Inside the project</h3><ul>${m.facts.map(f => `<li>${flags(f)}</li>`).join("")}</ul></div>` : ""}
+      ${m.note ? `<p class="project-note">${esc(m.note)}</p>` : ""}`;
   }
-  let current = null, opener = null;
+
+  function journalHTML() {
+    return `<div class="sh-top"><span>J-01 · 06 FIELD NOTES</span><button class="tbtn" id="shClose">Close<span class="kbd"> · Esc</span></button></div>
+      <h2 id="shTitle" tabindex="-1">Investigation Notes</h2>
+      <p class="lead">Observations, explanations, and the work behind them.</p>
+      <p class="journal-provenance">Recorded October 2026. Dates refer to the portfolio record, not the original investigation dates.</p>
+      <ol class="journal-entries">${JOURNAL_ENTRIES.map(e => `<li><time datetime="2026-10">Recorded October 2026</time><h3>${esc(e.title)}</h3><dl>
+        <div><dt>Observation</dt><dd>${esc(e.observation)}</dd></div><div><dt>Finding</dt><dd>${esc(e.finding)}</dd></div><div><dt>My work</dt><dd>${esc(e.work)}</dd></div></dl></li>`).join('')}</ol>
+      <p class="journal-provenance"><a href="https://github.com/blurxy/blurxy-worldcup26/blob/b8b190ee7171b3d4f300d031100495c2d3f14871/index.html" target="_blank" rel="noopener">Source notes ↗</a></p>`;
+  }
+  const item = key => key === 'journal' ? JOURNAL : MODS.find(m => m.key === key);
+  const boardItem = key => key === 'journal' ? journal : modEls[key];
+  const hashKey = () => { try { const k = decodeURIComponent(location.hash.slice(1)); return k === 'faults' ? 'journal' : k; } catch (_) { return ''; } };
+  let current = null, opener = null, popping = false;
+  function syncAccessibility() {
+    const list = !$('list').hidden, modal = !!current && window.innerWidth <= 760;
+    stage.inert = list || modal; $('list').inert = modal;
+    document.querySelector('.bar').inert = modal;
+    document.querySelector('.zoomer').inert = list || modal;
+    if (modal) $('sheet').setAttribute('aria-modal', 'true'); else $('sheet').removeAttribute('aria-modal');
+    document.querySelectorAll('.mod, .journal').forEach(el => el.setAttribute('aria-expanded', String(el.dataset.key === current)));
+  }
   function open(key, fromPop) {
-    const m = MODS.find(x => x.key === key); if (!m) return; current = key; dirty = true;
+    const m = item(key); if (!m) return;
+    const unchanged = current === key, switching = current !== null && !unchanged; current = key; dirty = true;
     const a = document.activeElement; if (a && a !== document.body && !a.closest('#sheet')) opener = a;
-    const sh = $('sheet'); sh.innerHTML = sheetHTML(m); sh.inert = false; sh.scrollTop = 0; sh.classList.add('open'); document.body.classList.add('sheetopen'); motion.sync();
-    if (window.innerWidth <= 760) { $('list').inert = true; stage.inert = true; }   // the sheet covers the whole screen: keep Tab inside it
-    document.querySelectorAll('.mod').forEach(el => el.setAttribute('aria-expanded', String(el.dataset.key === key)));
-    Object.values(modEls).forEach(el => el.classList.toggle('sel', el.dataset.key === key));
+    const sh = $('sheet'); sh.innerHTML = key === 'journal' ? journalHTML() : sheetHTML(m); sh.inert = false; sh.scrollTop = 0;
+    sh.classList.add('open'); document.body.classList.add('sheetopen'); motion.sync(); syncAccessibility();
+    [...Object.values(modEls), journal].forEach(el => el.classList.toggle('sel', el.dataset.key === key));
     motion.highlight(key);
     $('crumb').textContent = `board / blurxy / ${m.id.toLowerCase()} ${m.name}`;
-    $('shClose').onclick = close; $('shTitle').focus({ preventScroll: true }); $('live').textContent = `${m.name} spec sheet opened`;
-    if ($('list').hidden) focusOn(modEls[key]);
-    if (!fromPop) { try { history.pushState({ sheet: key }, '', '#' + encodeURIComponent(key)); } catch (e) {} }
+    $('shClose').onclick = close; $('shTitle').focus({preventScroll:true}); $('live').textContent = `${m.name} opened`;
+    if ($('list').hidden) focusOn(boardItem(key));
+    // One history entry per open sheet: switching sheets replaces it, so Esc / Back always closes rather than reopening the previous one.
+    if (!fromPop && !unchanged) { try { history[switching ? 'replaceState' : 'pushState']({sheet:key}, '', '#' + encodeURIComponent(key)); } catch (_) {} }
   }
   function close() {
     if (!current) return; const key = current; current = null;
-    const sh = $('sheet'); sh.classList.remove('open'); sh.inert = true; document.body.classList.remove('sheetopen'); motion.sync();
-    $('list').inert = false; stage.inert = !$('list').hidden;
-    document.querySelectorAll('.mod').forEach(el => el.setAttribute('aria-expanded', 'false'));
-    setTimeout(() => { if (!current) sh.innerHTML = ''; }, 260);   // after the slide-out, so no stale links stay behind
-    Object.values(modEls).forEach(el => el.classList.remove('sel'));
-    motion.highlight(null);
+    const sh = $('sheet'); sh.classList.remove('open'); sh.inert = true; document.body.classList.remove('sheetopen');
+    motion.sync(); syncAccessibility();
+    setTimeout(() => { if (!current) sh.innerHTML = ''; }, motion.reduced() ? 0 : 360);
+    [...Object.values(modEls), journal].forEach(el => el.classList.remove('sel')); motion.highlight(null);
     $('crumb').textContent = 'board / blurxy / all modules';
     const shown = el => el && el.isConnected && el.getClientRects().length && !el.closest('[inert],[hidden]');
-    const back = shown(opener) ? opener : ($('list').hidden ? modEls[key] : $('list').querySelector(`.mod[data-key="${key}"]`));
-    opener = null; if (shown(back)) back.focus({ preventScroll: true });
-    if (!popping && location.hash) { try { history.back(); } catch (e) {} }
+    const back = shown(opener) ? opener : ($('list').hidden ? boardItem(key) : $('list').querySelector(`[data-key="${key}"]`));
+    opener = null; if (shown(back)) back.focus({preventScroll:true});
+    if (!popping && location.hash) { try {
+      if (history.state?.sheet === key) history.back();
+      else history.replaceState(null, '', location.pathname + location.search);
+    } catch (_) {} }
   }
+  // Narrow sheets cover the page; contain keyboard focus while the background is inert.
+  $('sheet').addEventListener('keydown', e => {
+    if (e.key !== 'Tab' || !current || window.innerWidth > 760) return;
+    const all = [...$('sheet').querySelectorAll('a[href],button:not([disabled]),[tabindex="0"]')];
+    if (!all.length) return;
+    const first = all[0], last = all[all.length-1], active = document.activeElement;
+    if (e.shiftKey && (active === first || active === $('shTitle'))) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && active === last) { e.preventDefault(); first.focus(); }
+  });
 
   // ---------- list view ----------
   function buildList() {
-    const inner = $('listInner'); inner.innerHTML = "";
-    const c = core.cloneNode(true); c.querySelectorAll('[id]').forEach(el => el.removeAttribute('id')); inner.appendChild(c);
-    for (const z of ["live", "measure", "sim", "systems"]) {
+    const inner = $('listInner'); inner.innerHTML = '';
+    inner.appendChild(core.cloneNode(true));
+    for (const z of ['security', 'systems', 'builds']) {
       const h = document.createElement('div'); h.className = 'zone'; h.textContent = ZONES[z][0]; inner.appendChild(h);
       const grid = document.createElement('div'); grid.className = 'mods';
-      for (const m of MODS.filter(x => x.zone === z)) { const b = document.createElement('button'); b.className = 'mod'; b.dataset.key = m.key; b.setAttribute('aria-haspopup', 'dialog'); b.setAttribute('aria-controls', 'sheet'); b.innerHTML = modHTML(m); b.onclick = () => open(m.key); grid.appendChild(b); }
+      for (const m of MODS.filter(x => x.zone === z)) {
+        const b = document.createElement('button'); b.className = m.featured ? 'mod featured' : 'mod'; b.dataset.key = m.key;
+        b.setAttribute('aria-haspopup', 'dialog'); b.setAttribute('aria-controls', 'sheet'); b.setAttribute('aria-expanded', String(current === m.key));
+        b.innerHTML = modHTML(m); b.onclick = () => open(m.key); grid.appendChild(b);
+      }
       inner.appendChild(grid);
     }
-    const f = faults.cloneNode(true); f.removeAttribute('id'); inner.appendChild(f);
+    const collection = document.createElement('div'); collection.className = 'journal-collection';
+    const h = document.createElement('div'); h.className = 'zone'; h.textContent = 'From the journal'; collection.appendChild(h);
+    const j = journal.cloneNode(true); j.removeAttribute('id'); j.onclick = () => open('journal'); collection.appendChild(j); inner.appendChild(collection);
   }
   function setView(v) {
-    const list = v === 'list'; if (list === !$('list').hidden) return;   // already there: clicking the active view does nothing
+    const list = v === 'list'; if (list === !$('list').hidden) return;
     $('list').hidden = !list; $('vList').setAttribute('aria-pressed', String(list)); $('vBoard').setAttribute('aria-pressed', String(!list));
-    document.body.classList.toggle('listmode', list);
-    motion.sync();
-    stage.inert = list; document.querySelector('.zoomer').inert = list;   // the covered board leaves the tab order and the accessibility tree
-    if (list) buildList(); else requestAnimationFrame(() => { home(); if (current) focusOn(modEls[current]); });
+    document.body.classList.toggle('listmode', list); motion.sync();
+    if (list) buildList(); else requestAnimationFrame(() => { home(); if (current) focusOn(boardItem(current)); });
+    syncAccessibility();
   }
   $('vBoard').onclick = () => setView('board'); $('vList').onclick = () => setView('list');
-  let popping = false;
-  window.addEventListener('popstate', () => {
-    const k = decodeURIComponent((location.hash || '').slice(1));
-    const valid = MODS.some(x => x.key === k);
-    popping = true;
-    try { if (valid && k !== current) open(k, true); else if (!valid && current) close(); }
+  function followHash() {
+    const k = hashKey(); popping = true;
+    try { if (item(k) && k !== current) open(k, true); else if (!item(k) && current) close(); }
     finally { popping = false; }
-  });
-
+  }
+  window.addEventListener('popstate', followHash); window.addEventListener('hashchange', followHash);
 
   // ---------- v2 motion controller ----------
   // Geometry is measured only on layout changes. WAAPI follows cached orthogonal points;
@@ -565,7 +892,11 @@ body.listmode #depth { visibility: hidden; }
     let bounds = stage.getBoundingClientRect(), routes = [], boot = [], pulse = null, scanAnimation = null;
     let booted = false, bootTimer = 0, pulseTimer = 0, clockTimer = 0, pulseIndex = 0;
     let raf = 0, x = 0, y = 0, tx = 0, ty = 0, previous = 0, hovering = null;
-    const allowed = () => !preference.matches && !document.hidden && !$('stage').classList.contains('drag') &&
+    // Visitor's Motion toggle (WCAG 2.2.2 pause control). Remembered per browser; storage may be blocked, so default on.
+    let enabled = true; try { enabled = localStorage.getItem('blurxy-motion') !== 'off'; } catch (_) {}
+    // Ambient pulses stop after this long without input and resume on the next one, so an idle tab costs nothing.
+    const IDLE_MS = 20000; let idleTimer = 0, idled = false;
+    const allowed = () => enabled && !preference.matches && !document.hidden && !$('stage').classList.contains('drag') &&
       !document.body.classList.contains('listmode') && !document.body.classList.contains('sheetopen');
     const animate = (el, frames, timing) => el.animate(frames, timing);
     function highlight(key) {
@@ -589,8 +920,21 @@ body.listmode #depth { visibility: hidden; }
     function timecode() {
       const time = new Date(); $('hClock').textContent = 'LOCAL ' + [time.getHours(), time.getMinutes(), time.getSeconds()].map(n => String(n).padStart(2, '0')).join(':');
     }
+    // The clock is independent of the pulses: it ticks while motion is on and the tab is visible, and is hidden
+    // (never left showing a stale time) when motion is paused or reduced.
+    function clockSync() {
+      const on = enabled && !preference.matches && !document.hidden;
+      $('hClock').hidden = !on;
+      if (on && !clockTimer) { timecode(); clockTimer = setInterval(timecode, 1000); }
+      else if (!on && clockTimer) { clearInterval(clockTimer); clockTimer = 0; }
+    }
+    function armIdle() {
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => { idled = true; stopAmbient(); }, IDLE_MS);
+    }
+    function poke() { if (idled) { idled = false; ambient(); } else if (pulseTimer || pulse) armIdle(); }
     function stopAmbient() {
-      clearTimeout(pulseTimer); pulseTimer = 0; clearInterval(clockTimer); clockTimer = 0;
+      clearTimeout(pulseTimer); pulseTimer = 0;
       if (pulse) { pulse.animation.cancel(); pulse.el.remove(); pulse = null; }
       if (scanAnimation) { scanAnimation.cancel(); scanAnimation = null; }
       scan.style.opacity = 0;
@@ -610,13 +954,11 @@ body.listmode #depth { visibility: hidden; }
       animation.onfinish = () => { el.remove(); pulse = null; pulseTimer = setTimeout(nextPulse, 1700); };
     }
     function ambient() {
-      stopAmbient(); if (!allowed() || !booted) return;
-      timecode(); clockTimer = setInterval(timecode, 1000);
-      if (!hovering) {
-        pulseTimer = setTimeout(nextPulse, 1600);
-        scan.style.opacity = '.012';
-        scanAnimation = animate(scan, [{transform: 'translateY(0)'}, {transform: 'translateY(6px)'}], {duration: 18000, iterations: Infinity, easing: 'linear'});
-      }
+      // Pulses run only for a mouse user who is present: not on touch-only devices, not after IDLE_MS of no input.
+      // (The former full-stage scanline animated forever at opacity .012, invisible but ~60 compositor frames/s; removed.)
+      stopAmbient(); if (!allowed() || !booted || idled || !fine.matches) return;
+      if (!hovering) pulseTimer = setTimeout(nextPulse, 1600);
+      armIdle();
     }
     function finishBoot() {
       clearTimeout(bootTimer); bootTimer = 0;
@@ -628,7 +970,7 @@ body.listmode #depth { visibility: hidden; }
       if (booted) return;
       if (!allowed() || dirty || location.hash) { finishBoot(); ambient(); return; }
       stage.classList.add('booting');
-      boot.push(animate(core, [{opacity: 0}, {opacity: 1}], {duration: 600, delay: 80, fill: 'both', easing: 'ease-out'}));
+      // The core card (who / role / contact) is readable from the first frame; only the board around it powers on.
       // A deterministic clockwise sweep, beginning above the core.
       routes.sort((a,b) => angle(a) - angle(b));
       function angle(r) { const m = MODS.find(m => m.key === r.k); return (Math.atan2(m.y - CORE.y, m.x - CORE.x) + Math.PI/2 + Math.PI*2) % (Math.PI*2); }
@@ -646,21 +988,32 @@ body.listmode #depth { visibility: hidden; }
         });
         boot.push(animate(modEls[r.k], [{opacity: 0, transform: 'translateY(7px)'}, {opacity: 1, transform: 'translateY(0)'}], {duration: 540, delay: delay + 650, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'both'}));
       });
-      [faults, ...world.querySelectorAll('.zone')].forEach(el => boot.push(animate(el, [{opacity: 0}, {opacity: 1}], {duration: 650, delay: 950, fill: 'both'})));
+      [journal, ...world.querySelectorAll('.zone')].forEach(el => boot.push(animate(el, [{opacity: 0}, {opacity: 1}], {duration: 650, delay: 950, fill: 'both'})));
       bootTimer = setTimeout(() => { finishBoot(); ambient(); }, 1500 + routes.length * 65);
     }
     function sync() {
+      clockSync();
       if (!allowed()) { finishBoot(); stopAmbient(); clearDepth(); }
       else ambient();
     }
+    function setEnabled(on) {
+      enabled = on; $('vMotion').setAttribute('aria-pressed', String(on));
+      try { localStorage.setItem('blurxy-motion', on ? 'on' : 'off'); } catch (_) {}
+      idled = false; sync();
+    }
+    $('vMotion').setAttribute('aria-pressed', String(enabled));
+    $('vMotion').addEventListener('click', () => setEnabled(!enabled));
     function wire(paths) {
       // Font loads / breakpoint changes replace geometry, never replay the boot.
       if (boot.length) finishBoot();
       routes = paths; highlight(hovering); if (booted) ambient();
     }
     function interrupt() { if (!booted) { finishBoot(); ambient(); } }
+    // Any real input wakes idle pulses (and pushes the idle deadline back).
+    for (const t of ['pointerdown', 'keydown', 'wheel']) document.addEventListener(t, poke, {passive: true, capture: true});
     stage.addEventListener('pointermove', e => {
       if (e.pointerType !== 'mouse' || !e.isPrimary) return;
+      poke();
       if (e.buttons) { stopAmbient(); clearDepth(); return; }
       if (allowed()) aim(Math.max(-1,Math.min(1, (e.clientX-bounds.left)/bounds.width*2-1)), Math.max(-1,Math.min(1,(e.clientY-bounds.top)/bounds.height*2-1)));
     }, {passive: true});
@@ -676,31 +1029,34 @@ body.listmode #depth { visibility: hidden; }
       if (key === hovering) return; hovering = key; highlight(key); ambient();
     });
     stage.addEventListener('pointerleave', () => { hovering = null; highlight(null); ambient(); });
-    stage.addEventListener('focusin', e => { interrupt(); highlight(e.target.closest('.mod')?.dataset.key); });
+    // Only keyboard focus lights a trace; focus restored by a mouse/touch close must not leave a stuck highlight.
+    stage.addEventListener('focusin', e => { interrupt(); highlight(e.target.matches(':focus-visible') ? e.target.closest('.mod')?.dataset.key : hovering); });
     stage.addEventListener('focusout', () => highlight(hovering));
     preference.addEventListener('change', sync); fine.addEventListener('change', () => { clearDepth(); sync(); });
     document.addEventListener('visibilitychange', sync);
     window.addEventListener('blur', () => { interrupt(); stopAmbient(); clearDepth(); });
     window.addEventListener('focus', sync);
     window.addEventListener('resize', () => { bounds = stage.getBoundingClientRect(); clearDepth(); });
-    timecode();
+    clockSync();
     return {wire, highlight, sync, powerOn, reduced: () => preference.matches, rect: () => bounds};
   })();
 
   // One breakpoint for CSS and JS. Narrowing past it switches to the list; widening keeps whatever view is showing.
   const narrow = matchMedia('(max-width: 760px)');
-  narrow.addEventListener('change', e => { requestAnimationFrame(drawTraces); if (e.matches) setView('list'); });
+  narrow.addEventListener('change', e => { requestAnimationFrame(() => { placeBoard(); drawTraces(); }); if (e.matches) setView('list'); syncAccessibility(); });
   let rz = 0;
-  window.addEventListener('resize', () => { if (rz) return; rz = requestAnimationFrame(() => { rz = 0; if (!$('list').hidden) return; if (!dirty) home(); else apply(); if (current) focusOn(modEls[current]); }); });
-  const start = () => requestAnimationFrame(() => { if (narrow.matches) setView('list'); placeFaults(); drawTraces(); if ($('list').hidden) home(); motion.powerOn(); const h0 = decodeURIComponent((location.hash || '').slice(1)); if (MODS.some(x => x.key === h0)) { try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {} open(h0); } });
+  window.addEventListener('resize', () => { if (rz) return; rz = requestAnimationFrame(() => { rz = 0; syncAccessibility(); if (!$('list').hidden) return; if (!dirty) home(); else apply(); if (current) focusOn(boardItem(current)); }); });
+  const start = () => requestAnimationFrame(() => { if (narrow.matches) setView('list'); placeBoard(); drawTraces(); if ($('list').hidden) home(); stage.classList.remove('pending'); motion.powerOn(); const h0 = hashKey(); if (item(h0)) { try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {} open(h0); } });
   if (document.fonts && document.fonts.status !== 'loaded') {
     let started = false;
     const launch = () => { if (started) return; started = true; start(); };
-    const fallback = setTimeout(launch, 250);
+    // The world stays hidden (#stage.pending) until fonts are in, so waiting costs no visible flash; 1 s covers a cold
+    // first visit, after which a late font only re-measures and the boot reveal is cut short rather than delayed further.
+    const fallback = setTimeout(launch, 1000);
     document.fonts.ready.then(() => {
       clearTimeout(fallback);
       if (!started) launch();
-      else { placeFaults(); drawTraces(); if ($('list').hidden && !dirty) home(); }
+      else { placeBoard(); drawTraces(); if ($('list').hidden && !dirty) home(); }
     });
   } else start();
 })();
