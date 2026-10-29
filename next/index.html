@@ -197,10 +197,9 @@ body.listmode #depth { visibility: hidden; }
 .core .links a { font-size: 13.5px; padding: 7px 10px; }
 .core .browse { display: inline-block; margin-top: 16px; color: var(--muted); font: 500 12px var(--mono); text-decoration: none; }
 .core .browse:hover { color: var(--amber); }
-/* The handle is the identity; the name signs the card, on the line that already exists (no extra height). */
+/* Card footer: the browse action on its own line. */
 .core .foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 16px; margin-top: 16px; }
 .core .foot .browse { margin-top: 0; }
-.core .sig { font: 500 12px var(--mono); color: #aab3bd; letter-spacing: .04em; }
 .mod { width: 280px; }
 .mod.featured { width: 600px; border-top: 2px solid var(--amber); background: linear-gradient(125deg, #181a17, var(--panel) 65%); }
 .mod.featured .mb { padding: 18px; gap: 10px; }
@@ -581,13 +580,13 @@ body.listmode #depth { visibility: hidden; }
   const core = document.createElement('section');
   core.className = 'core'; core.style.left = CORE.x + 'px'; core.style.top = CORE.y + 'px';
   core.innerHTML = `<div class="tag">FOLLOW THE EVIDENCE</div>
-    <h1>blurxy</h1>
+    <h1>rafiul bari</h1>
     <p class="role">Cybersecurity student at CUNY City Tech</p>
     <p class="value">I investigate how systems behave and build tools that make the findings useful.</p>
     <p class="seeking">Seeking security internships and<br>full-time entry-level roles.</p>
     <p class="education">CUNY New York City College of Technology · Cybersecurity<br>Coursework complete December 2026<br>Commencement Spring 2027</p>
     <div class="links" aria-label="Contact"><a href="mailto:rafiulbari70@gmail.com" draggable="false">rafiulbari70@gmail.com</a><a href="https://linkedin.com/in/rafiul-bari" target="_blank" rel="noopener" draggable="false">LinkedIn ↗</a><a href="https://github.com/blurxy" target="_blank" rel="noopener" draggable="false">GitHub ↗</a>${RESUME_URL ? `<a href="${esc(RESUME_URL)}" target="_blank" rel="noopener" draggable="false">Resume ↗</a>` : ''}</div>
-    <div class="foot"><a href="#projects" class="browse" draggable="false">Explore all ${MODS.length} projects ↓</a><span class="sig">— Rafiul Bari</span></div>`;
+    <div class="foot"><a href="#projects" class="browse" draggable="false">Explore all ${MODS.length} projects ↓</a></div>`;
   world.appendChild(core);
 
   for (const [key, [label, x, y]] of Object.entries(ZONES)) {
