@@ -126,7 +126,7 @@ body.listmode #sheet { top: calc(44px + env(safe-area-inset-top, 0px)); }
 @media (min-width: 761px) { body.sheetopen .zoomer { right: calc(min(440px, 100%) + 14px); } }
 @media (max-width: 760px) { body.sheetopen .zoomer { visibility: hidden; } }
 @media (max-width: 1100px) { body.sheetopen .hud { display: none; } }
-@media (max-width: 760px) { .core h1 { font-size: 38px; } .crumb { display: none; } }
+@media (max-width: 760px) { .core h1 { font-size: 38px; } .crumb { display: none; } .core .seeking br { display: none; } }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
 /* v2 / quiet instrument. Text and chrome stay on a flat plane; only the substrate tilts.
@@ -613,7 +613,7 @@ body.listmode #depth { visibility: hidden; }
     <h1>rafiul bari</h1>
     <p class="role">Cybersecurity student at CUNY City Tech</p>
     <p class="value">I investigate how systems behave and build tools that make the findings useful.</p>
-    <p class="seeking">Graduating this December — seeking security<br>internships and full-time entry-level roles.</p>
+    <p class="seeking">Graduating this December — seeking security <br>internships and full-time entry-level roles.</p>
     <p class="education">CUNY New York City College of Technology · Cybersecurity<br>Coursework complete December 2026<br>Commencement Spring 2027</p>
     <div class="links" aria-label="Contact"><a href="mailto:rafiulbari70@gmail.com" draggable="false">rafiulbari70@gmail.com</a><a href="https://linkedin.com/in/rafiul-bari" target="_blank" rel="noopener" draggable="false">LinkedIn ↗</a><a href="https://github.com/blurxy" target="_blank" rel="noopener" draggable="false">GitHub ↗</a>${RESUME_URL ? `<a href="${esc(RESUME_URL)}" target="_blank" rel="noopener" draggable="false">Resume ↗</a>` : ''}</div>
     <div class="foot"><a href="#projects" class="browse" draggable="false">Explore all ${MODS.length} projects ↓</a></div>`;
