@@ -465,7 +465,7 @@ body.listmode #depth { visibility: hidden; }
     "y": 760,
     "status": "repo",
     "name": "spore",
-    "line": "A peer-to-peer community mesh with channels and presence over a LAN or phone hotspot.",
+    "line": "A serverless peer-to-peer mesh for a local network: peers find each other, authenticate, and exchange signed blocks.",
     "lang": "JavaScript",
     "last": "2026-09-18",
     "links": [
@@ -475,10 +475,10 @@ body.listmode #depth { visibility: hidden; }
       ]
     ],
     "facts": [
-      "Authenticated peer connections share a replicated append-only log.",
-      "Five roles—RELAY, VAULT, INDEX, FORGE, and BEACON—run on one device and distribute across peers as they join."
+      "Working now: LAN discovery, Noise_XX-authenticated connections, and signed-block exchange on a replicated append-only log.",
+      "Designed next: channels, presence, and five roles (RELAY, VAULT, INDEX, FORGE, BEACON) that distribute across peers; BEACON exists today."
     ],
-    "summary": "Connects communities without an uplink, registry, bootstrap node, or signalling server, with an empty dependencies list."
+    "summary": "Built to connect a community without an uplink, registry, bootstrap node, or signalling server, with an empty dependencies list. An early prototype, tested on one tablet and one laptop on a single access point."
   },
   {
     "id": "L-03",
@@ -490,7 +490,7 @@ body.listmode #depth { visibility: hidden; }
     "name": "Coursewake",
     "line": "Bring Brightspace deadlines, grade estimates, and reminders into one calmer view.",
     "lang": "Chrome MV3",
-    "last": "v0.2.4",
+    "last": "v0.2.5 beta",
     "links": [
       [
         "Chrome Web Store",
@@ -511,7 +511,7 @@ body.listmode #depth { visibility: hidden; }
     "y": 1030,
     "status": "repo",
     "name": "chladni-tui",
-    "line": "Turn live audio into a first-principles membrane simulation, rendered in the terminal.",
+    "line": "Turn the frequency content of real recordings into a first-principles membrane simulation, rendered in the terminal.",
     "lang": "Python",
     "last": "2026-09-18",
     "links": [
@@ -525,7 +525,7 @@ body.listmode #depth { visibility: hidden; }
       "Adds modal energies as Σaᵢ²Uᵢ² to model how independent modes contribute.",
       "A single tone produces lines; multiple modes can produce isolated points where their nodes meet."
     ],
-    "summary": "Drives Bessel eigenmodes of a clamped circular membrane with live audio frequencies and renders the resulting patterns in Braille sub-cells."
+    "summary": "Drives Bessel eigenmodes of a clamped circular membrane from frequencies analysed ahead of time from real recordings, and renders the resulting patterns in Braille sub-cells."
   },
   {
     "id": "L-01",
@@ -590,10 +590,10 @@ body.listmode #depth { visibility: hidden; }
   "last": "Independent project",
   "lastLabel": "",
   "links": [],
-  "summary": "An independent futures trading system operating live on funded-evaluation accounts, with a layered control stack around execution and model decisions.",
+  "summary": "An independent futures trading system with a layered control stack around execution and model decisions.",
   "facts": [
     "A kill switch and loss/drawdown circuit breakers sit alongside a preflight gate that halts trading when any dependency is degraded.",
-    "The broker’s written rulebook—contract caps, consistency limits, and daily loss limits—is enforced as hard clamps at order construction.",
+    "The trading rulebook—contract caps, consistency limits, and daily loss limits—is enforced as hard clamps at order construction.",
     "Model-risk controls include purged and walk-forward cross-validation, mandatory transaction-cost floors, explicit overfitting thresholds, and drift monitoring with retrain triggers."
   ]
 }
