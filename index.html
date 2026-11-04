@@ -427,7 +427,7 @@ body.listmode #depth { visibility: hidden; }
     "id": "L-02",
     "key": "osint",
     "zone": "systems",
-    "x": 560,
+    "x": 0,
     "y": 0,
     "status": "live",
     "name": "OSINT Field Kit",
@@ -454,7 +454,7 @@ body.listmode #depth { visibility: hidden; }
     "id": "L-05",
     "key": "kev",
     "zone": "systems",
-    "x": 560,
+    "x": 0,
     "y": 240,
     "status": "live",
     "name": "KEV Watch",
@@ -483,7 +483,7 @@ body.listmode #depth { visibility: hidden; }
     "id": "M-02",
     "key": "beacon",
     "zone": "systems",
-    "x": 880,
+    "x": 320,
     "y": 240,
     "status": "repo",
     "name": "beacon-spectrum",
@@ -507,7 +507,7 @@ body.listmode #depth { visibility: hidden; }
     "id": "M-05",
     "key": "pyexec",
     "zone": "systems",
-    "x": 560,
+    "x": 0,
     "y": 760,
     "status": "repo",
     "name": "py-exec-mcp",
@@ -531,7 +531,7 @@ body.listmode #depth { visibility: hidden; }
     "id": "M-04",
     "key": "spore",
     "zone": "systems",
-    "x": 880,
+    "x": 320,
     "y": 760,
     "status": "repo",
     "name": "spore",
@@ -554,7 +554,7 @@ body.listmode #depth { visibility: hidden; }
     "id": "L-03",
     "key": "coursewake",
     "zone": "builds",
-    "x": 560,
+    "x": 680,
     "y": 1030,
     "status": "beta",
     "name": "Coursewake",
@@ -577,7 +577,7 @@ body.listmode #depth { visibility: hidden; }
     "id": "M-03",
     "key": "chladni",
     "zone": "builds",
-    "x": 880,
+    "x": 1000,
     "y": 1030,
     "status": "repo",
     "name": "chladni-tui",
@@ -601,7 +601,7 @@ body.listmode #depth { visibility: hidden; }
     "id": "L-01",
     "key": "worldcup",
     "zone": "builds",
-    "x": 560,
+    "x": 680,
     "y": 1270,
     "status": "live",
     "name": "World Cup 2026",
@@ -628,7 +628,7 @@ body.listmode #depth { visibility: hidden; }
     "id": "L-04",
     "key": "cactus",
     "zone": "builds",
-    "x": 880,
+    "x": 1000,
     "y": 1270,
     "status": "live",
     "name": "Cactus McCoy",
@@ -648,7 +648,7 @@ body.listmode #depth { visibility: hidden; }
     "note": "Play requires a keyboard and mouse."
   }
 ];
-  const ZONES = { security: ["Testing and enforcing security boundaries", 560, -42], systems: ["Security tools & research", 560, 718], builds: ["Other builds & experiments", 560, 988] };
+  const ZONES = { security: ["Testing and enforcing security boundaries", 560, -42], systems: ["Security tools & research", 0, 718], builds: ["Other builds & experiments", 680, 988] };
   const CORE = { x: 0, y: 0 };
   const LED = { live: "LIVE", repo: "REPO", beta: "BETA", stage: "STAGING", private: "PRIVATE", lab: "LAB" };
 
@@ -812,7 +812,7 @@ body.listmode #depth { visibility: hidden; }
     rows[3] = rows[2] + journal.offsetHeight + 100;
     rows[4] = rows[3] + h.osint + 40;
     rows[5] = rows[4] + Math.max(h.kev, h.beacon) + 40;
-    rows[6] = Math.max(rows[5] + Math.max(h.pyexec, h.spore), core.offsetHeight + 12 + resume.offsetHeight) + 100;
+    rows[6] = rows[4];
     rows[7] = rows[6] + Math.max(h.coursewake, h.chladni) + 40;
     const yByKey = {ids: rows[0], aur: rows[0], haunted: rows[1], trading: rows[1], osint: rows[3], kev: rows[4], beacon: rows[4], pyexec: rows[5], spore: rows[5], coursewake: rows[6], chladni: rows[6], worldcup: rows[7], cactus: rows[7]};
     MODS.forEach(m => { m.y = yByKey[m.key]; modEls[m.key].style.top = m.y + 'px'; modEls[m.key].style.left = m.x + 'px'; });
