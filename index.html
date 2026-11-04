@@ -1030,7 +1030,7 @@ body.listmode #depth { visibility: hidden; }
         <div class="resume-date">${esc(e.dates)}</div><h4>${esc(e.org)}</h4><p class="position">${esc(e.role)}</p>
         ${e.promotion ? `<p class="resume-promotion">${esc(e.promotion)}</p>` : ''}<ul>${e.bullets.map(b => `<li>${esc(b)}</li>`).join('')}</ul></article>`).join('')}</section>
       <section class="resume-section"><h3>Education and certifications</h3><ul class="resume-certifications">${CERTIFICATIONS.map(([name,year]) => `<li><span>${esc(name)}</span><time datetime="${year}">${year}</time></li>`).join('')}</ul>
-        <div class="resume-education"><strong>B.S. in Cybersecurity</strong><p>New York City College of Technology (CUNY)</p><p>Expected December 2026</p><p>Coursework: Network Security; Cryptography and Access Control; Systems Administration; HIPAA/PCI-DSS.</p></div></section>
+        <div class="resume-education"><strong>B.S. in Cybersecurity</strong><p>New York City College of Technology (CUNY)</p><p>Expected December 2026 · Major GPA 3.14</p><p>Coursework: Penetration Testing; Computer Forensics; Cloud Security; Cryptographic Technologies; Network Security; Windows and Linux Systems Administration.</p></div></section>
       <section class="resume-section"><h3>Skills</h3><dl class="resume-skills">${SKILLS.map(([label,detail]) => `<div><dt>${esc(label)}</dt><dd>${esc(detail)}</dd></div>`).join('')}</dl></section>`;
   }
 
