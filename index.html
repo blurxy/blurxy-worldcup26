@@ -730,11 +730,10 @@ body.listmode #depth { visibility: hidden; }
     "dates": "Jul 2025 – Present",
     "promotion": "Promoted from Operations Assistant, July 2026.",
     "bullets": [
-      "Drafted a staff account policy requiring two-factor authentication and semiannual access review; reconciled 48 Slack and 39 Asana accounts against the staff roster through their live APIs to identify accounts for deprovisioning, and audited link sharing across about 7,000 shared-drive files.",
-      "Designed and built an operations ticketing system with tiered intake, director approval above a defined threshold, scope-confirmation gates, and a full audit trail of tier and scope changes; 74 requests tracked so far, 69 resolved, ahead of a staff-wide rollout.",
-      "Migrated 379 attendance and 176 testimonial records, when only 20% carried an email, into a 21-table Airtable base that now holds 165 people and 511 attendances across 19 events; escalated ambiguous identity matches for confirmation and preserved source tables for rollback.",
-      "Built a self-hosted signed-link self-update portal with expiring per-record tokens and no third-party data processing, covered by 1,473 automated checks; personal links are generated for 53 volunteers ahead of launch.",
-      "Administer NeonCRM, Asana, and Google Workspace and build in Airtable, with 54 documented live automations (47 Asana rules, 7 n8n workflows) and a change log for every update, so each change is traceable."
+      "Administer Slack, Asana, and Google Workspace; reconciled 48 Slack and 39 Asana accounts via APIs and audited sharing on ~7,000 files. Drafted 2FA and semiannual access-review policy.",
+      "Built tiered request intake with approval gates and a change audit trail; 74 requests tracked, 69 resolved. Staff rollout pending.",
+      "Built a volunteer self-update portal with expiring per-record tokens; generated 53 personal links, not yet sent.",
+      "Migrated 555 records into Airtable with email on only 20%; escalated ambiguous identity matches and preserved source tables for rollback. Maintain 54 live automations."
     ]
   },
   {
@@ -742,8 +741,7 @@ body.listmode #depth { visibility: hidden; }
     "org": "Bari & Sons Construction Inc.",
     "dates": "Feb 2018 – Present",
     "bullets": [
-      "Drafted customer contracts for 47 jobs since 2022, then built a pipeline that turns job texts into contract drafts with a human approval step.",
-      "Review contracts, permits, and project documentation for accuracy and regulatory compliance."
+      "Drafted contracts for 47 jobs since 2022; built a Python service that turns job texts into drafts for a human to review and send."
     ]
   },
   {
@@ -751,14 +749,13 @@ body.listmode #depth { visibility: hidden; }
     "org": "Bari & Sons Construction Inc.",
     "dates": "Jan 2018 – Feb 2020",
     "bullets": [
-      "Administered Active Directory users, groups, and password resets, and removed stale accounts to close unused access.",
-      "Triaged malware on Windows and macOS endpoints, applied patches and baseline hardening, and documented prevention steps in knowledge-base articles."
+      "Administered Active Directory users, groups, and password resets, removed stale accounts, and triaged Windows/macOS malware."
     ]
   }
 ];
   const CERTIFICATIONS = [
   [
-    "Cisco Network Defense",
+    "Cisco Network Defense (course complete)",
     "2026"
   ],
   [
@@ -784,24 +781,20 @@ body.listmode #depth { visibility: hidden; }
 ];
   const SKILLS = [
   [
-    "Detection & analysis",
-    "Suricata rule writing and tuning; Wireshark/tshark; pcap and Zeek analysis; Nmap and NSE (Lua); Nessus; false-positive testing with held-out sets and positive controls."
+    "Detection · capstone & projects",
+    "Suricata rules and held-out evaluation; pcap and Zeek conn.log parsing (beacon-spectrum)."
   ],
   [
-    "Security engineering",
-    "Python; Bash; sandboxing with bubblewrap and strace; prompt-injection defense; CI, CodeQL, Dependabot; Playwright; fail-closed controls and audit logging."
+    "Engineering · shipped tools",
+    "Python (contract service, PyPI package); bubblewrap/strace (build sandbox); GitHub Actions (test matrix)."
   ],
   [
-    "Identity & access",
-    "Active Directory; Google Workspace, Slack, and Asana administration; 2FA policy; access reviews; provisioning and deprovisioning; audit trails; least privilege."
+    "Identity & access · employment",
+    "Active Directory users/groups; Slack, Asana, Google Workspace administration; API account reconciliation."
   ],
   [
-    "Networks & systems",
-    "TCP/IP, DNS, DHCP, VLANs, VPNs, firewalls, IDS/IPS; Linux, Windows, macOS; endpoint hardening; patch management; isolated VirtualBox labs."
-  ],
-  [
-    "Platforms",
-    "PostgreSQL; Cloudflare Workers; Airtable; NeonCRM; Asana; Google Workspace; Slack."
+    "Network testing · coursework",
+    "Nmap scans and NSE scripts (Lua); Nessus scans of Windows lab targets; Bash port scanner."
   ]
 ];
   const resume = document.createElement('button');
@@ -1030,7 +1023,7 @@ body.listmode #depth { visibility: hidden; }
         <div class="resume-date">${esc(e.dates)}</div><h4>${esc(e.org)}</h4><p class="position">${esc(e.role)}</p>
         ${e.promotion ? `<p class="resume-promotion">${esc(e.promotion)}</p>` : ''}<ul>${e.bullets.map(b => `<li>${esc(b)}</li>`).join('')}</ul></article>`).join('')}</section>
       <section class="resume-section"><h3>Education and certifications</h3><ul class="resume-certifications">${CERTIFICATIONS.map(([name,year]) => `<li><span>${esc(name)}</span><time datetime="${year}">${year}</time></li>`).join('')}</ul>
-        <div class="resume-education"><strong>B.S. in Cybersecurity</strong><p>New York City College of Technology (CUNY)</p><p>Expected December 2026 · Major GPA 3.14</p><p>Coursework: Penetration Testing; Computer Forensics; Cloud Security; Cryptographic Technologies; Network Security; Windows and Linux Systems Administration.</p></div></section>
+        <div class="resume-education"><strong>B.S. in Cybersecurity</strong><p>New York City College of Technology (CUNY)</p><p>Expected December 2026 · Major GPA 3.14</p><p>Coursework: Penetration Testing (in progress); Network Security; Computer Forensics; Cloud Security; Cryptography; Windows/Linux System Administration.</p></div></section>
       <section class="resume-section"><h3>Skills</h3><dl class="resume-skills">${SKILLS.map(([label,detail]) => `<div><dt>${esc(label)}</dt><dd>${esc(detail)}</dd></div>`).join('')}</dl></section>`;
   }
 
