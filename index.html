@@ -240,6 +240,7 @@ body.listmode #depth { visibility: hidden; }
 
 /* v4 / experience record. The teaser uses the journal's existing dialog interaction. */
 .led.private { color: #a8b1c2; }
+.led.lab { color: var(--amber); }
 .resume-teaser { width: 480px; display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; padding: 10px 16px; border-left-color: var(--amber); }
 .resume-teaser .journal-title, .resume-teaser .journal-intro, .resume-teaser .journal-action { margin: 0; }
 .resume-teaser .journal-title, .resume-teaser .journal-intro { grid-column: 1 / -1; }
@@ -339,7 +340,7 @@ body.listmode #depth { visibility: hidden; }
     "name": "OSINT Field Kit",
     "line": "2,141 OSINT tools. One starting point for reconnaissance, with a case notebook and report export.",
     "lang": "HTML / JS",
-    "last": "2026-10-28",
+    "last": "2026-11-03",
     "lastLabel": "updated",
     "links": [
       [
@@ -384,6 +385,55 @@ body.listmode #depth { visibility: hidden; }
     ],
     "summary": "Loads CISA's Known Exploited Vulnerabilities catalog from its mirror and sorts entries by fix-by date, with a five-minute refresh cycle.",
     "note": "CISA fix-by dates apply to US federal agencies; other organizations can use them as a prioritization signal."
+  },
+  {
+    "id": "M-07",
+    "key": "ids",
+    "zone": "security",
+    "x": 880,
+    "y": 240,
+    "status": "lab",
+    "name": "IDS Rule Evaluation",
+    "line": "Tuned Suricata rules in an isolated attack lab, then measured what they catch and what they miss.",
+    "lang": "Suricata · pcap · VirtualBox",
+    "last": "Capstone · Fall 2026",
+    "lastLabel": "",
+    "links": [],
+    "facts": [
+      "On one 8,045-packet capture, 52,661 default rules raised 0 alerts; 2 tuned rules raised 195.",
+      "On a held-out set, detection rose from 6/37 to 33/37 attack requests, with 0/20 false positives on benign traffic.",
+      "Rules were frozen by SHA-256 before scoring, and a positive-control run exposed an earlier setup that had loaded 0 rules."
+    ],
+    "summary": "Capstone lead: built the lab, recorded the captures, wrote and froze the rules, and ran and re-checked every measurement."
+  },
+  {
+    "id": "L-06",
+    "key": "haunted",
+    "zone": "security",
+    "x": 560,
+    "y": 480,
+    "status": "live",
+    "name": "Haunted Inbox",
+    "line": "A hidden-text prompt injection makes a local hospital assistant leak another patient's record, and a code-enforced guard stops it.",
+    "lang": "Python · local LLM (Gemma 4 12B)",
+    "last": "Hacktoberfest Hack Day · Oct 2026",
+    "lastLabel": "",
+    "links": [
+      [
+        "Replay ↗",
+        "https://blurxy.github.io/ghost-in-the-reply/"
+      ],
+      [
+        "Source",
+        "https://github.com/blurxy/ghost-in-the-reply"
+      ]
+    ],
+    "facts": [
+      "Unguarded, the injected email leaked the other patient's chart in 3/3 runs; guarded, 0/3.",
+      "The model only classifies; code decides what runs, with deterministic leak checks that normalise Unicode tricks.",
+      "1,262 automated tests pass."
+    ],
+    "summary": "Built in one day for Hacktoberfest Hack Day Brooklyn."
   },
   {
     "id": "M-02",
@@ -436,8 +486,8 @@ body.listmode #depth { visibility: hidden; }
   {
     "id": "M-05",
     "key": "pyexec",
-    "zone": "systems",
-    "x": 560,
+    "zone": "security",
+    "x": 880,
     "y": 760,
     "status": "repo",
     "name": "py-exec-mcp",
@@ -465,7 +515,7 @@ body.listmode #depth { visibility: hidden; }
     "y": 760,
     "status": "repo",
     "name": "spore",
-    "line": "A serverless peer-to-peer mesh for a local network: peers find each other, authenticate, and exchange signed blocks.",
+    "line": "An early-prototype serverless peer-to-peer mesh for a local network: peers find each other, authenticate, and exchange signed blocks.",
     "lang": "JavaScript",
     "last": "2026-09-18",
     "links": [
@@ -537,7 +587,7 @@ body.listmode #depth { visibility: hidden; }
     "name": "World Cup 2026",
     "line": "Explore all 104 World Cup 2026 matches, with final scores and local kickoff times.",
     "lang": "HTML / JS",
-    "last": "2026-10-28",
+    "last": "2026-11-03",
     "links": [
       [
         "Open",
@@ -600,7 +650,7 @@ body.listmode #depth { visibility: hidden; }
 ];
   const ZONES = { security: ["Selected security work", 560, -42], systems: ["Systems", 560, 718], builds: ["Builds & experiments", 560, 988] };
   const CORE = { x: 0, y: 0 };
-  const LED = { live: "LIVE", repo: "REPO", beta: "BETA", stage: "STAGING", private: "PRIVATE" };
+  const LED = { live: "LIVE", repo: "REPO", beta: "BETA", stage: "STAGING", private: "PRIVATE", lab: "LAB" };
 
   const $ = id => document.getElementById(id);
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -760,15 +810,17 @@ body.listmode #depth { visibility: hidden; }
   function placeBoard() {
     const h = Object.fromEntries(MODS.map(m => [m.key, modEls[m.key].offsetHeight]));
     const rows = [0, h.osint + 40];
-    rows[2] = rows[1] + Math.max(h.kev, h.beacon) + 40;
-    rows[3] = Math.max(rows[2] + Math.max(h.aur, journal.offsetHeight), core.offsetHeight) + 100;
-    rows[4] = rows[3] + Math.max(h.pyexec, h.spore, h.trading) + 100;
-    rows[5] = rows[4] + Math.max(h.coursewake, h.chladni) + 40;
-    const yByKey = {osint: rows[0], kev: rows[1], beacon: rows[1], aur: rows[2], pyexec: rows[3], spore: rows[3], trading: rows[3], coursewake: rows[4], chladni: rows[4], worldcup: rows[5], cactus: rows[5]};
+    rows[2] = rows[1] + Math.max(h.kev, h.ids) + 40;
+    rows[3] = rows[2] + Math.max(h.haunted, h.beacon) + 40;
+    rows[4] = rows[3] + Math.max(h.aur, h.pyexec) + 40;
+    rows[5] = Math.max(rows[4] + journal.offsetHeight, core.offsetHeight + 12 + resume.offsetHeight) + 100;
+    rows[6] = rows[5] + Math.max(h.spore, h.trading) + 100;
+    rows[7] = rows[6] + Math.max(h.coursewake, h.chladni) + 40;
+    const yByKey = {osint: rows[0], kev: rows[1], ids: rows[1], haunted: rows[2], beacon: rows[2], aur: rows[3], pyexec: rows[3], spore: rows[5], trading: rows[5], coursewake: rows[6], chladni: rows[6], worldcup: rows[7], cactus: rows[7]};
     MODS.forEach(m => { m.y = yByKey[m.key]; modEls[m.key].style.top = m.y + 'px'; });
     resume.style.left = '0px'; resume.style.top = (core.offsetHeight + 12) + 'px';
-    journal.style.left = '880px'; journal.style.top = rows[2] + 'px';
-    ZONES.systems[2] = rows[3] - 42; ZONES.builds[2] = rows[4] - 42;
+    journal.style.left = '880px'; journal.style.top = rows[4] + 'px';
+    ZONES.systems[2] = rows[5] - 42; ZONES.builds[2] = rows[6] - 42;
     world.querySelectorAll('.zone').forEach(el => { el.style.top = ZONES[el.dataset.zone][2] + 'px'; });
   }
 
@@ -842,10 +894,10 @@ body.listmode #depth { visibility: hidden; }
     const pad = 60, s = clampS(Math.min((r.width - pad * 2) / (maxx - minx), (r.height - pad * 2) / (maxy - miny)));
     cam.s = s; cam.x = (r.width - (maxx - minx) * s) / 2 - minx * s; cam.y = (r.height - (maxy - miny) * s) / 2 - miny * s; apply();
   }
-  // Home frames the entire core, selected security work, and compact journal teaser.
+  // Home keeps the entire core and contact readable beside the first security rows.
   function home() {
     const r = stage.getBoundingClientRect();
-    const height = Math.max(core.offsetHeight, journal.offsetTop + journal.offsetHeight, modEls.aur.offsetTop + modEls.aur.offsetHeight);
+    const height = Math.max(core.offsetHeight + 60, modEls.ids.offsetTop + modEls.ids.offsetHeight, modEls.kev.offsetTop + modEls.kev.offsetHeight);
     const width = 1160, top = -42, padX = 48, padY = 38;
     cam.s = clampS(Math.min(1, (r.width - padX * 2) / width, (r.height - padY * 2 - 30) / (height - top)));
     cam.x = (r.width - width * cam.s) / 2;
@@ -943,7 +995,7 @@ body.listmode #depth { visibility: hidden; }
 
   // ---------- spec sheet ----------
   function sheetHTML(m) {
-    const acts = m.links.map(([t, u], i) => u === "#" ? `<span class="soon">${esc(t)}</span>` : `<a class="${i ? "" : "pri"}" href="${esc(u)}" target="_blank" rel="noopener">${esc(t)} ↗</a>`).join("");
+    const acts = m.links.map(([t, u], i) => u === "#" ? `<span class="soon">${esc(t)}</span>` : `<a class="${i ? "" : "pri"}" href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}${t.endsWith("↗") ? "" : " ↗"}</a>`).join("");
     const flags = s => esc(s).replace(/(^|\s)(--[a-z][a-z-]*)/g, '$1<code>$2</code>');   // keep CLI flags like --static on one line
     const lbl = lastLabel(m);
     return `<div class="sh-top"><span>${m.id} · ${LED[m.status]}</span><button class="tbtn" id="shClose">Close<span class="kbd"> · Esc</span></button></div>
