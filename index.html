@@ -331,70 +331,14 @@ body.listmode #depth { visibility: hidden; }
   const RESUME_URL = '/resume.pdf';
   const MODS = [
   {
-    "id": "L-02",
-    "key": "osint",
-    "zone": "security",
-    "x": 560,
-    "y": 0,
-    "status": "live",
-    "name": "OSINT Field Kit",
-    "line": "2,141 OSINT tools. One starting point for reconnaissance, with a case notebook and report export.",
-    "lang": "HTML / JS",
-    "last": "2026-11-03",
-    "lastLabel": "updated",
-    "links": [
-      [
-        "Open",
-        "https://blurxy.net/osint/"
-      ]
-    ],
-    "facts": [
-      "Merges 1,103 unique tools from OSINT Framework and 1,153 from OSINT4ALL; 115 overlap, giving 2,141 tools in one directory.",
-      "1,813 tools answered the recorded live link check.",
-      "Keyword-based ACTIVE tags flag tools that may interact with a target. The workflow starts with passive research and scope authorization.",
-      "A case notebook timestamps each tool used and exports a reconnaissance report."
-    ],
-    "summary": "Brings OSINT Framework and OSINT4ALL into one searchable field kit, organized by what you start an investigation with.",
-    "featured": true
-  },
-  {
-    "id": "L-05",
-    "key": "kev",
-    "zone": "security",
-    "x": 560,
-    "y": 240,
-    "status": "live",
-    "name": "KEV Watch",
-    "line": "Track CISA-listed exploited vulnerabilities with EPSS scores, vendor follows, and calendar export.",
-    "lang": "HTML / JS",
-    "last": "2026-10-28",
-    "links": [
-      [
-        "Open",
-        "https://blurxy.net/kev/"
-      ],
-      [
-        "Source",
-        "https://github.com/blurxy/blurxy-worldcup26/tree/main/kev"
-      ]
-    ],
-    "facts": [
-      "Follow vendors and review EPSS scores alongside catalog entries.",
-      "Export dates to a calendar or use the wall-display mode.",
-      "Hosted on Cloudflare Workers."
-    ],
-    "summary": "Loads CISA's Known Exploited Vulnerabilities catalog from its mirror and sorts entries by fix-by date, with a five-minute refresh cycle.",
-    "note": "Federal remediation deadlines now come from BOD 26-04 (June 2026), which replaced BOD 22-01; for everyone else, catalog fix-by dates are a prioritization signal."
-  },
-  {
     "id": "M-07",
     "key": "ids",
     "zone": "security",
-    "x": 880,
+    "x": 560,
     "y": 240,
     "status": "lab",
     "name": "IDS Rule Evaluation",
-    "line": "Tuned Suricata rules in an isolated attack lab, then measured what they catch and what they miss.",
+    "line": "Held-out lab detection: 6/37 → 33/37 attack requests caught, 0/20 benign requests flagged.",
     "lang": "Suricata · pcap · VirtualBox",
     "last": "Capstone · Fall 2026",
     "lastLabel": "",
@@ -405,6 +349,30 @@ body.listmode #depth { visibility: hidden; }
       "Rules were frozen by SHA-256 before scoring; a re-check caught an earlier run that had silently loaded 0 rules, and every number was re-measured."
     ],
     "summary": "Capstone lead: built the lab, recorded the captures, wrote and froze the rules, and ran and re-checked every measurement."
+  },
+  {
+    "id": "M-01",
+    "key": "aur",
+    "zone": "security",
+    "x": 880,
+    "y": 480,
+    "status": "repo",
+    "name": "aur-build-diff",
+    "line": "Compare AUR package revisions by the commands, connections, and file writes they produce.",
+    "lang": "Python",
+    "last": "2026-09-17",
+    "links": [
+      [
+        "Source",
+        "https://github.com/blurxy/aur-build-diff"
+      ]
+    ],
+    "facts": [
+      "On one Arch host, a naive --unshare-net sandbox still resolved DNS through the systemd-resolved socket; the hardened profile blocks that path and re-tests it before every build check.",
+      "A --static mode reads PKGBUILD declarations in 1.3 seconds without starting the sandbox.",
+      "Checked six real pkgcacheclean transitions: the static comparison flagged one and remained silent on five."
+    ],
+    "summary": "Runs package revisions under bubblewrap with strace to identify newly contacted endpoints, executed binaries, and writes outside the build tree."
   },
   {
     "id": "L-06",
@@ -435,14 +403,91 @@ body.listmode #depth { visibility: hidden; }
     "summary": "Built with a three-person team in one day at Hacktoberfest Hack Day Brooklyn."
   },
   {
+    "id": "M-06",
+    "key": "trading",
+    "zone": "security",
+    "x": 880,
+    "y": 760,
+    "status": "private",
+    "name": "Automated Futures Trading System",
+    "line": "Local LLMs propose trades; deterministic code blocks unsafe entries and clamps orders before money moves.",
+    "lang": "Python · Ollama/local LLMs · PostgreSQL · Redis",
+    "last": "Independent project",
+    "lastLabel": "",
+    "links": [],
+    "summary": "An independent futures trading system that contains model decisions with dependency checks, order limits and exchange-side stops.",
+    "facts": [
+      "Each cycle checks the LLM runtime, market data, PostgreSQL and Redis; degraded dependencies block trading and alert, while entries fail closed without data, a thesis or the model.",
+      "Deterministic tripwires invalidate the thesis independently of the model; contract caps and loss limits are enforced at order construction.",
+      "Exchange-side stops attach at fill and failed stop placement triggers immediate flattening; the kill switch survives shutdown and parks the scheduler to prevent silent resumption.",
+      "Upstream fix merged into project-x-py (PR #179, released in v4.4.2): poll delayed fills before abandoning bracket setup."
+    ]
+  },
+  {
+    "id": "L-02",
+    "key": "osint",
+    "zone": "systems",
+    "x": 560,
+    "y": 0,
+    "status": "live",
+    "name": "OSINT Field Kit",
+    "line": "2,141 OSINT tools. One starting point for reconnaissance, with a case notebook and report export.",
+    "lang": "HTML / JS",
+    "last": "2026-11-03",
+    "lastLabel": "updated",
+    "links": [
+      [
+        "Open",
+        "https://blurxy.net/osint/"
+      ]
+    ],
+    "facts": [
+      "Merges 1,103 unique tools from OSINT Framework and 1,153 from OSINT4ALL; 115 overlap, giving 2,141 tools in one directory.",
+      "1,813 tools answered the recorded live link check.",
+      "Keyword-based ACTIVE tags flag tools that may interact with a target. The workflow starts with passive research and scope authorization.",
+      "A case notebook timestamps each tool used and exports a reconnaissance report."
+    ],
+    "summary": "Brings OSINT Framework and OSINT4ALL into one searchable field kit, organized by what you start an investigation with.",
+    "featured": true
+  },
+  {
+    "id": "L-05",
+    "key": "kev",
+    "zone": "systems",
+    "x": 560,
+    "y": 240,
+    "status": "live",
+    "name": "KEV Watch",
+    "line": "Track CISA-listed exploited vulnerabilities with EPSS scores, vendor follows, and calendar export.",
+    "lang": "HTML / JS",
+    "last": "2026-10-28",
+    "links": [
+      [
+        "Open",
+        "https://blurxy.net/kev/"
+      ],
+      [
+        "Source",
+        "https://github.com/blurxy/blurxy-worldcup26/tree/main/kev"
+      ]
+    ],
+    "facts": [
+      "Follow vendors and review EPSS scores alongside catalog entries.",
+      "Export dates to a calendar or use the wall-display mode.",
+      "Hosted on Cloudflare Workers."
+    ],
+    "summary": "Loads CISA's Known Exploited Vulnerabilities catalog from its mirror and sorts entries by fix-by date, with a five-minute refresh cycle.",
+    "note": "Federal remediation deadlines now come from BOD 26-04 (June 2026), which replaced BOD 22-01; for everyone else, catalog fix-by dates are a prioritization signal."
+  },
+  {
     "id": "M-02",
     "key": "beacon",
-    "zone": "security",
+    "zone": "systems",
     "x": 880,
     "y": 240,
     "status": "repo",
     "name": "beacon-spectrum",
-    "line": "Research prototype: detect periodic, C2-style check-ins from connection timing alone.",
+    "line": "Synthetic-data periodicity research: missed every 300 s and 600 s beacon in 3 h, but cut benign false alarms to 19.4% (baseline 98.0%).",
     "lang": "Python",
     "last": "2026-09-16",
     "links": [
@@ -459,34 +504,10 @@ body.listmode #depth { visibility: hidden; }
     "summary": "Uses a Rayleigh / Z² periodogram to analyze the phase coherence of connection timestamps, without reading payloads or inspecting TLS."
   },
   {
-    "id": "M-01",
-    "key": "aur",
-    "zone": "security",
-    "x": 560,
-    "y": 480,
-    "status": "repo",
-    "name": "aur-build-diff",
-    "line": "Compare AUR package revisions by the commands, connections, and file writes they produce.",
-    "lang": "Python",
-    "last": "2026-09-17",
-    "links": [
-      [
-        "Source",
-        "https://github.com/blurxy/aur-build-diff"
-      ]
-    ],
-    "facts": [
-      "On one Arch host, a naive --unshare-net sandbox still resolved DNS through the systemd-resolved socket; the hardened profile blocks that path and re-tests it before every build check.",
-      "A --static mode reads PKGBUILD declarations in 1.3 seconds without starting the sandbox.",
-      "Checked six real pkgcacheclean transitions: the static comparison flagged one and remained silent on five."
-    ],
-    "summary": "Runs package revisions under bubblewrap with strace to identify newly contacted endpoints, executed binaries, and writes outside the build tree."
-  },
-  {
     "id": "M-05",
     "key": "pyexec",
-    "zone": "security",
-    "x": 880,
+    "zone": "systems",
+    "x": 560,
     "y": 760,
     "status": "repo",
     "name": "py-exec-mcp",
@@ -537,7 +558,7 @@ body.listmode #depth { visibility: hidden; }
     "y": 1030,
     "status": "beta",
     "name": "Coursewake",
-    "line": "Bring Brightspace deadlines, grade estimates, and reminders into one calmer view.",
+    "line": "Read-only Brightspace extension with ciphertext-only cloud backup and a client-held key.",
     "lang": "Chrome MV3",
     "last": "v0.2.5 beta",
     "links": [
@@ -625,30 +646,9 @@ body.listmode #depth { visibility: hidden; }
     ],
     "summary": "An early-build, playable 3D game that runs directly in the browser without installation.",
     "note": "Play requires a keyboard and mouse."
-  },
-{
-  "id": "M-06",
-  "key": "trading",
-  "zone": "systems",
-  "x": 200,
-  "y": 760,
-  "status": "private",
-  "name": "Automated Futures Trading System",
-  "line": "Local LLMs propose trades; deterministic code blocks unsafe entries and clamps orders before money moves.",
-  "lang": "Python · Ollama/local LLMs · PostgreSQL · Redis",
-  "last": "Independent project",
-  "lastLabel": "",
-  "links": [],
-  "summary": "An independent futures trading system that contains model decisions with dependency checks, order limits and exchange-side stops.",
-  "facts": [
-    "Each cycle checks the LLM runtime, market data, PostgreSQL and Redis; degraded dependencies block trading and alert, while entries fail closed without data, a thesis or the model.",
-    "Deterministic tripwires invalidate the thesis independently of the model; contract caps and loss limits are enforced at order construction.",
-    "Exchange-side stops attach at fill and failed stop placement triggers immediate flattening; the kill switch survives shutdown and parks the scheduler to prevent silent resumption.",
-    "Upstream fix merged into project-x-py (PR #179, released in v4.4.2): poll delayed fills before abandoning bracket setup."
-  ]
-}
+  }
 ];
-  const ZONES = { security: ["Selected security work", 560, -42], systems: ["Systems", 560, 718], builds: ["Builds & experiments", 560, 988] };
+  const ZONES = { security: ["Testing and enforcing security boundaries", 560, -42], systems: ["Security tools & research", 560, 718], builds: ["Other builds & experiments", 560, 988] };
   const CORE = { x: 0, y: 0 };
   const LED = { live: "LIVE", repo: "REPO", beta: "BETA", stage: "STAGING", private: "PRIVATE", lab: "LAB" };
 
@@ -662,7 +662,7 @@ body.listmode #depth { visibility: hidden; }
   core.innerHTML = `<div class="tag">FOLLOW THE EVIDENCE</div>
     <h1>rafiul bari</h1>
     <p class="role">Cybersecurity student at CUNY City Tech</p>
-    <p class="value">I investigate how systems behave and build tools that make the findings useful.</p>
+    <p class="value">I test where security controls fail and build code-enforced limits.</p>
     <p class="seeking">Graduating this December — seeking security <br>internships and full-time entry-level roles.</p>
     <p class="education">CUNY New York City College of Technology · Cybersecurity<br>Coursework complete December 2026<br>Commencement Spring 2027</p>
     <div class="links" aria-label="Contact"><a href="mailto:rafiulbari70@gmail.com" draggable="false">rafiulbari70@gmail.com</a><a href="https://linkedin.com/in/rafiul-bari" target="_blank" rel="noopener" draggable="false">LinkedIn ↗</a><a href="https://github.com/blurxy" target="_blank" rel="noopener" draggable="false">GitHub ↗</a>${RESUME_URL ? `<a href="${esc(RESUME_URL)}" target="_blank" rel="noopener" draggable="false">Resume ↗</a>` : ''}</div>
@@ -800,24 +800,25 @@ body.listmode #depth { visibility: hidden; }
   resume.className = 'journal resume-teaser'; resume.id = 'resume'; resume.dataset.key = 'resume';
   resume.setAttribute('aria-haspopup', 'dialog'); resume.setAttribute('aria-controls', 'sheet'); resume.setAttribute('aria-expanded', 'false');
   resume.innerHTML = `<span class="journal-meta">E-01 · EXPERIENCE</span><span class="journal-title">Resume & experience</span>
-    <span class="journal-intro">Detection rules, security tooling, and access control in production.</span><span class="journal-action">Read the record ↗</span>`;
+    <span class="journal-intro">Access audit: caught a migration file that would have deactivated an employee&#8217;s working account. No removals executed.</span><span class="journal-action">Read the record ↗</span>`;
   world.appendChild(resume);
 
   // Stack rows from measured card heights; writes happen only after all measurements.
   function placeBoard() {
     const h = Object.fromEntries(MODS.map(m => [m.key, modEls[m.key].offsetHeight]));
-    const rows = [0, h.osint + 40];
-    rows[2] = rows[1] + Math.max(h.kev, h.ids) + 40;
-    rows[3] = rows[2] + Math.max(h.haunted, h.beacon) + 40;
-    rows[4] = rows[3] + Math.max(h.aur, h.pyexec) + 40;
-    rows[5] = Math.max(rows[4] + journal.offsetHeight, core.offsetHeight + 12 + resume.offsetHeight) + 100;
-    rows[6] = rows[5] + Math.max(h.spore, h.trading) + 100;
+    const rows = [0];
+    rows[1] = rows[0] + Math.max(h.ids, h.aur) + 40;
+    rows[2] = rows[1] + Math.max(h.haunted, h.trading) + 40;
+    rows[3] = rows[2] + journal.offsetHeight + 100;
+    rows[4] = rows[3] + h.osint + 40;
+    rows[5] = rows[4] + Math.max(h.kev, h.beacon) + 40;
+    rows[6] = Math.max(rows[5] + Math.max(h.pyexec, h.spore), core.offsetHeight + 12 + resume.offsetHeight) + 100;
     rows[7] = rows[6] + Math.max(h.coursewake, h.chladni) + 40;
-    const yByKey = {osint: rows[0], kev: rows[1], ids: rows[1], haunted: rows[2], beacon: rows[2], aur: rows[3], pyexec: rows[3], spore: rows[5], trading: rows[5], coursewake: rows[6], chladni: rows[6], worldcup: rows[7], cactus: rows[7]};
-    MODS.forEach(m => { m.y = yByKey[m.key]; modEls[m.key].style.top = m.y + 'px'; });
+    const yByKey = {ids: rows[0], aur: rows[0], haunted: rows[1], trading: rows[1], osint: rows[3], kev: rows[4], beacon: rows[4], pyexec: rows[5], spore: rows[5], coursewake: rows[6], chladni: rows[6], worldcup: rows[7], cactus: rows[7]};
+    MODS.forEach(m => { m.y = yByKey[m.key]; modEls[m.key].style.top = m.y + 'px'; modEls[m.key].style.left = m.x + 'px'; });
     resume.style.left = '0px'; resume.style.top = (core.offsetHeight + 12) + 'px';
-    journal.style.left = '880px'; journal.style.top = rows[4] + 'px';
-    ZONES.systems[2] = rows[5] - 42; ZONES.builds[2] = rows[6] - 42;
+    journal.style.left = '560px'; journal.style.top = rows[2] + 'px';
+    ZONES.systems[2] = rows[3] - 42; ZONES.builds[2] = rows[6] - 42;
     world.querySelectorAll('.zone').forEach(el => { el.style.top = ZONES[el.dataset.zone][2] + 'px'; });
   }
 
@@ -894,7 +895,7 @@ body.listmode #depth { visibility: hidden; }
   // Home keeps the entire core and contact readable beside the first security rows.
   function home() {
     const r = stage.getBoundingClientRect();
-    const height = Math.max(core.offsetHeight + 60, modEls.ids.offsetTop + modEls.ids.offsetHeight, modEls.kev.offsetTop + modEls.kev.offsetHeight);
+    const height = Math.max(core.offsetHeight + 60, modEls.haunted.offsetTop + modEls.haunted.offsetHeight, modEls.trading.offsetTop + modEls.trading.offsetHeight);
     const width = 1160, top = -42, padX = 48, padY = 38;
     cam.s = clampS(Math.min(1, (r.width - padX * 2) / width, (r.height - padY * 2 - 30) / (height - top)));
     cam.x = (r.width - width * cam.s) / 2;
