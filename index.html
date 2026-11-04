@@ -634,17 +634,17 @@ body.listmode #depth { visibility: hidden; }
   "y": 760,
   "status": "private",
   "name": "Automated Futures Trading System",
-  "line": "Risk-control engineering: preventive order controls, dependency gates, and model-risk checks.",
-  "lang": "Python · PostgreSQL/pgvector · local LLMs",
+  "line": "Local LLMs propose trades; deterministic code blocks unsafe entries and clamps orders before money moves.",
+  "lang": "Python · Ollama/local LLMs · PostgreSQL · Redis",
   "last": "Independent project",
   "lastLabel": "",
   "links": [],
-  "summary": "An independent futures trading system with a layered control stack around execution and model decisions.",
+  "summary": "An independent futures trading system that contains model decisions with dependency checks, order limits and exchange-side stops.",
   "facts": [
-    "Upstream fix merged into the project-x-py SDK (PR #179, released in v4.4.2): poll delayed fills before abandoning bracket setup, with two tests.",
-    "A kill switch and loss/drawdown circuit breakers sit alongside a preflight gate that halts trading when any dependency is degraded.",
-    "The trading rulebook—contract caps, consistency limits, and daily loss limits—is enforced as hard clamps at order construction.",
-    "Model-risk controls include purged and walk-forward cross-validation, mandatory transaction-cost floors, explicit overfitting thresholds, and drift monitoring with retrain triggers."
+    "Each cycle checks the LLM runtime, market data, PostgreSQL and Redis; degraded dependencies block trading and alert, while entries fail closed without data, a thesis or the model.",
+    "Deterministic tripwires invalidate the thesis independently of the model; contract caps and loss limits are enforced at order construction.",
+    "Exchange-side stops attach at fill and failed stop placement triggers immediate flattening; the kill switch survives shutdown and parks the scheduler to prevent silent resumption.",
+    "Upstream fix merged into project-x-py (PR #179, released in v4.4.2): poll delayed fills before abandoning bracket setup."
   ]
 }
 ];
@@ -729,10 +729,10 @@ body.listmode #depth { visibility: hidden; }
     "dates": "Jul 2025 – Present",
     "promotion": "Promoted from Operations Assistant, July 2026.",
     "bullets": [
-      "Administer Slack, Asana, and Google Workspace. Audited 17 core staff accounts via read-only APIs; caught a migration file that would have deactivated an active employee’s account (62 open tasks). Audited sharing on ~7,000 files; drafted 2FA and access-review policy.",
-      "Built tiered request intake with approval gates and a change audit trail; 74 requests tracked, 69 resolved. Staff rollout pending.",
-      "Built a volunteer self-update portal with expiring per-record tokens; generated 53 personal links, not yet sent.",
-      "Migrated 555 records into Airtable with email on only 20%; escalated ambiguous identity matches and preserved source tables for rollback. Maintain 54 live automations."
+      "Administer Slack, Asana and Google Workspace. Audited 17 staff accounts; caught a migration that would deactivate an active account (62 open tasks). Audited ~7,000 files; drafted 2FA/access-review policy.",
+      "Built intake with approvals and audit trail; resolved 69/74 requests. Rollout pending.",
+      "Built volunteer portal with expiring per-record tokens; 53 links remain unsent.",
+      "Migrated 555 records into Airtable (20% had email); escalated ambiguous matches, preserved rollback tables. Maintain 54 live automations."
     ]
   },
   {
@@ -740,7 +740,7 @@ body.listmode #depth { visibility: hidden; }
     "org": "Bari & Sons Construction Inc.",
     "dates": "Feb 2018 – Present",
     "bullets": [
-      "Drafted contracts for 47 jobs since 2022; built a Python service that turns job texts into drafts for a human to review and send."
+      "Drafted 47 job contracts since 2022; built Python draft service with human review."
     ]
   },
   {
@@ -748,7 +748,7 @@ body.listmode #depth { visibility: hidden; }
     "org": "Bari & Sons Construction Inc.",
     "dates": "Jan 2018 – Feb 2020",
     "bullets": [
-      "Administered Active Directory users, groups, and password resets, removed stale accounts, and triaged Windows/macOS malware."
+      "Managed Active Directory accounts/groups; removed stale accounts; triaged Windows/macOS malware."
     ]
   }
 ];

@@ -107,26 +107,27 @@ ul { padding-left:16px; margin:9px 0 0; } li { margin:0 0 7px; }
  <div class="main-column">
   <section aria-labelledby="experience"><h2 id="experience">Experience</h2>
 <article class="job"><div class="job-heading"><h3>Plant Powered Metro New York</h3><span class="dates">Jul 2025 – Present</span></div><p class="job-role">Operations &amp; Systems Associate</p><p class="promotion">Promoted from Operations Assistant, July 2026.</p><ul>
-<li>Administer Slack, Asana, and Google Workspace. Audited 17 core staff accounts via read-only APIs; caught a migration file that would have deactivated an active employee&#8217;s account (62 open tasks). Audited sharing on ~7,000 files; drafted 2FA and access-review policy.</li>
-<li>Built tiered request intake with approval gates and a change audit trail; 74 requests tracked, 69 resolved. Staff rollout pending.</li>
-<li>Built a volunteer self-update portal with expiring per-record tokens; generated 53 personal links, not yet sent.</li>
-<li>Migrated 555 records into Airtable with email on only 20%; escalated ambiguous identity matches and preserved source tables for rollback. Maintain 54 live automations.</li></ul></article>
+<li>Administer Slack, Asana and Google Workspace. Audited 17 staff accounts; caught a migration that would deactivate an active account (62 open tasks). Audited ~7,000 files; drafted 2FA/access-review policy.</li>
+<li>Built intake with approvals and audit trail; resolved 69/74 requests. Rollout pending.</li>
+<li>Built volunteer portal with expiring per-record tokens; 53 links remain unsent.</li>
+<li>Migrated 555 records into Airtable (20% had email); escalated ambiguous matches, preserved rollback tables. Maintain 54 live automations.</li></ul></article>
 <article class="job"><div class="job-heading"><h3>Bari &amp; Sons Construction Inc.</h3><span class="dates">Feb 2018 – Present</span></div><p class="job-role">Vice President</p><ul>
-<li>Drafted contracts for 47 jobs since 2022; built a Python service that turns job texts into drafts for a human to review and send.</li></ul></article>
+<li>Drafted 47 job contracts since 2022; built Python draft service with human review.</li></ul></article>
 <article class="job"><div class="job-heading"><h3>Bari &amp; Sons Construction Inc.</h3><span class="dates">Jan 2018 – Feb 2020</span></div><p class="job-role">IT Help Desk Support</p><ul>
-<li>Administered Active Directory users, groups, and password resets, removed stale accounts, and triaged Windows/macOS malware.</li></ul></article>
+<li>Managed Active Directory accounts/groups; removed stale accounts; triaged Windows/macOS malware.</li></ul></article>
   </section>
   <section class="project" aria-labelledby="project"><h2 id="project">Security projects</h2>
    <h3>Suricata IDS evaluation · Three-person capstone lead, Fall 2026</h3>
-   <ul><li>Wrote 14 rules and froze them before scoring. Adding 12 web rules to stock raised held-out detections from 6/37 to 33/37, with 0/20 benign samples flagged. Verified rule loading and ran a positive-control scan.</li></ul>
+   <ul><li>Froze 14 rules before scoring; 12 web rules added to stock raised held-out detections from 6/37 to 33/37, with 0/20 benign samples flagged. Verified loading and a positive-control scan.</li></ul>
    <h3>Haunted Inbox · Hacktoberfest Hack Day, Oct 2026</h3>
    <ul><li>Three-person team: hidden-text injection leaked a patient record in 3/3 unguarded runs, 0/3 guarded (temperature 0, fixed seed); code controls access, the model only classifies.</li></ul>
    <h3>Security tools · github.com/blurxy</h3>
    <ul><li>aur-build-diff: traced DNS escaping my initial bubblewrap sandbox through a resolver socket; blocked it with separate fetch/build jails on one host.</li>
    <li>beacon-spectrum: built pcap/Zeek log ingest and a periodicity research prototype; 19.4% false alarms vs 98.0% for my reimplemented baseline on synthetic data.</li>
-   <li>py-exec-mcp: PyPI package; GitHub Actions CI on 3 OSes &#215; 3 Python versions.</li></ul>
-   <h3>Automated futures trading system · Independent</h3>
-   <ul><li>Contributed a delayed-fill race fix so bracket setup waits for order status; added 2 tests. Merged upstream in project-x-py PR #179 and released in v4.4.2.</li></ul>
+</ul>
+   <h3>Model containment · Futures trading system</h3>
+   <ul><li>Built a futures system where local LLMs propose trades; deterministic code checks runtime, data, PostgreSQL and Redis. Entries fail closed; order construction clamps contract caps and loss limits.</li>
+   <li>Exchange-side stops attach at fill; failed stop placement triggers immediate flattening. Made the kill switch survive shutdown and park the scheduler, preventing silent resumption on restart.</li></ul>
   </section>
  </div>
  <aside class="side-column" aria-label="Qualifications and skills">
