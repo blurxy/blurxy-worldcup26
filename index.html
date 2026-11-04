@@ -691,7 +691,7 @@ body.listmode #depth { visibility: hidden; }
     "org": "Bari & Sons Construction Inc.",
     "dates": "Feb 2018 – Present",
     "bullets": [
-      "Drafted customer contracts for 47 jobs since 2022; scope, select, and oversee vendors and subcontractors.",
+      "Drafted customer contracts for 47 jobs since 2022, then built a pipeline that turns job texts into contract drafts with a human approval step.",
       "Review contracts, permits, and project documentation for accuracy and regulatory compliance."
     ]
   },
@@ -706,6 +706,10 @@ body.listmode #depth { visibility: hidden; }
   }
 ];
   const CERTIFICATIONS = [
+  [
+    "Cisco Network Defense",
+    "2026"
+  ],
   [
     "Google Cybersecurity",
     "2025"
@@ -725,35 +729,31 @@ body.listmode #depth { visibility: hidden; }
 ];
   const SKILLS = [
   [
-    "Governance, risk & compliance",
-    "HIPAA; PCI-DSS; access reviews and recertification; least privilege; change management; approval gates; SOP and control documentation; audit trails."
+    "Detection & analysis",
+    "Suricata rule writing and tuning; Wireshark/tshark; pcap and Zeek analysis; Nmap and NSE (Lua); Nessus; false-positive testing with held-out sets and positive controls."
   ],
   [
-    "Identity & access management",
-    "Active Directory; Google Workspace administration; provisioning and deprovisioning; MFA; stale-account remediation; permission auditing; role mapping."
+    "Security engineering",
+    "Python; Bash; sandboxing with bubblewrap and strace; prompt-injection defense; CI, CodeQL, Dependabot; Playwright; fail-closed controls and audit logging."
   ],
   [
-    "Security operations",
-    "Log review; incident intake and escalation; malware triage; SIEM; root-cause documentation."
+    "Identity & access",
+    "Active Directory; Google Workspace, Slack, and Asana administration; 2FA policy; access reviews; provisioning and deprovisioning; audit trails; least privilege."
   ],
   [
     "Networks & systems",
-    "TCP/IP, DNS, DHCP, VLANs, VPNs, firewalls, IDS/IPS; Windows, macOS, Linux; endpoint hardening; patch management."
+    "TCP/IP, DNS, DHCP, VLANs, VPNs, firewalls, IDS/IPS; Linux, Windows, macOS; endpoint hardening; patch management; isolated VirtualBox labs."
   ],
   [
-    "Tools & platforms",
-    "Wireshark, Nmap; Python, Bash, PowerShell; NeonCRM, Asana, Airtable, Google Workspace, Slack."
-  ],
-  [
-    "Professional",
-    "Stakeholder communication; vendor and third-party risk review; technical documentation for non-technical audiences; staff training."
+    "Platforms",
+    "PostgreSQL; Cloudflare Workers; Airtable; NeonCRM; Asana; Google Workspace; Slack."
   ]
 ];
   const resume = document.createElement('button');
   resume.className = 'journal resume-teaser'; resume.id = 'resume'; resume.dataset.key = 'resume';
   resume.setAttribute('aria-haspopup', 'dialog'); resume.setAttribute('aria-controls', 'sheet'); resume.setAttribute('aria-expanded', 'false');
   resume.innerHTML = `<span class="journal-meta">E-01 · EXPERIENCE</span><span class="journal-title">Resume & experience</span>
-    <span class="journal-intro">Access policy, approval gates, and auditable systems.</span><span class="journal-action">Read the record ↗</span>`;
+    <span class="journal-intro">Detection rules, security tooling, and access control in production.</span><span class="journal-action">Read the record ↗</span>`;
   world.appendChild(resume);
 
   // Stack rows from measured card heights; writes happen only after all measurements.
@@ -967,7 +967,7 @@ body.listmode #depth { visibility: hidden; }
   function resumeHTML() {
     return `<div class="sh-top"><span>E-01 · EXPERIENCE</span><button class="tbtn" id="shClose">Close<span class="kbd"> · Esc</span></button></div>
       <h2 id="shTitle" tabindex="-1">Experience & resume</h2>
-      <p class="lead">IT audit, technology risk, GRC, and identity & access management.</p>
+      <p class="lead">Security engineering, detection and automation, and identity & access.</p>
       <div class="acts"><a class="pri" href="${esc(RESUME_URL)}" target="_blank" rel="noopener">Resume PDF ↗</a><a href="/resume.html" target="_blank" rel="noopener">Print-ready view ↗</a></div>
       <section class="resume-section"><h3>Experience</h3>${EXPERIENCE.map(e => `<article class="resume-role">
         <div class="resume-date">${esc(e.dates)}</div><h4>${esc(e.org)}</h4><p class="position">${esc(e.role)}</p>
