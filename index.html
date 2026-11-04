@@ -384,7 +384,7 @@ body.listmode #depth { visibility: hidden; }
       "Hosted on Cloudflare Workers."
     ],
     "summary": "Loads CISA's Known Exploited Vulnerabilities catalog from its mirror and sorts entries by fix-by date, with a five-minute refresh cycle.",
-    "note": "CISA fix-by dates apply to US federal agencies; other organizations can use them as a prioritization signal."
+    "note": "Federal remediation deadlines now come from BOD 26-04 (June 2026), which replaced BOD 22-01; for everyone else, catalog fix-by dates are a prioritization signal."
   },
   {
     "id": "M-07",
@@ -400,9 +400,9 @@ body.listmode #depth { visibility: hidden; }
     "lastLabel": "",
     "links": [],
     "facts": [
-      "On one 8,045-packet capture, 52,661 default rules raised 0 alerts; 2 tuned rules raised 195.",
+      "On one 8,045-packet connect-scan capture, the stock Emerging Threats ruleset (52,667 signatures loaded) raised 0 alerts; 2 tuned rules raised 195.",
       "On a held-out set, detection rose from 6/37 to 33/37 attack requests, with 0/20 false positives on benign traffic.",
-      "Rules were frozen by SHA-256 before scoring, and a positive-control run exposed an earlier setup that had loaded 0 rules."
+      "Rules were frozen by SHA-256 before scoring; a re-check caught an earlier run that had silently loaded 0 rules, and every number was re-measured."
     ],
     "summary": "Capstone lead: built the lab, recorded the captures, wrote and froze the rules, and ran and re-checked every measurement."
   },
@@ -429,11 +429,11 @@ body.listmode #depth { visibility: hidden; }
       ]
     ],
     "facts": [
-      "Unguarded, the injected email leaked the other patient's chart in 3/3 runs; guarded, 0/3.",
+      "At temperature 0 with a fixed seed, the injected email leaked the other patient's chart in 3/3 unguarded runs and 0/3 guarded runs.",
       "The model only classifies; code decides what runs, with deterministic leak checks that normalise Unicode tricks.",
       "1,262 automated tests pass."
     ],
-    "summary": "Built in one day for Hacktoberfest Hack Day Brooklyn."
+    "summary": "Built with a three-person team in one day at Hacktoberfest Hack Day Brooklyn."
   },
   {
     "id": "M-02",
@@ -443,7 +443,7 @@ body.listmode #depth { visibility: hidden; }
     "y": 240,
     "status": "repo",
     "name": "beacon-spectrum",
-    "line": "Analyze connection timing for periodic patterns associated with C2 beaconing.",
+    "line": "Research prototype: detect periodic, C2-style check-ins from connection timing alone.",
     "lang": "Python",
     "last": "2026-09-16",
     "links": [
@@ -455,7 +455,7 @@ body.listmode #depth { visibility: hidden; }
     "facts": [
       "Dependency-free ingestion of pcap and Zeek data.",
       "Compares phase-coherence analysis with a dispersion/skew control detector.",
-      "Derives the relationship Z² = 2N·R² to connect sample count with the strength of the timing signal."
+      "On synthetic data at a 1% false-alarm budget, benign periodic flows alarmed 19.4% of the time versus 98.0% for my reimplemented dispersion/skew control; it needs at least 57 check-ins in the window."
     ],
     "summary": "Uses a Rayleigh / Z² periodogram to analyze the phase coherence of connection timestamps, without reading payloads or inspecting TLS."
   },
@@ -477,7 +477,7 @@ body.listmode #depth { visibility: hidden; }
       ]
     ],
     "facts": [
-      "Blocks DNS through the io.systemd.Resolve Unix socket as well as restricting the network namespace; reruns that control on every check.",
+      "On one Arch host, a naive --unshare-net sandbox still resolved DNS through the systemd-resolved socket; the hardened profile blocks that path and re-tests it before every build check.",
       "A --static mode reads PKGBUILD declarations in 1.3 seconds without starting the sandbox.",
       "Checked six real pkgcacheclean transitions: the static comparison flagged one and remained silent on five."
     ],
@@ -525,7 +525,7 @@ body.listmode #depth { visibility: hidden; }
       ]
     ],
     "facts": [
-      "Working now: LAN discovery, Noise_XX-authenticated connections, and signed-block exchange on a replicated append-only log.",
+      "Working now: LAN discovery, Noise_XX-authenticated connections, and signed-block exchange on a replicated append-only log. Blocks are signed, not encrypted, so there is no content confidentiality yet.",
       "Designed next: channels, presence, and five roles (RELAY, VAULT, INDEX, FORGE, BEACON) that distribute across peers; BEACON exists today."
     ],
     "summary": "Built to connect a community without an uplink, registry, bootstrap node, or signalling server, with an empty dependencies list. An early prototype, tested on one tablet and one laptop on a single access point."
@@ -548,7 +548,7 @@ body.listmode #depth { visibility: hidden; }
       ]
     ],
     "facts": [
-      "Published on the Chrome Web Store and in private beta.",
+      "Chrome Web Store private beta: activation requires an invited tester's code.",
       "Read-only access: the extension does not submit work, enroll in courses, or change Brightspace records."
     ],
     "summary": "A Chrome extension for CUNY Brightspace that reads information available through your existing login, with optional encrypted cloud backup on a Cloudflare Worker."
@@ -642,6 +642,7 @@ body.listmode #depth { visibility: hidden; }
   "links": [],
   "summary": "An independent futures trading system with a layered control stack around execution and model decisions.",
   "facts": [
+    "Upstream fix merged into the project-x-py SDK (PR #179, released in v4.4.2): poll delayed fills before abandoning bracket setup, with two tests.",
     "A kill switch and loss/drawdown circuit breakers sit alongside a preflight gate that halts trading when any dependency is degraded.",
     "The trading rulebook—contract caps, consistency limits, and daily loss limits—is enforced as hard clamps at order construction.",
     "Model-risk controls include purged and walk-forward cross-validation, mandatory transaction-cost floors, explicit overfitting thresholds, and drift monitoring with retrain triggers."
@@ -704,7 +705,7 @@ body.listmode #depth { visibility: hidden; }
     "title": "Matching a scan to its detection rules",
     "observation": "A port scan produced no alerts with 52,667 IDS rules loaded.",
     "finding": "The enabled rules matched specific content or repeated activity on one port. The scan touched each port only once or twice.",
-    "work": "I reviewed the rule conditions against the scan pattern. A positive-control scan was identified as the next step."
+    "work": "I reviewed the rule conditions against the scan pattern, then ran a positive control: with the 15 disabled Nmap rules enabled and HOME_NET scoped to the targets, a SYN scan drew 2 stock alerts while the connect scan still drew 0. My tuned rule caught both (101 and 195)."
   },
   {
     "title": "Inspecting the assumptions inside a test",
@@ -730,9 +731,9 @@ body.listmode #depth { visibility: hidden; }
     "promotion": "Promoted from Operations Assistant, July 2026.",
     "bullets": [
       "Drafted a staff account policy requiring two-factor authentication and semiannual access review; reconciled 48 Slack and 39 Asana accounts against the staff roster through their live APIs to identify accounts for deprovisioning, and audited link sharing across about 7,000 shared-drive files.",
-      "Designed and shipped an operations ticketing system with tiered intake, director approval above a defined threshold, scope-confirmation gates, and a full audit trail of tier and scope changes; 74 requests tracked so far, 69 resolved.",
+      "Designed and built an operations ticketing system with tiered intake, director approval above a defined threshold, scope-confirmation gates, and a full audit trail of tier and scope changes; 74 requests tracked so far, 69 resolved, ahead of a staff-wide rollout.",
       "Migrated 379 attendance and 176 testimonial records, when only 20% carried an email, into a 21-table Airtable base that now holds 165 people and 511 attendances across 19 events; escalated ambiguous identity matches for confirmation and preserved source tables for rollback.",
-      "Built a self-hosted signed-link self-update portal with expiring per-record tokens and no third-party data processing, covered by 1,473 automated checks and ready for 53 volunteers.",
+      "Built a self-hosted signed-link self-update portal with expiring per-record tokens and no third-party data processing, covered by 1,473 automated checks; personal links are generated for 53 volunteers ahead of launch.",
       "Administer NeonCRM, Asana, and Google Workspace and build in Airtable, with 54 documented live automations (47 Asana rules, 7 n8n workflows) and a change log for every update, so each change is traceable."
     ]
   },

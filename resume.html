@@ -101,15 +101,15 @@ ul { padding-left:16px; margin:9px 0 0; } li { margin:0 0 7px; }
  <h1>Rafiul Bari</h1>
  <p class="focus">Security engineering · Detection &amp; automation · Identity &amp; access</p>
  <div class="contact"><span>Brooklyn, NY</span><a href="mailto:rafiulbari70@gmail.com">rafiulbari70@gmail.com</a><a href="https://linkedin.com/in/rafiul-bari">linkedin.com/in/rafiul-bari</a><a href="https://github.com/blurxy">github.com/blurxy</a></div>
- <p class="summary">Cybersecurity B.S. candidate (coursework complete December 2026) who builds and tests security tooling (IDS rules, supply-chain sandboxes, prompt-injection defenses) and runs identity and access for a nonprofit&#8217;s production systems.</p>
+ <p class="summary">Cybersecurity B.S. candidate (December 2026) who builds and tests security tooling (IDS rules, build sandboxes, prompt-injection defenses) and runs identity and access for a nonprofit&#8217;s production systems.</p>
 </header>
 <div class="columns">
  <div class="main-column">
   <section aria-labelledby="experience"><h2 id="experience">Experience</h2>
 <article class="job"><div class="job-heading"><h3>Plant Powered Metro New York</h3><span class="dates">Jul 2025 – Present</span></div><p class="job-role">Operations &amp; Systems Associate</p><p class="promotion">Promoted from Operations Assistant, July 2026.</p><ul>
-<li>Run access for Slack, Asana, and Google Workspace: 2FA and semiannual access-review policy, 48 Slack + 39 Asana accounts reconciled via APIs, link-sharing audit of ~7,000 files.</li>
-<li>Designed tiered ticketing with approval gates and an audit trail: 74 requests tracked, 69 resolved.</li>
-<li>Built a signed-link self-update portal (expiring per-record tokens, 1,473 automated checks), ready for 53 volunteers.</li>
+<li>Run access for Slack, Asana, and Google Workspace: drafted the 2FA and semiannual access-review policy, reconciled 48 Slack + 39 Asana accounts via APIs, audited link sharing on ~7,000 files.</li>
+<li>Designed tiered ticketing with approval gates and an audit trail: 74 requests tracked, 69 resolved; staff rollout pending.</li>
+<li>Built a signed-link self-update portal (expiring per-record tokens, 1,473 automated checks); links generated for 53 volunteers ahead of launch.</li>
 <li>Migrated 555 records (email on 20%) into a 21-table Airtable base, now 165 people and 511 attendances; maintain 54 live automations.</li></ul></article>
 <article class="job"><div class="job-heading"><h3>Bari &amp; Sons Construction Inc.</h3><span class="dates">Feb 2018 – Present</span></div><p class="job-role">Vice President</p><ul>
 <li>Drafted customer contracts for 47 jobs since 2022, then built a pipeline that turns job texts into contract drafts with a human approval step.</li></ul></article>
@@ -118,15 +118,15 @@ ul { padding-left:16px; margin:9px 0 0; } li { margin:0 0 7px; }
   </section>
   <section class="project" aria-labelledby="project"><h2 id="project">Security projects</h2>
    <h3>IDS rule evaluation (Suricata) · Capstone lead, Fall 2026</h3>
-   <ul><li>2 tuned rules raised 195 alerts where 52,661 default rules raised 0 on the same capture; on a held-out set, detection rose from 6/37 to 33/37 with 0/20 false positives.</li></ul>
+   <ul><li>2 tuned rules raised 195 alerts on a connect-scan capture where the stock ruleset (52,667 signatures loaded) raised 0; on a held-out set, detection rose from 6/37 to 33/37 with 0/20 false positives.</li></ul>
    <h3>Haunted Inbox · Hacktoberfest Hack Day, Oct 2026</h3>
-   <ul><li>Hidden-text prompt injection made a local-LLM hospital assistant leak another patient&#8217;s record in 3/3 runs; a code-enforced guard stopped it in 3/3. 1,262 passing tests.</li></ul>
+   <ul><li>Three-person team; at temperature 0 and a fixed seed, a hidden-text injection leaked a patient record in 3/3 unguarded runs, 0/3 guarded; 1,262 tests.</li></ul>
    <h3>Security tools · github.com/blurxy</h3>
-   <ul><li>aur-build-diff: supply-chain sandbox (bubblewrap, strace) that caught DNS leaking past network isolation.</li>
-   <li>beacon-spectrum: C2-beacon detector; 19.4% vs 98.0% false alarms against a baseline (synthetic data).</li>
+   <ul><li>aur-build-diff: bubblewrap/strace build sandbox; blocked DNS that escaped naive network isolation.</li>
+   <li>beacon-spectrum: periodicity research prototype; 19.4% vs 98.0% false alarms vs a reimplemented baseline (synthetic).</li>
    <li>py-exec-mcp: PyPI package with CI on 3 OSes &#215; 3 Python versions and CodeQL.</li></ul>
    <h3>Automated futures trading system · Independent</h3>
-   <ul><li>Python, PostgreSQL/pgvector, local LLMs: kill switch, loss breakers, dependency gate, rulebook clamps; 2,764 commits, ~7,900 tests; upstream fix merged into project-x-py.</li></ul>
+   <ul><li>Python, PostgreSQL/pgvector, local LLMs: kill switch, loss breakers, dependency gate, rulebook clamps; upstream fix merged into the project-x-py SDK (PR #179, released v4.4.2).</li></ul>
   </section>
  </div>
  <aside class="side-column" aria-label="Qualifications and skills">
