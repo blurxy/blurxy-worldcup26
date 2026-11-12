@@ -217,6 +217,7 @@ body.listmode #depth { visibility: hidden; }
 .journal-entries { list-style: none; padding: 0; margin: 0; display: grid; gap: 24px; counter-reset: entry; }
 .journal-entries li { padding-top: 16px; border-top: 1px solid var(--line); }
 .journal-entries time { font: 500 11px var(--mono); color: var(--muted); }
+.journal-entries .journal-project { display: block; margin-top: 6px; font: 500 11px var(--mono); color: var(--amber); letter-spacing: .04em; text-transform: uppercase; }
 .journal-entries h3 { margin: 8px 0 12px; font: 700 20px/1.2 var(--display); }
 .journal-entries dl { margin: 0; display: grid; gap: 10px; }
 .journal-entries dl div { display: grid; gap: 3px; }
@@ -681,28 +682,32 @@ body.listmode #depth { visibility: hidden; }
     "date": "November 2026",
     "observation": "In an independent adversarial review, my container-based prover reported a vulnerable image as fixed when its data-leaking sink was packaged as a shell script instead of a compiled binary.",
     "finding": "The prover watched for the sink program's name being executed. A script runs under the shell, so the name never appeared, and one packaging change flipped the verdict.",
-    "work": "I reproduced the failure, retracted the “malicious-image-robust” claim, scoped the guarantee to operator-built labs, and replaced the approach with a host-boundary egress check that doesn't rely on program names."
+    "work": "I reproduced the failure, retracted the “malicious-image-robust” claim, scoped the guarantee to operator-built labs, and replaced the approach with a host-boundary egress check that doesn't rely on program names.",
+    "project": "Jetson Sentinel · offline AI security appliance"
   },
   {
     "title": "A model edge that was just over-confirming",
     "date": "November 2026",
     "observation": "On privilege-escalation checks, my engine plus a local 7B model confirmed a renamed SUID bash that the rules-only engine had only flagged as a candidate.",
     "finding": "The model also confirmed a harmless SUID binary, so it was upgrading candidates indiscriminately; the evidence couldn't tell the two apart.",
-    "work": "I added binary-identity evidence and re-ran. Across 25 hand-built scenarios the rules-only engine scored 15/17 with 0/8 false positives, engine plus model 15/17 with 2/8, and the raw model 2/17 with 7/8, so I moved the project away from model-led privilege escalation."
+    "work": "I added binary-identity evidence and re-ran. Across 25 hand-built scenarios the rules-only engine scored 15/17 with 0/8 false positives, engine plus model 15/17 with 2/8, and the raw model 2/17 with 7/8, so I moved the project away from model-led privilege escalation.",
+    "project": "Jetson Sentinel · offline AI security appliance"
   },
   {
     "title": "What “held-out” actually held out",
     "date": "November 2026",
     "observation": "My fine-tuned Suricata rule-writer scored 7/15 on a held-out set, against 3/15 for the same grammar-constrained model untuned.",
     "finding": "An independent adversarial review pointed out that every attack type in that set was also in the training corpus. Only the exact captures were new, and at n=15 the gain is not statistically significant.",
-    "work": "I restated it as a small feasibility result, ran the grammar on/off ablation (without the grammar the fine-tune still went 0/15 to 3/15), and designed a follow-up that removes three attack families from training entirely."
+    "work": "I restated it as a small feasibility result, ran the grammar on/off ablation (without the grammar the fine-tune still went 0/15 to 3/15), and designed a follow-up that removes three attack families from training entirely.",
+    "project": "Jetson Sentinel · offline AI security appliance"
   },
   {
     "title": "A pass that proved nothing",
     "date": "November 2026",
     "observation": "An independent adversarial review showed my rule scorer passed any rule that fired on the attack capture and stayed quiet on one benign capture, so copying the example string from the prompt could pass.",
     "finding": "The scorer measured string overlap, not detection skill. My first hardened version swung the other way: on log4shell, no single rule cleared 80% of the attack variants while staying silent on the benign decoy.",
-    "work": "I retuned the variants until a reference rule fired on 100% of them and stayed silent while a literal copy caught 20–50%, and confirmed it for all 10 attack families on Suricata."
+    "work": "I retuned the variants until a reference rule fired on 100% of them and stayed silent while a literal copy caught 20–50%, and confirmed it for all 10 attack families on Suricata.",
+    "project": "Jetson Sentinel · offline AI security appliance"
   },
   {
     "title": "Two hosts or four?",
@@ -1043,7 +1048,7 @@ body.listmode #depth { visibility: hidden; }
       <h2 id="shTitle" tabindex="-1">Investigation Notes</h2>
       <p class="lead">Observations, explanations, and the work behind them.</p>
       <p class="journal-provenance">Recorded October–November 2026. Dates refer to the portfolio record, not the original investigation dates.</p>
-      <ol class="journal-entries">${JOURNAL_ENTRIES.map(e => `<li><time datetime="${e.date === "November 2026" ? "2026-11" : "2026-10"}">Recorded ${esc(e.date)}</time><h3>${esc(e.title)}</h3><dl>
+      <ol class="journal-entries">${JOURNAL_ENTRIES.map(e => `<li><time datetime="${e.date === "November 2026" ? "2026-11" : "2026-10"}">Recorded ${esc(e.date)}</time>${e.project ? `<span class="journal-project">${esc(e.project)}</span>` : ""}<h3>${esc(e.title)}</h3><dl>
         <div><dt>Observation</dt><dd>${esc(e.observation)}</dd></div><div><dt>Finding</dt><dd>${esc(e.finding)}</dd></div><div><dt>My work</dt><dd>${esc(e.work)}</dd></div></dl></li>`).join('')}</ol>
       <p class="journal-provenance"><a href="https://github.com/blurxy/blurxy-worldcup26/blob/b8b190ee7171b3d4f300d031100495c2d3f14871/index.html" target="_blank" rel="noopener">Source notes ↗</a></p>`;
   }
