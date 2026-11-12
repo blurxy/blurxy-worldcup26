@@ -677,48 +677,82 @@ body.listmode #depth { visibility: hidden; }
   // (2026-10-28). The month below dates that record, not the original investigation.
   const JOURNAL_ENTRIES = [
   {
+    "title": "A guarantee I had to take back",
+    "date": "November 2026",
+    "observation": "In an independent adversarial review, my container-based prover reported a vulnerable image as fixed when its data-leaking sink was packaged as a shell script instead of a compiled binary.",
+    "finding": "The prover watched for the sink program's name being executed. A script runs under the shell, so the name never appeared, and one packaging change flipped the verdict.",
+    "work": "I reproduced the failure, retracted the “malicious-image-robust” claim, scoped the guarantee to operator-built labs, and replaced the approach with a host-boundary egress check that doesn't rely on program names."
+  },
+  {
+    "title": "A model edge that was just over-confirming",
+    "date": "November 2026",
+    "observation": "On privilege-escalation checks, my engine plus a local 7B model confirmed a renamed SUID bash that the rules-only engine had only flagged as a candidate.",
+    "finding": "The model also confirmed a harmless SUID binary, so it was upgrading candidates indiscriminately; the evidence couldn't tell the two apart.",
+    "work": "I added binary-identity evidence and re-ran. Across 25 hand-built scenarios the rules-only engine scored 15/17 with 0/8 false positives, engine plus model 15/17 with 2/8, and the raw model 2/17 with 7/8, so I moved the project away from model-led privilege escalation."
+  },
+  {
+    "title": "What “held-out” actually held out",
+    "date": "November 2026",
+    "observation": "My fine-tuned Suricata rule-writer scored 7/15 on a held-out set, against 3/15 for the same grammar-constrained model untuned.",
+    "finding": "An independent adversarial review pointed out that every attack type in that set was also in the training corpus. Only the exact captures were new, and at n=15 the gain is not statistically significant.",
+    "work": "I restated it as a small feasibility result, ran the grammar on/off ablation (without the grammar the fine-tune still went 0/15 to 3/15), and designed a follow-up that removes three attack families from training entirely."
+  },
+  {
+    "title": "A pass that proved nothing",
+    "date": "November 2026",
+    "observation": "An independent adversarial review showed my rule scorer passed any rule that fired on the attack capture and stayed quiet on one benign capture, so copying the example string from the prompt could pass.",
+    "finding": "The scorer measured string overlap, not detection skill. My first hardened version swung the other way: on log4shell, no single rule cleared 80% of the attack variants while staying silent on the benign decoy.",
+    "work": "I retuned the variants until a reference rule fired on 100% of them and stayed silent while a literal copy caught 20–50%, and confirmed it for all 10 attack families on Suricata."
+  },
+  {
     "title": "Two hosts or four?",
     "observation": "The same nmap -sn command found two hosts without elevated privileges and four as root on the same network.",
     "finding": "The discovery result changed with the privileges used to run the command.",
-    "work": "I compared the two runs on the same network and documented the privilege-dependent result."
+    "work": "I compared the two runs on the same network and documented the privilege-dependent result.",
+    "date": "October 2026"
   },
   {
     "title": "Following DNS beyond the network namespace",
     "observation": "A TCP probe indicated blocked network access, while DNS still resolved inside the sandbox.",
     "finding": "DNS reached the system resolver through the io.systemd.Resolve Unix socket.",
-    "work": "I traced the resolver path. The package sandbox blocks that socket and reruns the DNS control on each check."
+    "work": "I traced the resolver path. The package sandbox blocks that socket and reruns the DNS control on each check.",
+    "date": "October 2026"
   },
   {
     "title": "Reading the build behind the diff",
     "observation": "A package comparison returned unchanged.",
     "finding": "Both builds had failed in the same way, producing the same comparison outcome.",
-    "work": "I checked the underlying build outcomes and documented the shared failure behind the result."
+    "work": "I checked the underlying build outcomes and documented the shared failure behind the result.",
+    "date": "October 2026"
   },
   {
     "title": "Tracing a process-search self-match",
     "observation": "A pgrep -f pattern search returned a matching process.",
     "finding": "The hit was the search command line itself, which contained the pattern.",
-    "work": "I inspected the returned command line and identified the self-match."
+    "work": "I inspected the returned command line and identified the self-match.",
+    "date": "October 2026"
   },
   {
     "title": "Matching a scan to its detection rules",
     "observation": "A port scan produced no alerts with 52,667 IDS rules loaded.",
     "finding": "The enabled rules matched specific content or repeated activity on one port. The scan touched each port only once or twice.",
-    "work": "I reviewed the rule conditions against the scan pattern, then ran a positive control: with the 15 disabled Nmap rules enabled and HOME_NET scoped to the targets, a SYN scan drew 2 stock alerts while the connect scan still drew 0. My tuned rule caught both (101 and 195)."
+    "work": "I reviewed the rule conditions against the scan pattern, then ran a positive control: with the 15 disabled Nmap rules enabled and HOME_NET scoped to the targets, a SYN scan drew 2 stock alerts while the connect scan still drew 0. My tuned rule caught both (101 and 195).",
+    "date": "October 2026"
   },
   {
     "title": "Inspecting the assumptions inside a test",
     "observation": "Seven unit tests returned passing results.",
     "finding": "The tests shared the same assumption as the implementation they exercised.",
-    "work": "I examined what the tests asserted and documented the shared assumption."
+    "work": "I examined what the tests asserted and documented the shared assumption.",
+    "date": "October 2026"
   }
 ];
   const JOURNAL = { id: 'J-01', key: 'journal', name: 'Investigation Notes' };
   const journal = document.createElement('button');
   journal.className = 'journal'; journal.id = 'journal'; journal.dataset.key = 'journal';
   journal.setAttribute('aria-haspopup', 'dialog'); journal.setAttribute('aria-controls', 'sheet'); journal.setAttribute('aria-expanded', 'false');
-  journal.innerHTML = `<span class="journal-meta">06 FIELD NOTES · OCT 2026</span><span class="journal-title">Investigation Notes</span>
-    <span class="journal-intro">Network discovery, sandbox boundaries, and detection rules.</span><span class="journal-action">Read the entries ↗</span>`;
+  journal.innerHTML = `<span class="journal-meta">10 FIELD NOTES · OCT–NOV 2026</span><span class="journal-title">Investigation Notes</span>
+    <span class="journal-intro">Network discovery, sandbox boundaries, detection rules, and model evaluation.</span><span class="journal-action">Read the entries ↗</span>`;
   world.appendChild(journal);
 
   const RESUME = { id: 'E-01', key: 'resume', name: 'Experience & resume' };
@@ -1005,11 +1039,11 @@ body.listmode #depth { visibility: hidden; }
   }
 
   function journalHTML() {
-    return `<div class="sh-top"><span>J-01 · 06 FIELD NOTES</span><button class="tbtn" id="shClose">Close<span class="kbd"> · Esc</span></button></div>
+    return `<div class="sh-top"><span>J-01 · ${String(JOURNAL_ENTRIES.length).padStart(2, "0")} FIELD NOTES</span><button class="tbtn" id="shClose">Close<span class="kbd"> · Esc</span></button></div>
       <h2 id="shTitle" tabindex="-1">Investigation Notes</h2>
       <p class="lead">Observations, explanations, and the work behind them.</p>
-      <p class="journal-provenance">Recorded October 2026. Dates refer to the portfolio record, not the original investigation dates.</p>
-      <ol class="journal-entries">${JOURNAL_ENTRIES.map(e => `<li><time datetime="2026-10">Recorded October 2026</time><h3>${esc(e.title)}</h3><dl>
+      <p class="journal-provenance">Recorded October–November 2026. Dates refer to the portfolio record, not the original investigation dates.</p>
+      <ol class="journal-entries">${JOURNAL_ENTRIES.map(e => `<li><time datetime="${e.date === "November 2026" ? "2026-11" : "2026-10"}">Recorded ${esc(e.date)}</time><h3>${esc(e.title)}</h3><dl>
         <div><dt>Observation</dt><dd>${esc(e.observation)}</dd></div><div><dt>Finding</dt><dd>${esc(e.finding)}</dd></div><div><dt>My work</dt><dd>${esc(e.work)}</dd></div></dl></li>`).join('')}</ol>
       <p class="journal-provenance"><a href="https://github.com/blurxy/blurxy-worldcup26/blob/b8b190ee7171b3d4f300d031100495c2d3f14871/index.html" target="_blank" rel="noopener">Source notes ↗</a></p>`;
   }
