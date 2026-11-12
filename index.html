@@ -425,6 +425,28 @@ body.listmode #depth { visibility: hidden; }
     ]
   },
   {
+    "id": "M-08",
+    "key": "jetson",
+    "zone": "security",
+    "x": 880,
+    "y": 0,
+    "status": "lab",
+    "name": "Jetson Sentinel",
+    "line": "An offline 8 GB edge appliance that drafts Suricata rules and keeps only those that fire on attacks and stay silent on benign traffic.",
+    "lang": "Suricata · Qwen2.5-Coder 7B (QLoRA) · Jetson Orin Nano",
+    "last": "Independent project · Nov 2026",
+    "lastLabel": "",
+    "links": [],
+    "summary": "An independent, fully offline security appliance on a Jetson Orin Nano 8 GB, reported as a feasibility result rather than a finished detector.",
+    "facts": [
+      "A QLoRA fine-tune of Qwen2.5-Coder-7B on 12,855 ET-Open description→rule pairs, a grammar, and a Suricata-scored validator run fully offline on an 8 GB laptop GPU and an 8 GB Jetson.",
+      "On a small held-out set whose attack types were in training, the fine-tuned model passed 7/15 against 3/15 untuned; at n=15 that is not statistically significant.",
+      "After an independent adversarial review showed the scorer was gameable, I rebuilt it: a reference rule fires on 100% of variants while a prompt-literal copy catches 20–50%, across 10 attack families.",
+      "On privilege escalation, a deterministic engine (15/17, 0/8 false positives) beat the local-model arms, so I moved the project away from model-led selection."
+    ],
+    "note": "Investigation Notes has four entries on how this project's claims were tested and corrected."
+  },
+  {
     "id": "L-02",
     "key": "osint",
     "zone": "systems",
@@ -848,12 +870,12 @@ body.listmode #depth { visibility: hidden; }
     const rows = [0];
     rows[1] = rows[0] + Math.max(h.ids, h.aur) + 40;
     rows[2] = rows[1] + Math.max(h.haunted, h.trading) + 40;
-    rows[3] = rows[2] + journal.offsetHeight + 100;
+    rows[3] = rows[2] + Math.max(journal.offsetHeight, h.jetson) + 100;
     rows[4] = rows[3] + h.osint + 40;
     rows[5] = rows[4] + Math.max(h.kev, h.beacon) + 40;
     rows[6] = rows[4];
     rows[7] = rows[6] + Math.max(h.coursewake, h.chladni) + 40;
-    const yByKey = {ids: rows[0], aur: rows[0], haunted: rows[1], trading: rows[1], osint: rows[3], kev: rows[4], beacon: rows[4], pyexec: rows[5], spore: rows[5], coursewake: rows[6], chladni: rows[6], worldcup: rows[7], cactus: rows[7]};
+    const yByKey = {ids: rows[0], aur: rows[0], haunted: rows[1], trading: rows[1], jetson: rows[2], osint: rows[3], kev: rows[4], beacon: rows[4], pyexec: rows[5], spore: rows[5], coursewake: rows[6], chladni: rows[6], worldcup: rows[7], cactus: rows[7]};
     MODS.forEach(m => { m.y = yByKey[m.key]; modEls[m.key].style.top = m.y + 'px'; modEls[m.key].style.left = m.x + 'px'; });
     resume.style.left = '0px'; resume.style.top = (core.offsetHeight + 12) + 'px';
     journal.style.left = '560px'; journal.style.top = rows[2] + 'px';
